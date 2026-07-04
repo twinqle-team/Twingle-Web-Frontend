@@ -82,11 +82,17 @@ export default function Loginvendor() {
         animate="visible"
         className="flex min-h-screen w-full flex-col items-center justify-center bg-white px-4 py-8 sm:px-6 md:w-1/2 md:px-8 lg:px-10"
       >
-        <img
+        {/* <img
           src="src/assets/Container.png"
           alt=""
           className="mb-4 h-14 w-auto sm:h-16"
-        />
+        /> */}
+
+        <h1 className="mb-2 text-2xl font-bold">Log in to <span className="text-[#1E8863]">Twingle.com</span></h1>
+              <p className="mb-6 text-gray-600">
+                Enter your valid email address and password to log in to your
+                account.
+              </p>
 
         <form
           onSubmit={handleLogin}

@@ -31,6 +31,7 @@ export default function Signupvendor() {
     }
     setIsLoading(true);
     // API call would go here
+    
     setTimeout(() => setIsLoading(false), 2000);
   };
 
@@ -78,11 +79,19 @@ export default function Signupvendor() {
         animate="visible"
         className="flex min-h-screen w-full flex-col items-center justify-center bg-white px-4 py-8 sm:px-6 md:w-1/2 md:px-8 lg:px-10"
       >
-        <img
+        {/* <img
           src="src/assets/Container.png"
           alt="Twingle logo"
           className="mb-4 h-14 w-auto sm:h-16"
-        />
+        /> */}
+
+          <h1 className="mb-2 text-2xl font-bold">Welcome to <span className="text-[#1E8863]">Twingle!</span></h1>
+              <p className="mb-4 text-gray-600">
+                We’re excited to have you onboard—start selling and growing your
+                business with us today!
+              </p>
+              <br />
+              {/* <br /> */}
 
         <form
           onSubmit={handleSignup}
