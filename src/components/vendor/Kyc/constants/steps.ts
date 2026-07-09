@@ -1,0 +1,1 @@
+export const STEP_TITLES = ["Upload ID", "Live Verification", "Review & Submit"];

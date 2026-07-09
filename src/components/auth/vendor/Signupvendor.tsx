@@ -12,6 +12,7 @@ export default function Signupvendor() {
     password: "",
     confirmPassword: "",
     agentType: "",
+    country: "", // Added for country selection
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -156,6 +157,38 @@ export default function Signupvendor() {
               <option value="property agent">Property Agent</option>
               <option value="auto agent">Auto Agent</option>
               <option value="both">Become Both</option>
+            </select>
+          </div>
+
+          {/* New Country Select */}
+          <div className="flex h-[50px] w-full items-center gap-3">
+            <User className="text-gray-400" />
+            <select
+              name="country"
+              value={formData.country}
+              onChange={(e) => 
+                setFormData((prev) => ({ ...prev, country: e.target.value }))
+              }
+              className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-3 text-gray-700 focus:outline-none"
+              required
+            >
+              <option value="" disabled>Select Country</option>
+              <option value="Nigeria">Nigeria</option>
+              <option value="Ghana">Ghana</option>
+              <option value="Kenya">Kenya</option>
+              <option value="South Africa">South Africa</option>
+              <option value="Egypt">Egypt</option>
+              <option value="United States">United States</option>
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="Canada">Canada</option>
+              <option value="Germany">Germany</option>
+              <option value="France">France</option>
+              <option value="India">India</option>
+              <option value="China">China</option>
+              <option value="Brazil">Brazil</option>
+              <option value="Australia">Australia</option>
+              <option value="United Arab Emirates">United Arab Emirates</option>
+              <option value="Other">Other</option>
             </select>
           </div>
 

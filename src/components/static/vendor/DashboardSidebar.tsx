@@ -66,7 +66,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
 
           <NavItem
             title="Real Estate"
-            subItems={["All Products", "New Product"]}
+            subItems={["All Properties", "New Property"]}
             Icon={MdRealEstateAgent}
           />
 
@@ -75,20 +75,18 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
 
           <NavItem
             title="Automotive"
-            subItems={["All Products", "New Product"]}
+            subItems={["All Automotives", "New Automotive"]}
             Icon={FcAutomotive}
           />
           <NavItem title="Messages" to="inbox" Icon={TiMessages} />
 
-          <NavItem
-            title="Payment"
-            subItems={["Payments", "Preview Invoice"]}
-            Icon={RiSecurePaymentFill}
-          />
 
-          <NavItem title="Verification" to="inbox" Icon={MdVerifiedUser} />
+          <NavItem title="Payment" to="payment" Icon={RiSecurePaymentFill} />
 
-          <NavItem title="Billing" to="inbox" Icon={ReceiptText} />
+
+          <NavItem title="Verification" to="kyc" Icon={MdVerifiedUser} />
+
+          <NavItem title="Billing" to="billing" Icon={ReceiptText} />
 
           
           <NavItem title="Reviews" to="reviews" Icon={VscPreview} />
@@ -192,7 +190,7 @@ const NavItem = ({
               className={({ isActive }) =>
                 `block py-1 ${
                   isActive
-                    ? "text-orange-500 font-semibold"
+                    ? "text-[orange-500] font-semibold"
                     : "hover:text-gray-600 dark:hover:text-gray-300"
                 }`
               }
