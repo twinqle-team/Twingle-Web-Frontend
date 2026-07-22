@@ -564,7 +564,7 @@ export default function Profile() {
     }
 
     // Use Paystack key directly
-    const paystackKey = "sk_live_8e60afeb1befc22f297e02606b679decd84dbeb4"; // Replace with your actual key
+  const paystackKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
 
     setIsSearchingAccount(true);
     setFoundAccountName("");
