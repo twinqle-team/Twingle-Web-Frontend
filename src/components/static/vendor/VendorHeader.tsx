@@ -158,10 +158,17 @@ const VendorHeader: React.FC = () => {
         </div>
 
      
-          <div className="w-[50px] h-[50px] rounded-[50%] bg-[#1E8863] text-white flex items-center justify-center">
-            {/* {user.user.name.charAt(0).toUpperCase()} */}
-            v
-          </div>
+            <div className="flex items-center gap-3 pl-6 border-l border-gray-200">
+              <div className="text-right">
+                <p className="font-medium text-sm">Admin Oluwaseun</p>
+                <p className="text-xs text-green-600">Online</p>
+              </div>
+              <div className="w-9 h-9 bg-gradient-to-br from-green-400 to-emerald-600 rounded-2xl flex items-center justify-center text-white font-semibold ring-2 ring-white">AO</div>
+            </div>
+
+         
+          
+         
         
         {/* {!user.vendor?.name ? (
           <div className="w-[50px] h-[50px] rounded-[50%] bg-orange-300 text-white flex items-center justify-center">

@@ -38,6 +38,14 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
   }
   const user = useSelector((state: RootState) => state.vendor)
 
+  const itemVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { duration: 0.3 },
+    },
+  };
+
   // const { data: vendors } = useQuery({
   //   queryKey: ["vendor"],
   //   queryFn: () => get_single_vendor(user.token),
@@ -57,16 +65,26 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
     >
       <div>
         <div className="mb-5 text-2xl font-bold text-[#1E8863]">
-          <Link to="/">
+          {/* <Link to="/">
             <img src={Logo} alt="Twingle" className=" w-20 h-20" />
-          </Link>
+          </Link> */}
+           {/* Logo */}
+                    <motion.div variants={itemVariants} className="flex-shrink-0 min-w-0">
+                      <Link to="/" className="flex items-center gap-2 group">
+                        <img
+                          src="src/assets/Container.png"
+                          alt="Twingle Logo"
+                          className="w-auto h-8 transition-opacity sm:h-10 md:h-14 lg:h-20 group-hover:opacity-80"
+                        />
+                      </Link>
+                    </motion.div>
         </div>
         <nav>
           <NavItem title="Dashboard" to="/app" Icon={Home} />
 
           <NavItem
             title="Real Estate"
-            subItems={["All Properties", "New Property"]}
+            subItems={["My Properties", "New Property"]}
             Icon={MdRealEstateAgent}
           />
 
@@ -75,7 +93,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
 
           <NavItem
             title="Automotive"
-            subItems={["All Automotives", "New Automotive"]}
+            subItems={["My Automotives", "New Automotive"]}
             Icon={FcAutomotive}
           />
           <NavItem title="Messages" to="inbox" Icon={TiMessages} />
@@ -99,27 +117,9 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
         </nav>
       </div>
       <br />
-      <div className="flex items-center gap-3 p-3 bg-gray-200 rounded-lg dark:bg-gray-700">
-        {/* <img
-          src="/vendor-avatar.png"
-          alt="Vendor"
-          className="w-12 h-12 rounded-full"
-        /> */}
-        <div className="bg-[#1E8863] w-[40px] h-[40px] rounded-full text-white flex items-center justify-center">
-                  {/* <p>{vendors?.userName?.charAt()}</p> */}
-                  <p>v</p>
-                </div>
-        <div>
-          {/* <p className="text-sm font-semibold text-orange-500">{vendors?.userName}</p> */}
-          <p className="text-sm font-semibold text-[#1E8863]">vendor</p>
-          <div className="flex items-center justify-center mt-2">
-            <div className="w-[12px] h-[12px] bg-green-500 rounded-full "></div>
-            <span className="text-green-500 text-xs rounded ml-[3px]">
-              Online
-            </span>
-          </div>
-        </div>
-      </div>
+
+
+      
     </aside>
   );
 };
