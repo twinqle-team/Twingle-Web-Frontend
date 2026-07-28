@@ -1,4 +1,3 @@
-// hooks/useRecipientCode.ts
 import { useMutation } from "@tanstack/react-query";
 import { createRecipientCode, CreateRecipientCodePayload } from "./editvendorApi";
 

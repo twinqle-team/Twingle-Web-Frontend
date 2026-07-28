@@ -1,8 +1,7 @@
-// utils/vendorApi.ts
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 
-const BASE_URL = "https://mbayy-be.onrender.com/api/v1/vendor";
+const BASE_URL = import.meta.env.BASE_URL;
 
 // ====================== RECIPIENT CODE ======================
 

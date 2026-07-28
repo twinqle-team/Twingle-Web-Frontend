@@ -73,7 +73,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
                       <Link to="/" className="flex items-center gap-2 group">
                         <img
                           src="src/assets/Container.png"
-                          alt="Twingle Logo"
+                          alt="Twinqle Logo"
                           className="w-auto h-8 transition-opacity sm:h-10 md:h-14 lg:h-20 group-hover:opacity-80"
                         />
                       </Link>

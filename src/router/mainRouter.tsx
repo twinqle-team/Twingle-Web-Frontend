@@ -22,7 +22,7 @@ import Review from "@/components/vendor/Review/Review";
 import Profile from "@/components/vendor/Setting/Profile";
 import Payment from "@/components/vendor/Payment/Payment";
 import Customer from "@/components/vendor/Customer/Customer";
-import Chat from "@/components/vendor/Chat/Chat";
+// import Chat from "@/components/vendor/Chat/Chat";
 import Billing from "@/components/vendor/Billing/Billing";
 import KYCVerification from "@/components/vendor/Kyc/KYCVerification";
 import Property from "@/components/vendor/Product/Property/Property-form/Property";
@@ -98,7 +98,7 @@ const routes: RouteObject[] = [
       { path: "settings", element: withSuspense(Profile) },
       { path: "Payment", element: withSuspense(Payment) },
       { path: "Customers", element: withSuspense(Customer) },
-      { path: "inbox", element: withSuspense(Chat) },
+      // { path: "inbox", element: withSuspense(Chat) },
       { path: "kyc", element: withSuspense(KYCVerification) },
       { path: "billing", element: withSuspense(Billing) },
     ],
