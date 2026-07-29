@@ -1,23 +1,23 @@
 import React, { useState } from "react";
-import { Bell, Search, X } from "lucide-react";
+import { Bell, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 const VendorHeader: React.FC = () => {
   const [showNotifications, setShowNotifications] = useState(false);
 
-  interface RootState {
-    vendor: {
-      vendor: {
-        name: string;
-      };
-      user: {
-        name: string;
-      };
-    };
-  }
+  // interface RootState {
+  //   vendor: {
+  //     vendor: {
+  //       name: string;
+  //     };
+  //     user: {
+  //       name: string;
+  //     };
+  //   };
+  // }
 
-  const user = useSelector((state: RootState) => state.vendor);
+  // const user = useSelector((state: RootState) => state.vendor);
 
   const notifications = [
     {
@@ -70,7 +70,7 @@ const VendorHeader: React.FC = () => {
   ];
 
   return (
-    <header className="p-4 flex justify-between items-center shadow-md bg-white text-gray-900">
+    <header className="flex items-center justify-between p-4 text-gray-900 bg-white shadow-md">
       <h1 className="text-xl font-semibold">
         Good Morning,{" "}
         <span className="text-[#1E8863]">
@@ -100,7 +100,7 @@ const VendorHeader: React.FC = () => {
           <AnimatePresence>
             {showNotifications && (
               <motion.div
-                className="absolute right-0 mt-2 w-80 shadow-lg rounded-lg overflow-hidden bg-white text-gray-900"
+                className="absolute right-0 mt-2 overflow-hidden text-gray-900 bg-white rounded-lg shadow-lg w-80"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}

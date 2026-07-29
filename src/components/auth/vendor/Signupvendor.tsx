@@ -32,7 +32,7 @@ export default function Signupvendor() {
     }
     setIsLoading(true);
     // API call would go here
-    
+
     setTimeout(() => setIsLoading(false), 2000);
   };
 
@@ -64,7 +64,7 @@ export default function Signupvendor() {
   };
 
   return (
-    <div className="flex min-h-screen overflow-x-hidden p-0">
+    <div className="flex min-h-screen p-0 overflow-x-hidden">
       <motion.div
         variants={leftVariants}
         initial="hidden"
@@ -78,27 +78,29 @@ export default function Signupvendor() {
         variants={rightVariants}
         initial="hidden"
         animate="visible"
-        className="flex min-h-screen w-full flex-col items-center justify-center bg-white px-4 py-8 sm:px-6 md:w-1/2 md:px-8 lg:px-10"
+        className="flex flex-col items-center justify-center w-full min-h-screen px-4 py-8 bg-white sm:px-6 md:w-1/2 md:px-8 lg:px-10"
       >
         {/* <img
           src="src/assets/Container.png"
           alt="Twingle logo"
-          className="mb-4 h-14 w-auto sm:h-16"
+          className="w-auto mb-4 h-14 sm:h-16"
         /> */}
 
-          <h1 className="mb-2 text-2xl font-bold">Welcome to <span className="text-[#1E8863]">Twingle!</span></h1>
-              <p className="mb-4 text-gray-600">
-                We’re excited to have you onboard—start selling and growing your
-                business with us today!
-              </p>
-              <br />
-              {/* <br /> */}
+        <h1 className="mb-2 text-2xl font-bold">
+          Welcome to <span className="text-[#004e27]">Twingle!</span>
+        </h1>
+        <p className="mb-4 text-gray-600">
+          We’re excited to have you onboard—start selling and growing your
+          business with us today!
+        </p>
+        <br />
+        {/* <br /> */}
 
         <form
           onSubmit={handleSignup}
           className="flex w-full max-w-[600px] flex-col items-stretch gap-5 px-0 sm:gap-6"
         >
-            {/* FirstName */}
+          {/* FirstName */}
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex h-[50px] w-full items-center gap-3">
               <User className="text-gray-400" />
@@ -127,7 +129,7 @@ export default function Signupvendor() {
               />
             </div>
           </div>
-                {/* Email */}
+          {/* Email */}
           <div className="flex h-[50px] w-full items-center gap-3">
             <Mail className="text-gray-400" />
             <input
@@ -147,18 +149,21 @@ export default function Signupvendor() {
             <select
               name="agentType"
               value={formData.agentType}
-              onChange={(e) => 
+              onChange={(e) =>
                 setFormData((prev) => ({ ...prev, agentType: e.target.value }))
               }
               className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-3 text-gray-700 focus:outline-none"
               required
             >
-              <option value="" disabled>Select Agent Type</option>
+              <option value="" disabled>
+                Select Agent Type
+              </option>
               <option value="property agent">Property Agent</option>
               <option value="auto agent">Auto Agent</option>
               <option value="both">Become Both</option>
             </select>
           </div>
+
 
           {/* New Country Select */}
           <div className="flex h-[50px] w-full items-center gap-3">
@@ -192,7 +197,7 @@ export default function Signupvendor() {
             </select>
           </div>
 
-              {/* Password */}
+          {/* Password */}
           <div className="flex h-[50px] w-full items-center gap-3">
             <Lock className="text-gray-400" />
             <div className="flex h-full w-full items-center gap-3 rounded-[5px] border border-gray-400 px-3">
@@ -202,24 +207,24 @@ export default function Signupvendor() {
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
-                className="h-full w-full bg-transparent text-gray-700 placeholder:text-gray-400 focus:outline-none"
+                className="w-full h-full text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
                 required
               />
               {showPassword ? (
                 <EyeOff
-                  className="cursor-pointer text-gray-400"
+                  className="text-gray-400 cursor-pointer"
                   onClick={() => setShowPassword(false)}
                 />
               ) : (
                 <Eye
-                  className="cursor-pointer text-gray-400"
+                  className="text-gray-400 cursor-pointer"
                   onClick={() => setShowPassword(true)}
                 />
               )}
             </div>
           </div>
 
-              {/* confrim Password */}
+          {/* confrim Password */}
           <div className="flex h-[50px] w-full items-center gap-3">
             <Lock className="text-gray-400" />
             <div className="flex h-full w-full items-center gap-3 rounded-[5px] border border-gray-400 px-3">
@@ -229,17 +234,17 @@ export default function Signupvendor() {
                 placeholder="Confirm Password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="h-full w-full bg-transparent text-gray-700 placeholder:text-gray-400 focus:outline-none"
+                className="w-full h-full text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
                 required
               />
               {showConfirmPassword ? (
                 <EyeOff
-                  className="cursor-pointer text-gray-400"
+                  className="text-gray-400 cursor-pointer"
                   onClick={() => setShowConfirmPassword(false)}
                 />
               ) : (
                 <Eye
-                  className="cursor-pointer text-gray-400"
+                  className="text-gray-400 cursor-pointer"
                   onClick={() => setShowConfirmPassword(true)}
                 />
               )}
@@ -255,23 +260,23 @@ export default function Signupvendor() {
               type="checkbox"
               checked={agreeToTerms}
               onChange={(e) => setAgreeToTerms(e.target.checked)}
-              className="mt-1 h-4 w-4 cursor-pointer rounded border-gray-300 text-teal-500"
+              className="mt-1 h-4 w-4 cursor-pointer rounded border-gray-300 text-[#004e27]"
             />
             <label
               htmlFor="terms"
-              className="cursor-pointer text-sm text-gray-600"
+              className="text-sm text-gray-600 cursor-pointer"
             >
               I agree to the{" "}
               <a
                 href="#"
-                className="font-medium text-teal-600 hover:text-teal-700"
+                className="font-medium text-[#004e27] hover:text-[#004e27]/80"
               >
                 Terms of Service
               </a>{" "}
               and{" "}
               <a
                 href="#"
-                className="font-medium text-teal-600 hover:text-teal-700"
+                className="font-medium text-[#004e27] hover:text-[#004e27]/80"
               >
                 Privacy Policy
               </a>
@@ -284,14 +289,14 @@ export default function Signupvendor() {
             disabled={isLoading || !agreeToTerms}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-teal-500 py-3 font-semibold text-white transition-colors hover:bg-teal-600 disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? (
               <>
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 1, repeat: Infinity }}
-                  className="h-5 w-5 rounded-full border-2 border-white border-t-transparent"
+                  className="w-5 h-5 border-2 border-white rounded-full border-t-transparent"
                 />
                 Creating account...
               </>
@@ -318,6 +323,15 @@ export default function Signupvendor() {
               className="font-semibold text-teal-500 transition-colors hover:text-teal-600"
             >
               Login
+            </Link>
+          </p>
+          <p className="text-sm text-gray-600">
+            Want a customer account instead?{" "}
+            <Link
+              to="/signup"
+              className="font-semibold text-teal-500 transition-colors hover:text-teal-600"
+            >
+              User signup
             </Link>
           </p>
         </motion.div>

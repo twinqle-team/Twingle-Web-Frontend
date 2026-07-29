@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import { createBrowserRouter, RouteObject } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouteObject } from "react-router-dom";
 import Layout from "@/components/layout/layout";
 import { withSuspense } from "@/router/withSuspense";
 
@@ -8,7 +8,6 @@ import SignupPage from "@/components/auth/user/signup";
 import ForgotPasswordPage from "@/components/auth/user/forgotPassword";
 import VerifyOtpPage from "@/components/auth/user/verifyOtp";
 
-
 import Signupvendor from "@/components/auth/vendor/Signupvendor";
 import ForgotPasswordvendor from "@/components/auth/vendor/forgotPasswordvendor";
 import Loginvendor from "@/components/auth/vendor/Loginvendor";
@@ -16,6 +15,7 @@ import Loginvendor from "@/components/auth/vendor/Loginvendor";
 import AccountTypeSelectionPage from "@/pages/accountTypeSelectionPage";
 import VendorLayout from "@/components/vendor/Layout/Layout";
 import Dashboard from "@/components/vendor/Main/Dashboard";
+
 import Property from "@/components/vendor/Product/Property/Property-form/Property";
 import PropertyList from "@/components/vendor/Product/Property/Property-list/PropertyList";
 import AutomotiveList from "@/components/vendor/Product/Auto/AutomotiveList";
@@ -29,10 +29,17 @@ import Billing from "@/components/vendor/Billing/Billing";
 import KYCVerification from "@/components/vendor/Kyc/KYCVerification";
 
 
+import ProfileLayout from "@/components/layout/profileLayout";
+import ProfileDashboard from "@/components/userProfile/profileDashboard";
+
+
 const Home = lazy(() => import("@/pages/homePage"));
 const RealEstate = lazy(() => import("@/pages/realEstatePage"));
 const Automotive = lazy(() => import("@/pages/automotivePage"));
-const Verification = lazy(() => import("@/pages/verificationPage"));
+const About = lazy(() => import("@/pages/verificationPage"));
+const Listings = lazy(() => import("@/pages/listingsPage"));
+const CarDetail = lazy(() => import("@/pages/carDetailPage"));
+const PropertyDetail = lazy(() => import("@/pages/propertyDetailPage"));
 
 const routes: RouteObject[] = [
   {
@@ -56,28 +63,35 @@ const routes: RouteObject[] = [
     element: <VerifyOtpPage />,
   },
   {
+    path: "/profile",
+    element: <ProfileLayout />,
+    children: [{ index: true, element: <ProfileDashboard /> }],
+  },
+  {
     path: "/",
     element: <Layout />,
     children: [
       { index: true, element: withSuspense(Home) },
       { path: "real-estate", element: withSuspense(RealEstate) },
       { path: "automotive", element: withSuspense(Automotive) },
-      { path: "verification", element: withSuspense(Verification) },
+      { path: "automotive/:id", element: withSuspense(CarDetail) },
+      { path: "property/:id", element: withSuspense(PropertyDetail) },
+      { path: "about", element: withSuspense(About) },
+      { path: "listings/:type", element: withSuspense(Listings) },
+      { path: "verification", element: <Navigate to="/about" replace /> },
     ],
   },
 
-
-
   //vendorRouter
   {
-      path: "/vendor-signup",
-      element: <Signupvendor />,
+    path: "/vendor-signup",
+    element: <Signupvendor />,
   },
-   {
+  {
     path: "/vendor-login",
     element: <Loginvendor />,
   },
-    {
+  {
     path: "/vendor-forgot",
     element: <ForgotPasswordvendor />,
   },

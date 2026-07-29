@@ -1,21 +1,14 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useState } from "react";
-import {
-  Home,
-  ReceiptText,
-  Settings,
-  ChevronDown,
-} from "lucide-react";
+import { Home, ReceiptText, Settings, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
-import {  MdRealEstateAgent, MdVerifiedUser } from "react-icons/md";
+import { MdRealEstateAgent, MdVerifiedUser } from "react-icons/md";
 import { FaPersonCircleCheck } from "react-icons/fa6";
 import { AiOutlineLogout } from "react-icons/ai";
 import { RiSecurePaymentFill } from "react-icons/ri";
 import { TiMessages } from "react-icons/ti";
 import { VscPreview } from "react-icons/vsc";
 import { FcAutomotive } from "react-icons/fc";
-import { useDispatch, useSelector } from "react-redux";
-import { useQuery } from "@tanstack/react-query";
 // import { logoutVendor } from "@/redux/slices/vendorSlice";
 // import { useDarkMode } from "../Context/DarkModeContext";
 import Logo from "@/assets/Container.png";
@@ -26,25 +19,7 @@ interface DashboardSidebarProps {
 }
 
 const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
-
-  interface RootState {
-    vendor: {
-      token: string;
-      _id: string;
-      vendor: {
-        id: string;
-      };
-    };
-  }
-  const user = useSelector((state: RootState) => state.vendor)
-
-  // const { data: vendors } = useQuery({
-  //   queryKey: ["vendor"],
-  //   queryFn: () => get_single_vendor(user.token),
-  // });
   // const { darkMode } = useDarkMode();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   // const handle_logOut = () => {
   //   dispatch(logoutVendor());
   //   navigate("/login-vendor");
@@ -56,7 +31,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
       }`}
     >
       <div>
-        <div className="mb-5 text-2xl font-bold text-[#1E8863]">
+        <div className="mb-5 text-2xl font-bold text-[#004e27]">
           <Link to="/">
             <img src={Logo} alt="Twingle" className=" w-20 h-20" />
           </Link>
@@ -70,8 +45,11 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
             Icon={MdRealEstateAgent}
           />
 
-          
-          <NavItem title="Customers" to="customers" Icon={FaPersonCircleCheck} />
+          <NavItem
+            title="Customers"
+            to="customers"
+            Icon={FaPersonCircleCheck}
+          />
 
           <NavItem
             title="Automotive"
@@ -88,14 +66,13 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
 
           <NavItem title="Billing" to="billing" Icon={ReceiptText} />
 
-          
           <NavItem title="Reviews" to="reviews" Icon={VscPreview} />
 
           <NavItem title="Settings" to="settings" Icon={Settings} />
 
           {/* <NavItem title="LogOut" onClick={handle_logOut} Icon={LogOutIcon} /> */}
           <br />
-          <NavItem title="LogOut"  Icon={AiOutlineLogout} />
+          <NavItem title="LogOut" Icon={AiOutlineLogout} />
         </nav>
       </div>
       <br />
@@ -105,16 +82,16 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
           alt="Vendor"
           className="w-12 h-12 rounded-full"
         /> */}
-        <div className="bg-[#1E8863] w-[40px] h-[40px] rounded-full text-white flex items-center justify-center">
-                  {/* <p>{vendors?.userName?.charAt()}</p> */}
-                  <p>v</p>
-                </div>
+        <div className="bg-[#004e27] w-[40px] h-[40px] rounded-full text-white flex items-center justify-center">
+          {/* <p>{vendors?.userName?.charAt()}</p> */}
+          <p>v</p>
+        </div>
         <div>
           {/* <p className="text-sm font-semibold text-orange-500">{vendors?.userName}</p> */}
-          <p className="text-sm font-semibold text-[#1E8863]">vendor</p>
+          <p className="text-sm font-semibold text-[#004e27]">vendor</p>
           <div className="flex items-center justify-center mt-2">
-            <div className="w-[12px] h-[12px] bg-green-500 rounded-full "></div>
-            <span className="text-green-500 text-xs rounded ml-[3px]">
+            <div className="w-[12px] h-[12px] bg-[#004e27] rounded-full "></div>
+            <span className="text-[#004e27] text-xs rounded ml-[3px]">
               Online
             </span>
           </div>
@@ -150,8 +127,8 @@ const NavItem = ({
   return (
     <div>
       <div
-        className={`p-2 flex items-center justify-between gap-3 cursor-pointer hover:bg-[#1E8863] rounded ${
-          open ? "bg-[#1E8863] text-white" : ""
+        className={`p-2 flex items-center justify-between gap-3 cursor-pointer hover:bg-[#004e27] rounded ${
+          open ? "bg-[#004e27] text-white" : ""
         }`}
         onClick={handleClick}
       >
@@ -162,7 +139,7 @@ const NavItem = ({
               to={to}
               className={({ isActive }) =>
                 isActive
-                  ? "font-semibold text-[#1E8863]"
+                  ? "font-semibold text-[#004e27]"
                   : "text-gray-700 dark:text-gray-300"
               }
             >

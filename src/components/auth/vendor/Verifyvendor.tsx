@@ -125,7 +125,7 @@ export default function VerifyOtpPage() {
             className="rounded-[12px] border border-gray-200 bg-slate-50 px-5 py-4 text-center"
           >
             <div className="mb-3 flex justify-center">
-              <div className="rounded-full bg-teal-100 p-3 text-teal-600">
+              <div className="rounded-full bg-[#004e27]/10 p-3 text-[#004e27]">
                 <ShieldCheck className="h-6 w-6" />
               </div>
             </div>
@@ -159,7 +159,7 @@ export default function VerifyOtpPage() {
                   onChange={(e) => handleChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={handlePaste}
-                  className="h-12 w-12 rounded-[8px] border border-gray-300 text-center text-lg font-semibold text-gray-700 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 sm:h-14 sm:w-14 bg-white"
+                  className="h-12 w-12 rounded-[8px] border border-gray-300 text-center text-lg font-semibold text-gray-700 outline-none focus:border-[#004e27] focus:ring-2 focus:ring-[#004e27]/10 sm:h-14 sm:w-14 bg-white"
                 />
               ))}
             </div>
@@ -169,7 +169,7 @@ export default function VerifyOtpPage() {
               disabled={isLoading || otp.some((digit) => !digit)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-teal-500 py-3 font-semibold text-white transition-colors hover:bg-teal-600 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isLoading ? (
                 <>
@@ -192,7 +192,7 @@ export default function VerifyOtpPage() {
           >
             <Link
               to="/vendor-forgot"
-              className="inline-flex items-center gap-2 text-sm font-medium text-teal-600 transition-colors hover:text-teal-700"
+              className="inline-flex items-center gap-2 text-sm font-medium text-[#004e27] transition-colors hover:text-[#004e27]/80"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to reset password
