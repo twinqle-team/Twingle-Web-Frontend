@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import {
   Home,
@@ -14,11 +14,11 @@ import { RiSecurePaymentFill } from "react-icons/ri";
 import { TiMessages } from "react-icons/ti";
 import { VscPreview } from "react-icons/vsc";
 import { FcAutomotive } from "react-icons/fc";
-import { useDispatch, useSelector } from "react-redux";
-import { useQuery } from "@tanstack/react-query";
+import {  useSelector } from "react-redux";
+// import { useQuery } from "@tanstack/react-query";
 // import { logoutVendor } from "@/redux/slices/vendorSlice";
 // import { useDarkMode } from "../Context/DarkModeContext";
-import Logo from "@/assets/Container.png";
+
 import { Link } from "react-router-dom";
 // import { get_single_vendor } from "@/utils/vendorApi";
 interface DashboardSidebarProps {
@@ -38,6 +38,8 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
   }
   const user = useSelector((state: RootState) => state.vendor)
 
+  console.log(user)
+
   const itemVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -51,8 +53,8 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
   //   queryFn: () => get_single_vendor(user.token),
   // });
   // const { darkMode } = useDarkMode();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
   // const handle_logOut = () => {
   //   dispatch(logoutVendor());
   //   navigate("/login-vendor");
