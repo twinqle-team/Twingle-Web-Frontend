@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  CreditCard, Receipt, Calendar, BadgeCheck, ShieldCheck, 
-  TrendingUp, Building2, DollarSign, Banknote, FileText, Download, 
-  Check, X, Star, Award, Upload, Plus 
+  CreditCard, Receipt, BadgeCheck, ShieldCheck, 
+  TrendingUp, Building2, DollarSign, Banknote, Download, 
+   Star, Award, Plus 
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -56,7 +56,7 @@ const Billing: React.FC = () => {
   const [editingCard, setEditingCard] = useState<Card | null>(null);
 
   const { register: promoReg, handleSubmit: promoHandle, reset: promoReset } = useForm<PromoForm>({ resolver: zodResolver(promoSchema) });
-  const { register: cardReg, handleSubmit: cardHandle, reset: cardReset, formState: { errors: cardErrors } } = useForm<CardForm>({ resolver: zodResolver(cardSchema) });
+  const { register: cardReg, handleSubmit: cardHandle, reset: cardReset, formState: {  } } = useForm<CardForm>({ resolver: zodResolver(cardSchema) });
 
   const onPromoSubmit = (data: PromoForm) => {
     if (data.promoCode.toUpperCase() === 'REALESTATE10') setPromoApplied(true);

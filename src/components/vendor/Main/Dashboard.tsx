@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { 
-  Home, Car, Users, TrendingUp, Bell, MessageCircle, Search, 
-  Plus, Edit, Trash2, Eye, Award 
+  Home, Car,  TrendingUp, 
+  Plus, Edit, Trash2, Eye,
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+// import { motion, AnimatePresence } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
-import { useForm } from 'react-hook-form';
+// import { useForm } from 'react-hook-form';
 
 // Mock Data
 const statCards = [
@@ -43,9 +44,9 @@ const recentListings = [
   { id: 2, image: "https://picsum.photos/id/1074/80/60", title: "2023 Toyota Camry", category: "Vehicle", type: "Sedan", location: "Abuja, Nigeria", price: "₦38M", owner: "Chinedu Eze", status: "Pending", date: "5h ago" },
 ];
 
-const transactions = [
-  { id: 1, invoice: "INV-3921", customer: "Fatima Bello", listing: "4-Bed Duplex", amount: "₦185M", method: "Bank Transfer", status: "Completed", date: "Today" },
-];
+// const transactions = [
+//   { id: 1, invoice: "INV-3921", customer: "Fatima Bello", listing: "4-Bed Duplex", amount: "₦185M", method: "Bank Transfer", status: "Completed", date: "Today" },
+// ];
 
 interface StatCardProps {
   title: string;
@@ -80,8 +81,8 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, change, icon: Icon, c
 
 const Dashboard: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState('30 Days');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showNotifications, setShowNotifications] = useState(false);
+  // const [searchTerm, setSearchTerm] = useState('');
+  // const [showNotifications, setShowNotifications] = useState(false);
 
   // const { register, handleSubmit } = useForm();
 

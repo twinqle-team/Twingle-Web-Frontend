@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Bell, Search, X } from "lucide-react";
+import { Bell, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 
@@ -18,7 +18,7 @@ const VendorHeader: React.FC = () => {
   }
 
   const user = useSelector((state: RootState) => state.vendor);
-
+console.log(user)
   const notifications = [
     {
       id: 1,
