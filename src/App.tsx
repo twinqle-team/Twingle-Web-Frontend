@@ -20,7 +20,7 @@ function App() {
         </ErrorBoundary>
       </NetworkError>
       {isAuthenticated && user && (
-        <div className="fixed bottom-4 right-4 z-[60] rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700 shadow-sm">
+        <div className="fixed bottom-4 right-4 z-[60] rounded-lg border border-green-200 bg-[#004e27] px-3 py-2 text-sm text-white shadow-sm">
           Logged in as {user.email || user.name || "user"}
         </div>
       )}

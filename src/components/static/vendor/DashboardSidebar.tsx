@@ -1,13 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
-import {
-  Home,
-  ReceiptText,
-  Settings,
-  ChevronDown,
-} from "lucide-react";
+import { Home, ReceiptText, Settings, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
-import {  MdRealEstateAgent, MdVerifiedUser } from "react-icons/md";
+import { MdRealEstateAgent, MdVerifiedUser } from "react-icons/md";
 import { FaPersonCircleCheck } from "react-icons/fa6";
 import { AiOutlineLogout } from "react-icons/ai";
 import { RiSecurePaymentFill } from "react-icons/ri";
@@ -16,6 +11,7 @@ import { VscPreview } from "react-icons/vsc";
 import { FcAutomotive } from "react-icons/fc";
 import {  useSelector } from "react-redux";
 // import { useQuery } from "@tanstack/react-query";
+
 // import { logoutVendor } from "@/redux/slices/vendorSlice";
 // import { useDarkMode } from "../Context/DarkModeContext";
 
@@ -26,6 +22,7 @@ interface DashboardSidebarProps {
 }
 
 const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
+
 
   interface RootState {
     vendor: {
@@ -55,6 +52,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
   // const { darkMode } = useDarkMode();
   // const dispatch = useDispatch();
   // const navigate = useNavigate();
+
   // const handle_logOut = () => {
   //   dispatch(logoutVendor());
   //   navigate("/login-vendor");
@@ -66,8 +64,10 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
       }`}
     >
       <div>
+
         <div className="mb-5 text-2xl font-bold text-[#1E8863]">
           {/* <Link to="/">
+
             <img src={Logo} alt="Twingle" className=" w-20 h-20" />
           </Link> */}
            {/* Logo */}
@@ -90,8 +90,11 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
             Icon={MdRealEstateAgent}
           />
 
-          
-          <NavItem title="Customers" to="customers" Icon={FaPersonCircleCheck} />
+          <NavItem
+            title="Customers"
+            to="customers"
+            Icon={FaPersonCircleCheck}
+          />
 
           <NavItem
             title="Automotive"
@@ -108,20 +111,17 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
 
           <NavItem title="Billing" to="billing" Icon={ReceiptText} />
 
-          
           <NavItem title="Reviews" to="reviews" Icon={VscPreview} />
 
           <NavItem title="Settings" to="settings" Icon={Settings} />
 
           {/* <NavItem title="LogOut" onClick={handle_logOut} Icon={LogOutIcon} /> */}
           <br />
-          <NavItem title="LogOut"  Icon={AiOutlineLogout} />
+          <NavItem title="LogOut" Icon={AiOutlineLogout} />
         </nav>
       </div>
       <br />
 
-
-      
     </aside>
   );
 };
@@ -152,8 +152,8 @@ const NavItem = ({
   return (
     <div>
       <div
-        className={`p-2 flex items-center justify-between gap-3 cursor-pointer hover:bg-[#1E8863] rounded ${
-          open ? "bg-[#1E8863] text-white" : ""
+        className={`p-2 flex items-center justify-between gap-3 cursor-pointer hover:bg-[#004e27] rounded ${
+          open ? "bg-[#004e27] text-white" : ""
         }`}
         onClick={handleClick}
       >
@@ -164,7 +164,7 @@ const NavItem = ({
               to={to}
               className={({ isActive }) =>
                 isActive
-                  ? "font-semibold text-[#1E8863]"
+                  ? "font-semibold text-[#004e27]"
                   : "text-gray-700 dark:text-gray-300"
               }
             >

@@ -88,11 +88,12 @@ export default function Loginvendor() {
           className="mb-4 h-14 w-auto sm:h-16"
         /> */}
 
-        <h1 className="mb-2 text-2xl font-bold">Log in to <span className="text-[#1E8863]">Twingle.com</span></h1>
-              <p className="mb-6 text-gray-600">
-                Enter your valid email address and password to log in to your
-                account.
-              </p>
+        <h1 className="mb-2 text-2xl font-bold">
+          Log in to <span className="text-[#004e27]">Twingle.com</span>
+        </h1>
+        <p className="mb-6 text-gray-600">
+          Enter your valid email address and password to log in to your account.
+        </p>
 
         <form
           onSubmit={handleLogin}
@@ -142,13 +143,13 @@ export default function Loginvendor() {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 text-teal-500 border-gray-300 rounded cursor-pointer"
+                className="w-4 h-4 text-[#004e27] border-gray-300 rounded cursor-pointer"
               />
               <span className="text-sm text-gray-600">Remember me</span>
             </label>
             <Link
               to="/vendor-forgot"
-              className="text-sm font-medium text-teal-600 transition-colors hover:text-teal-700"
+              className="text-sm font-medium text-[#004e27] transition-colors hover:text-[#004e27]/80"
             >
               Forgot password?
             </Link>
@@ -161,7 +162,7 @@ export default function Loginvendor() {
             disabled={isLoading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-teal-500 py-3 font-semibold text-white transition-colors hover:bg-teal-600 disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? (
               <>
@@ -195,6 +196,15 @@ export default function Loginvendor() {
               className="font-semibold text-teal-500 transition-colors hover:text-teal-600"
             >
               Register
+            </Link>
+          </p>
+          <p className="text-sm text-gray-600">
+            Looking for the customer account?{" "}
+            <Link
+              to="/login"
+              className="font-semibold text-teal-500 transition-colors hover:text-teal-600"
+            >
+              User login
             </Link>
           </p>
         </motion.div>

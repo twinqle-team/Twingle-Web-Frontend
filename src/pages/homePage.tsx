@@ -1,10 +1,12 @@
 import React from "react";
-import Hero from "@/components/home-layout/hero";
-import Product from "@/components/home-layout/product";
-import SecurityFeatures from "@/components/home-layout/securityFeatures";
-import SubscribeSection from "@/components/home-layout/subscribeSection";
-import Seller from "@/components/home-layout/seller";
-import ServicesSlider from "@/components/home-layout/servicesSlider";
+import Hero from "@/components/home/hero";
+import Product from "@/components/home/product";
+import SecurityFeatures from "@/components/home/securityFeatures";
+import SubscribeSection from "@/components/home/subscribeSection";
+import Seller from "@/components/home/seller";
+import ServicesSlider from "@/components/home/servicesSlider";
+import RealtorHelp from "@/components/home/realtorHelp";
+import TrustAndReliability from "@/components/home/trustAndReliability";
 import { BarChart3, Clock3, ShieldCheck, Building2 } from "lucide-react";
 
 const HomePage: React.FC = () => {
@@ -52,8 +54,10 @@ const HomePage: React.FC = () => {
         </div>
       </div>
       <Product />
+      <RealtorHelp />
       <SecurityFeatures />
       <Seller />
+      <TrustAndReliability />
       <ServicesSlider />
       <SubscribeSection />
     </div>

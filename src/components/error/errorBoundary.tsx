@@ -40,7 +40,7 @@ class ErrorBoundary extends React.Component<Props, State> {
         <div className="min-h-screen flex items-center justify-center ">
           <div className="bg-white rounded-lg shadow-2xl p-8 max-w-md text-center border-t-4 border-emerald-500">
             <div className="mb-4">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#004e27]">
                 <svg
                   className="w-8 h-8 text-emerald-600"
                   fill="none"
@@ -77,7 +77,7 @@ class ErrorBoundary extends React.Component<Props, State> {
             <div className="mt-6 space-y-3">
               <button
                 onClick={this.handleReset}
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded transition duration-200"
+                className="w-full bg-[#004e27] hover:bg-[#004e27] text-white font-semibold py-2 px-4 rounded transition duration-200"
               >
                 Try Again
               </button>
