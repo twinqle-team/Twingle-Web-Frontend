@@ -96,12 +96,12 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex min-h-screen overflow-x-hidden bg-white p-0">
+    <div className="flex min-h-screen w-full overflow-x-hidden bg-white p-0 md:flex-row">
       <motion.div
         variants={leftVariants}
         initial="hidden"
         animate="visible"
-        className="hidden md:flex md:h-screen md:w-[45%] lg:w-1/2"
+        className="hidden md:flex md:flex-1 h-screen overflow-hidden min-w-0"
       >
         <SimpleSlider />
       </motion.div>
@@ -110,14 +110,20 @@ export default function SignupPage() {
         variants={rightVariants}
         initial="hidden"
         animate="visible"
-        className="flex min-h-screen w-full flex-col items-center justify-center bg-white px-4 py-8 sm:px-6 md:w-[55%] md:px-6 lg:w-1/2 lg:px-8 xl:px-10"
+        className="flex h-screen flex-1 min-w-0 flex-col items-center justify-start bg-white px-4 py-8 sm:px-6 md:px-8 lg:px-10 max-w-full overflow-y-auto"
       >
-        <img
+        {/* <img
           src="src/assets/Container.png"
           alt="Twingle logo"
           className="mb-4 h-14 w-auto sm:h-16"
-        />
-
+        /> */}
+        <h1 className="mb-2 text-2xl font-bold">
+          Welcome to <span className="text-[#004e27]">Twingle!</span>
+        </h1>
+        <p className="mb-4 text-gray-600">
+          We’re excited to have you onboard—start buying with us today!
+        </p>
+        <br />
         <form
           onSubmit={handleSignup}
           className="flex w-full max-w-[620px] flex-col items-stretch gap-4 px-0 sm:gap-5 md:gap-6"
@@ -289,7 +295,7 @@ export default function SignupPage() {
                   });
                 }
               }}
-              className="mt-1 h-4 w-4 cursor-pointer rounded border-gray-300 text-teal-500"
+              className="mt-1 h-4 w-4 cursor-pointer rounded border-gray-300 text-[#004e27]"
             />
             <label
               htmlFor="terms"
@@ -298,14 +304,14 @@ export default function SignupPage() {
               I agree to the{" "}
               <a
                 href="#"
-                className="font-medium text-teal-600 hover:text-teal-700"
+                className="font-medium text-[#004e27] hover:text-[#004e27]/80"
               >
                 Terms of Service
               </a>{" "}
               and{" "}
               <a
                 href="#"
-                className="font-medium text-teal-600 hover:text-teal-700"
+                className="font-medium text-[#004e27] hover:text-[#004e27]/80"
               >
                 Privacy Policy
               </a>
@@ -324,7 +330,7 @@ export default function SignupPage() {
             disabled={isLoading || !agreeToTerms}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-teal-500 py-3 font-semibold text-white transition-colors hover:bg-teal-600 disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? (
               <>
@@ -355,9 +361,18 @@ export default function SignupPage() {
             Already have an account?{" "}
             <Link
               to="/login"
-              className="font-semibold text-teal-500 transition-colors hover:text-teal-600"
+              className="font-semibold text-[#004e27] transition-colors hover:text-[#004e27]/80"
             >
               Login
+            </Link>
+          </p>
+          <p className="text-sm text-gray-600">
+            Want to become a vendor?{" "}
+            <Link
+              to="/vendor-signup"
+              className="font-semibold text-[#004e27] transition-colors hover:text-[#004e27]/80"
+            >
+              Sign up as a seller
             </Link>
           </p>
         </motion.div>
