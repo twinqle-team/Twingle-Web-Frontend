@@ -1,4 +1,3 @@
-// src/pages/KYCVerification.tsx
 import { motion, AnimatePresence } from 'framer-motion';
 import React, { useState } from 'react';
 import { CameraPreview } from './CameraPreview';

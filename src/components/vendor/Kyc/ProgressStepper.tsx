@@ -1,4 +1,4 @@
-// src/components/kyc/ProgressStepper.tsx
+
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 
@@ -10,7 +10,7 @@ export const ProgressStepper: React.FC<ProgressStepperProps> = ({ currentStep })
   const steps = ["Upload ID", "Live Verification", "Review & Submit"];
 
   return (
-    <div className="flex items-center gap-4 md:gap-8 sticky top-6 z-50 bg-[#000002]/90 backdrop-blur-2xl px-8 py-5 rounded-3xl border border-white/10">
+    <div className="flex items-center gap-4 md:gap-8  top-6 z-50 bg-[#000002]/90 backdrop-blur-2xl px-8 py-5 rounded-3xl border border-white/10">
       {steps.map((title, index) => {
         const stepNum = index + 1;
         const isCompleted = stepNum < currentStep;

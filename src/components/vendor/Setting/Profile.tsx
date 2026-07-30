@@ -1,9 +1,1726 @@
+import { motion, AnimatePresence } from "framer-motion";
+import { Camera, Edit, X, Search } from "lucide-react";
+import { MdVerified } from "react-icons/md";
+import type React from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+// import { get_single_vendor } from "@/utils/vendorApi";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/store"
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
+import { useUploadAvatar, useUploadBusinessLogo } from "@/hooks/vendor/editvendorApi";
+import { useCreateRecipientCode } from "@/hooks/vendor/useRecipientCode";
 
-
-const Profile = () => {
-  return (
-    <div>Profile</div>
-  )
+interface VendorProfile {
+  companyName: string;
+  email: string;
+  phone: string;
+  bio: string;
+  accountName: string;
+  accountNumber: string;
+  bankName: string;
+  returnPolicy: string;
 }
 
-export default Profile
+// Define popup types
+type PopupType = "password" | "location" | "account" | "email" | "store" | null;
+
+// Enhanced bank data with logos - this will be replaced by Paystack API
+const bankLogos: Record<string, string> = {
+  // ====== COMMERCIAL BANKS ======
+  "Access Bank": "/placeholder.svg?height=30&width=30&text=Access",
+  "Citibank Nigeria": "/placeholder.svg?height=30&width=30&text=Citi",
+  "Ecobank Nigeria": "/placeholder.svg?height=30&width=30&text=Ecobank",
+  "Fidelity Bank": "/placeholder.svg?height=30&width=30&text=Fidelity",
+  "First Bank of Nigeria": "/placeholder.svg?height=30&width=30&text=FirstBank",
+  "First City Monument Bank": "/placeholder.svg?height=30&width=30&text=FCMB",
+  "Globus Bank": "/placeholder.svg?height=30&width=30&text=Globus",
+  "Guaranty Trust Bank": "/placeholder.svg?height=30&width=30&text=GTBank",
+  "Heritage Bank": "/placeholder.svg?height=30&width=30&text=Heritage",
+  "Jaiz Bank": "/placeholder.svg?height=30&width=30&text=Jaiz",
+  "Keystone Bank": "/placeholder.svg?height=30&width=30&text=Keystone",
+  "Parallex Bank": "/placeholder.svg?height=30&width=30&text=Parallex",
+  "Polaris Bank": "/placeholder.svg?height=30&width=30&text=Polaris",
+  "PremiumTrust Bank": "/placeholder.svg?height=30&width=30&text=PremiumTrust",
+  "Providus Bank": "/placeholder.svg?height=30&width=30&text=Providus",
+  "Stanbic IBTC Bank": "/placeholder.svg?height=30&width=30&text=Stanbic",
+  "Sterling Bank": "/placeholder.svg?height=30&width=30&text=Sterling",
+  "SunTrust Bank": "/placeholder.svg?height=30&width=30&text=SunTrust",
+  TAJBank: "/placeholder.svg?height=30&width=30&text=TAJBank",
+  "Titan Trust Bank": "/placeholder.svg?height=30&width=30&text=Titan",
+  "Union Bank of Nigeria": "/placeholder.svg?height=30&width=30&text=Union",
+  "United Bank for Africa": "/placeholder.svg?height=30&width=30&text=UBA",
+  "Wema Bank": "/placeholder.svg?height=30&width=30&text=Wema",
+  "Zenith Bank": "/placeholder.svg?height=30&width=30&text=Zenith",
+
+  // ====== ONLINE/DIGITAL BANKS & MFBs ======
+  "ALAT by Wema": "/placeholder.svg?height=30&width=30&text=ALAT",
+  "Carbon (One Finance)": "/placeholder.svg?height=30&width=30&text=Carbon",
+  "Chipper Cash": "/placeholder.svg?height=30&width=30&text=Chipper",
+  Eyowo: "/placeholder.svg?height=30&width=30&text=Eyowo",
+  "FairMoney Microfinance Bank":
+    "/placeholder.svg?height=30&width=30&text=FairMoney",
+  "FinaTrust Microfinance Bank":
+    "/placeholder.svg?height=30&width=30&text=FinaTrust",
+  "Hackman Microfinance Bank":
+    "/placeholder.svg?height=30&width=30&text=Hackman",
+  "Kuda Bank": "/placeholder.svg?height=30&width=30&text=Kuda",
+  "Lotus Bank": "/placeholder.svg?height=30&width=30&text=Lotus",
+  "Moniepoint Microfinance Bank":
+    "/placeholder.svg?height=30&width=30&text=Moniepoint",
+  "Mint Finex MFB": "/placeholder.svg?height=30&width=30&text=Mint",
+  NowNow: "/placeholder.svg?height=30&width=30&text=NowNow",
+  "OPay Digital Bank": "/image/bank/Opay.png",
+  "PalmPay Digital Bank": "/placeholder.svg?height=30&width=30&text=PalmPay",
+  "Rubies Bank": "/placeholder.svg?height=30&width=30&text=Rubies",
+  "Sparkle Microfinance Bank":
+    "/placeholder.svg?height=30&width=30&text=Sparkle",
+  "VFD Microfinance Bank": "/placeholder.svg?height=30&width=30&text=VFD",
+
+  // ====== PAYMENT SERVICE BANKS (PSBs) ======
+  "9PSB": "/placeholder.svg?height=30&width=30&text=9PSB",
+  "Momo PSB": "/placeholder.svg?height=30&width=30&text=MomoPSB",
+  "Smartcash PSB": "/placeholder.svg?height=30&width=30&text=Smartcash",
+
+  // ====== BRICKS & MORTAR MICROFINANCE BANKS ======
+  "AB Microfinance Bank": "/placeholder.svg?height=30&width=30&text=AB",
+  "Accion Microfinance Bank": "/placeholder.svg?height=30&width=30&text=Accion",
+  "Baobab Microfinance Bank": "/placeholder.svg?height=30&width=30&text=Baobab",
+  "CEMCS Microfinance Bank": "/placeholder.svg?height=30&width=30&text=CEMCS",
+  "Finca Microfinance Bank": "/placeholder.svg?height=30&width=30&text=Finca",
+  "Fortis Microfinance Bank": "/placeholder.svg?height=30&width=30&text=Fortis",
+  "Hasal Microfinance Bank": "/placeholder.svg?height=30&width=30&text=Hasal",
+  "Infinity Microfinance Bank":
+    "/placeholder.svg?height=30&width=30&text=Infinity",
+  "LAPO Microfinance Bank": "/placeholder.svg?height=30&width=30&text=LAPO",
+  "Mutual Trust Microfinance Bank":
+    "/placeholder.svg?height=30&width=30&text=MutualTrust",
+  "NPF Microfinance Bank": "/placeholder.svg?height=30&width=30&text=NPF",
+  "Peace Microfinance Bank": "/placeholder.svg?height=30&width=30&text=Peace",
+  "QuickFund Microfinance Bank":
+    "/placeholder.svg?height=30&width=30&text=QuickFund",
+  "RenMoney Microfinance Bank":
+    "/placeholder.svg?height=30&width=30&text=RenMoney",
+  "Seedvest Microfinance Bank": "/image/bank/",
+};
+
+// Enhanced bank codes with all categories
+export const bankCodes = [
+  // ====== COMMERCIAL BANKS ======
+  { name: "Access Bank", code: "044", type: "Commercial" },
+  { name: "Citibank Nigeria", code: "023", type: "Commercial" },
+  { name: "Ecobank Nigeria", code: "050", type: "Commercial" },
+  { name: "Fidelity Bank", code: "070", type: "Commercial" },
+  { name: "First Bank of Nigeria", code: "011", type: "Commercial" },
+  { name: "First City Monument Bank", code: "214", type: "Commercial" },
+  { name: "Globus Bank", code: "00103", type: "Commercial" },
+  { name: "Guaranty Trust Bank", code: "058", type: "Commercial" },
+  { name: "Heritage Bank", code: "030", type: "Commercial" },
+  { name: "Jaiz Bank", code: "301", type: "Commercial" },
+  { name: "Keystone Bank", code: "082", type: "Commercial" },
+  { name: "Parallex Bank", code: "104", type: "Commercial" },
+  { name: "Polaris Bank", code: "076", type: "Commercial" },
+  { name: "PremiumTrust Bank", code: "105", type: "Commercial" },
+  { name: "Providus Bank", code: "101", type: "Commercial" },
+  { name: "Stanbic IBTC Bank", code: "221", type: "Commercial" },
+  { name: "Sterling Bank", code: "232", type: "Commercial" },
+  { name: "SunTrust Bank", code: "100", type: "Commercial" },
+  { name: "TAJBank", code: "302", type: "Commercial" },
+  { name: "Titan Trust Bank", code: "102", type: "Commercial" },
+  { name: "Union Bank of Nigeria", code: "032", type: "Commercial" },
+  { name: "United Bank for Africa", code: "033", type: "Commercial" },
+  { name: "Wema Bank", code: "035", type: "Commercial" },
+  { name: "Zenith Bank", code: "057", type: "Commercial" },
+
+  // ====== DIGITAL BANKS ======
+  { name: "ALAT by Wema", code: "035", type: "Digital" },
+  { name: "Carbon (One Finance)", code: "565", type: "Digital" },
+  { name: "Chipper Cash", code: "100022", type: "Digital" },
+  { name: "Eyowo", code: "50126", type: "Digital" },
+  { name: "Kuda Bank", code: "50211", type: "Digital" },
+  { name: "Lotus Bank", code: "303", type: "Digital" },
+  { name: "NowNow", code: "050", type: "Digital" },
+  { name: "OPay Digital Bank", code: "999992", type: "Digital" },
+  { name: "PalmPay Digital Bank", code: "999991", type: "Digital" },
+  { name: "Rubies Bank", code: "125", type: "Digital" },
+
+  // ====== MICROFINANCE BANKS ======
+  { name: "FairMoney Microfinance Bank", code: "090", type: "Microfinance" },
+  { name: "FinaTrust Microfinance Bank", code: "107", type: "Microfinance" },
+  { name: "Hackman Microfinance Bank", code: "51251", type: "Microfinance" },
+  { name: "Moniepoint Microfinance Bank", code: "50515", type: "Microfinance" },
+  { name: "Mint Finex MFB", code: "50304", type: "Microfinance" },
+  { name: "Sparkle Microfinance Bank", code: "51310", type: "Microfinance" },
+  { name: "VFD Microfinance Bank", code: "566", type: "Microfinance" },
+  { name: "AB Microfinance Bank", code: "090197", type: "Microfinance" },
+  { name: "Accion Microfinance Bank", code: "090134", type: "Microfinance" },
+  { name: "Baobab Microfinance Bank", code: "090118", type: "Microfinance" },
+  { name: "CEMCS Microfinance Bank", code: "50823", type: "Microfinance" },
+  { name: "Finca Microfinance Bank", code: "090107", type: "Microfinance" },
+  { name: "Fortis Microfinance Bank", code: "50162", type: "Microfinance" },
+  { name: "Hasal Microfinance Bank", code: "090121", type: "Microfinance" },
+  { name: "Infinity Microfinance Bank", code: "090157", type: "Microfinance" },
+  { name: "LAPO Microfinance Bank", code: "090259", type: "Microfinance" },
+  {
+    name: "Mutual Trust Microfinance Bank",
+    code: "090161",
+    type: "Microfinance",
+  },
+  { name: "NPF Microfinance Bank", code: "090194", type: "Microfinance" },
+  { name: "Peace Microfinance Bank", code: "090292", type: "Microfinance" },
+  { name: "QuickFund Microfinance Bank", code: "090261", type: "Microfinance" },
+  { name: "RenMoney Microfinance Bank", code: "090198", type: "Microfinance" },
+  { name: "Seedvest Microfinance Bank", code: "090112", type: "Microfinance" },
+
+  // ====== PAYMENT SERVICE BANKS (PSBs) ======
+  { name: "9PSB", code: "120001", type: "PSB" },
+  { name: "Momo PSB", code: "120003", type: "PSB" },
+  { name: "Smartcash PSB", code: "120002", type: "PSB" },
+];
+
+// Local storage keys
+const PROFILE_IMAGE_KEY = "vendor_profile_image";
+const BANNER_IMAGE_KEY = "vendor_banner_image";
+const LOGO_IMAGE_KEY = "vendor_logo_image";
+
+// Maximum file sizes in bytes
+const MAX_BANNER_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_PROFILE_SIZE = 2 * 1024 * 1024; // 2MB
+
+// Helper function to format bytes to MB
+const formatFileSize = (bytes: number) => {
+  return (bytes / (1024 * 1024)).toFixed(2) + "MB";
+};
+
+// Helper function to get bank logo from bank name
+const getBankLogo = (bankName: string): string => {
+  if (!bankName) return "/images/banks/default-bank.png";
+
+  // First try exact match
+  if (bankLogos[bankName]) {
+    return bankLogos[bankName];
+  }
+
+  // Try partial matches for common variations
+  const normalizedBankName = bankName.toLowerCase().trim();
+
+  for (const [key, logo] of Object.entries(bankLogos)) {
+    const normalizedKey = key.toLowerCase();
+    if (
+      normalizedKey.includes(normalizedBankName) ||
+      normalizedBankName.includes(normalizedKey)
+    ) {
+      return logo;
+    }
+  }
+
+  // Return default if no match found
+  return "/images/banks/default-bank.png";
+};
+
+export default function Profile() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [bannerImage, setBannerImage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof VendorProfile, string>>
+  >({});
+  const [showEditDropdown, setShowEditDropdown] = useState(false);
+  const [activePopup, setActivePopup] = useState<PopupType>(null);
+  const [actualPassword, setActualPassword] = useState("Password123");
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [selectedBankCode, setSelectedBankCode] = useState("");
+
+  // Form states for popups
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [country, setCountry] = useState("");
+  const [state, setState] = useState("");
+  const [address, setAddress] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [storeName, setStoreName] = useState("");
+  const [storeNumber, setStoreNumber] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [isSearchingAccount, setIsSearchingAccount] = useState(false);
+  const [foundAccountName, setFoundAccountName] = useState("");
+  const [foundBankName, setFoundBankName] = useState("");
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const editButtonRef = useRef<HTMLButtonElement>(null);
+
+  const user = useSelector((state: RootState) => state.user);
+
+  const { data: vendors } = useQuery({
+    queryKey: ["vendor"],
+    queryFn: () => {
+      if (!user.token) {
+        throw new Error("No token available");
+      }
+      return get_single_vendor(user.token);
+    },
+  });
+
+  // Mutations for image uploads and recipient code
+  const uploadAvatarMutation = useUploadAvatar();
+  const uploadBusinessLogoMutation = useUploadBusinessLogo();
+  const createRecipientCodeMutation = useCreateRecipientCode();
+
+  const [profile, setProfile] = useState<VendorProfile>({
+    companyName: "PreciousLtd Limited",
+    email: "preciousltd@gmail.com",
+    phone: "+234 805743214",
+    bio: "",
+    accountName: "",
+    accountNumber: "",
+    bankName: "",
+    returnPolicy: "",
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && !imagesLoaded) {
+      try {
+        const storedProfileImage = localStorage.getItem(PROFILE_IMAGE_KEY);
+        const storedBannerImage = localStorage.getItem(BANNER_IMAGE_KEY);
+
+        if (storedProfileImage) {
+          setProfileImage(storedProfileImage);
+        }
+        if (storedBannerImage) {
+          setBannerImage(storedBannerImage);
+        }
+
+        setImagesLoaded(true);
+      } catch (error) {
+        console.error("Error loading images from localStorage:", error);
+      }
+    }
+  }, [imagesLoaded]);
+
+  useEffect(() => {
+    if (vendors) {
+      setProfile((prev) => ({
+        ...prev,
+        companyName: vendors.storeName || prev.companyName,
+        email: vendors.email || prev.email,
+        phone: vendors.storePhone || prev.phone,
+        accountName: vendors.accountName || prev.accountName,
+        accountNumber: vendors.accountNumber || prev.accountNumber,
+        bankName: vendors.bankName || prev.bankName,
+      }));
+    }
+  }, [vendors]);
+
+  
+
+    
+
+  const saveImageToLocalStorage = (imageData: string, storageKey: string) => {
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem(storageKey, imageData);
+      } catch (error) {
+        console.error(
+          `Error saving image to localStorage (${storageKey}):`,
+          error
+        );
+        toast.error(
+          "Failed to save image locally. Your browser storage might be full.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+          }
+        );
+      }
+    }
+  };
+
+  const handleImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    type: "profile" | "banner" | "logo"
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Check file size based on type
+      if (type === "banner" && file.size > MAX_BANNER_SIZE) {
+        toast.error(
+          `Banner image is too large. Maximum size is ${formatFileSize(
+            MAX_BANNER_SIZE
+          )}`,
+          {
+            position: "top-right",
+            autoClose: 5000,
+          }
+        );
+        return;
+      }
+
+      if (type === "profile" && file.size > MAX_PROFILE_SIZE) {
+        toast.error(
+          `Profile image is too large. Maximum size is ${formatFileSize(
+            MAX_PROFILE_SIZE
+          )}`,
+          {
+            position: "top-right",
+            autoClose: 5000,
+          }
+        );
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const imageData = reader.result as string;
+
+        switch (type) {
+          case "profile":
+            setProfileImage(imageData);
+            saveImageToLocalStorage(imageData, PROFILE_IMAGE_KEY);
+
+            // Create FormData and upload profile image
+            const profileFormData = new FormData();
+            profileFormData.append("avatar", file);
+            if (user.token) {
+              uploadAvatarMutation.mutate({
+                data: profileFormData,
+                token: user.token,
+              });
+            }
+            break;
+
+          case "banner":
+            setBannerImage(imageData);
+            saveImageToLocalStorage(imageData, BANNER_IMAGE_KEY);
+
+            // Create FormData and upload banner image
+            const bannerFormData = new FormData();
+            bannerFormData.append("businessLogo", file);
+            if (user.token) {
+              uploadBusinessLogoMutation.mutate({
+                data: bannerFormData,
+                token: user.token,
+              });
+            }
+            break;
+
+          case "logo":
+            saveImageToLocalStorage(imageData, LOGO_IMAGE_KEY);
+
+            // Create FormData and upload logo image
+            const logoFormData = new FormData();
+            logoFormData.append("avatar", file);
+            if (user.token) {
+              uploadAvatarMutation.mutate({
+                data: logoFormData,
+                token: user.token,
+              });
+            }
+            break;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const handleEditOption = (option: string) => {
+    setShowEditDropdown(false);
+
+    switch (option) {
+      case "password":
+        setActivePopup("password");
+        setNewPassword("");
+        setConfirmPassword("");
+        break;
+      case "location":
+        setActivePopup("location");
+        setCountry("");
+        setState("");
+        setAddress("");
+        break;
+      case "account":
+        setActivePopup("account");
+        setAccountNumber(profile.accountNumber || "");
+        setSelectedBankCode(
+          bankCodes.find((bank) => bank.name === profile.bankName)?.code || ""
+        );
+        setFoundAccountName(profile.accountName || "");
+        setFoundBankName(profile.bankName || "");
+        break;
+      case "email":
+        setActivePopup("email");
+        setNewEmail("");
+        break;
+      case "store":
+        setActivePopup("store");
+        setStoreName("");
+        setStoreNumber("");
+        break;
+      default:
+        break;
+    }
+  };
+
+  const closePopup = () => {
+    setActivePopup(null);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setIsSubmitting(true);
+
+      // Validate form data
+      const newErrors: Partial<Record<keyof VendorProfile, string>> = {};
+
+      if (!profile.companyName.trim()) {
+        newErrors.companyName = "Company name is required";
+      }
+
+      if (!profile.email.trim()) {
+        newErrors.email = "Email is required";
+      } else if (!/\S+@\S+\.\S+/.test(profile.email)) {
+        newErrors.email = "Email is invalid";
+      }
+
+      if (!profile.phone.trim()) {
+        newErrors.phone = "Phone number is required";
+      }
+
+      // If there are validation errors, stop submission
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        toast.error("Please fix the errors in the form", {
+          position: "top-right",
+          autoClose: 4000,
+        });
+        return;
+      }
+
+      // Prepare form data for submission
+      const formData = new FormData();
+
+      // Add profile data
+      Object.entries(profile).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+
+    
+
+      // Simulate API call for now
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      // Show success message
+      toast.success("Profile updated successfully!");
+
+      // Clear any existing errors
+      setErrors({});
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Enhanced account search with Paystack API
+  const searchAccount = async () => {
+    if (!accountNumber.trim()) {
+      toast.error("Please enter an account number", {
+        position: "top-right",
+        autoClose: 4000,
+      });
+      return;
+    }
+
+    if (accountNumber.length !== 10) {
+      toast.error("Account number must be exactly 10 digits", {
+        position: "top-right",
+        autoClose: 4000,
+      });
+      return;
+    }
+
+    if (!selectedBankCode) {
+      toast.error("Please select a bank", {
+        position: "top-right",
+        autoClose: 4000,
+      });
+      return;
+    }
+
+    // Use Paystack key directly
+  const paystackKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
+
+    setIsSearchingAccount(true);
+    setFoundAccountName("");
+    setFoundBankName("");
+
+    try {
+      const verifyResponse = await fetch(
+        `https://api.paystack.co/bank/resolve?account_number=${accountNumber}&bank_code=${selectedBankCode}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${paystackKey}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (verifyResponse.ok) {
+        const verifyData = await verifyResponse.json();
+        if (
+          verifyData?.status &&
+          verifyData?.data &&
+          verifyData?.data?.account_name
+        ) {
+          const selectedBank = bankCodes.find(
+            (bank) => bank?.code === selectedBankCode
+          );
+          setFoundAccountName(verifyData?.data?.account_name);
+          setFoundBankName(selectedBank?.name || "");
+
+          // Update profile state with verified account details
+          setProfile((prev) => ({
+            ...prev,
+            accountName: verifyData?.data?.account_name,
+            accountNumber: accountNumber,
+            bankName: selectedBank?.name || "",
+          }));
+
+          toast.success("Account verified successfully!", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        } else {
+          toast.error(
+            "Account not found. Please verify the account number and bank selection.",
+            {
+              position: "top-right",
+              autoClose: 4000,
+            }
+          );
+        }
+      } else {
+        toast.error("Account verification failed. Please check your details.", {
+          position: "top-right",
+          autoClose: 4000,
+        });
+      }
+    } catch (error) {
+      console.error("Error verifying account:", error);
+      toast.error(
+        "Network error occurred. Please check your connection and try again.",
+        {
+          position: "top-right",
+          autoClose: 4000,
+        }
+      );
+    } finally {
+      setIsSearchingAccount(false);
+    }
+  };
+
+  // Handle password change
+  const handlePasswordChange = () => {
+    if (!newPassword) {
+      toast.error("Please enter a new password", {
+        position: "top-right",
+        autoClose: 4000,
+      });
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast.error("Passwords do not match", {
+        position: "top-right",
+        autoClose: 4000,
+      });
+      return;
+    }
+
+    // Update the actual password
+    setActualPassword(newPassword);
+
+    // Simulate password change
+    toast.success("Password changed successfully", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+    closePopup();
+  };
+
+  // Handle location change
+  const handleLocationChange = () => {
+    if (!country || !state || !address) {
+      toast.error("Please fill all location fields", {
+        position: "top-right",
+        autoClose: 4000,
+      });
+      return;
+    }
+
+    // Simulate location change
+    toast.success("Location updated successfully", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+    closePopup();
+  };
+
+  // Handle email change
+  const handleEmailChange = () => {
+    if (!newEmail) {
+      toast.error("Please enter a new email address", {
+        position: "top-right",
+        autoClose: 4000,
+      });
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(newEmail)) {
+      toast.error("Please enter a valid email address", {
+        position: "top-right",
+        autoClose: 4000,
+      });
+      return;
+    }
+
+    // Simulate email change
+    setProfile({ ...profile, email: newEmail });
+    toast.success("Email updated successfully", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+    closePopup();
+  };
+
+  // Handle store details change
+  const handleStoreChange = () => {
+    if (!storeName || !storeNumber) {
+      toast.error("Please fill all store details", {
+        position: "top-right",
+        autoClose: 4000,
+      });
+      return;
+    }
+
+    // Simulate store details change
+    setProfile({
+      ...profile,
+      companyName: storeName,
+      phone: storeNumber,
+    });
+    toast.success("Store details updated successfully", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+    closePopup();
+  };
+
+  // Enhanced account change handler with recipient code creation
+  const handleAccountChange = async () => {
+    if (!accountNumber || !foundAccountName || !selectedBankCode) {
+      toast.error("Please search for a valid account first", {
+        position: "top-right",
+        autoClose: 4000,
+      });
+      return;
+    }
+
+    try {
+      await createRecipientCodeMutation.mutateAsync({
+        token: user.token!,
+        accountData: {
+          account_number: accountNumber,
+          bank_code: selectedBankCode,
+          name: foundAccountName,
+          bankName: foundBankName,
+        },
+      });
+
+      // Ensure profile state is updated with verified account details
+      const selectedBank = bankCodes.find(
+        (bank) => bank.code === selectedBankCode
+      );
+      setProfile((prev) => ({
+        ...prev,
+        accountName: foundAccountName,
+        accountNumber: accountNumber,
+        bankName: selectedBank?.name || "",
+      }));
+
+      // Persist account details to localStorage (optional, for persistence)
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem(
+            "vendor_account_details",
+            JSON.stringify({
+              accountName: foundAccountName,
+              accountNumber: accountNumber,
+              bankName: selectedBank?.name || "",
+            })
+          );
+        } catch (error) {
+          console.error("Error saving account details to localStorage:", error);
+        }
+      }
+
+      toast.success("Account details updated successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+      closePopup();
+    } catch (error) {
+      console.error("Error saving account details:", error);
+      // The error toast is already handled in the mutation
+    }
+  };
+
+  // Function to clear images from local storage and state
+  const clearImages = () => {
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.removeItem(PROFILE_IMAGE_KEY);
+        localStorage.removeItem(BANNER_IMAGE_KEY);
+        localStorage.removeItem(LOGO_IMAGE_KEY);
+
+        setProfileImage(null);
+        setBannerImage(null);
+
+        toast.success("All images have been cleared", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } catch (error) {
+        console.error("Error clearing images from localStorage:", error);
+        toast.error("Failed to clear images", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+    }
+  };
+
+
+
+  // Check if account details exist to determine button text
+  const hasAccountDetails =
+    profile.accountName && profile.accountNumber && profile.bankName;
+
+  // Get the current bank logo for display
+  const currentBankLogo = getBankLogo(profile.bankName);
+
+  return (
+    <motion.div
+      className="min-h-screen p-6 bg-gray-50"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <ToastContainer />
+      <div className="max-w-5xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold"> Profile</h1>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 px-3 py-1 text-sm text-blue-600 bg-blue-100 rounded-full">
+             Verified
+              <MdVerified size={20} className="text-blue-500" />
+            </div>
+          </div>
+        </div>
+
+        <div className="grid gap-6">
+          {/* Banner and Profile Section */}
+          <motion.div
+            variants={itemVariants}
+            className="overflow-hidden bg-white rounded-lg shadow-sm"
+          >
+            <div className="relative h-48 bg-white border border-b-green-100">
+              {bannerImage ? (
+                <img
+                  src={bannerImage || "/placeholder.svg"}
+                  alt="Banner"
+                  className="object-cover w-full h-full"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-r from-emerald-500 to-black" />
+              )}
+              <motion.input
+                type="file"
+                id="banner-upload"
+                className="hidden"
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e, "banner")}
+              />
+              <label
+                htmlFor="banner-upload"
+                className={`absolute p-2 bg-white rounded-full cursor-pointer bottom-4 right-4 hover:bg-gray-100 ${
+                  uploadBusinessLogoMutation.isPending
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
+              >
+                {uploadBusinessLogoMutation.isPending ? (
+                  <div className="w-5 h-5 border-2 border-gray-300 rounded-full border-t-green-500 animate-spin"></div>
+                ) : (
+                  <Camera className="w-5 h-5" />
+                )}
+              </label>
+            </div>
+            <div className="p-6">
+              <div className="flex items-end gap-4 -mt-16">
+                <div className="relative">
+                  <div className="w-24 h-24 overflow-hidden bg-gray-200 border-4 border-white rounded-full">
+                    {profileImage ? (
+                      <img
+                        src={profileImage || "/placeholder.svg"}
+                        alt="Profile"
+                        className="object-cover w-full h-full"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center w-full h-full">
+                        <Camera className="w-8 h-8 text-gray-400" />
+                      </div>
+                    )}
+                  </div>
+                  <motion.input
+                    type="file"
+                    id="profile-upload"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => handleImageUpload(e, "profile")}
+                  />
+                  <label
+                    htmlFor="profile-upload"
+                    className={`absolute bottom-0 right-0 bg-green-500 p-1.5 rounded-full cursor-pointer hover:bg-green-600 ${
+                      uploadAvatarMutation.isPending
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }`}
+                  >
+                    {uploadAvatarMutation.isPending ? (
+                      <div className="w-4 h-4 border-2 border-white rounded-full border-t-green-500 animate-spin"></div>
+                    ) : (
+                      <Camera className="w-4 h-4 text-white" />
+                    )}
+                  </label>
+                </div>
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-4 text-sm">
+                    <div>
+                      <div className="font-semibold">12</div>
+                      <div className="text-gray-500">Followers</div>
+                    </div>
+                    <div>
+                      <div className="font-semibold">17</div>
+                      <div className="text-gray-500">Following</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Account Type and Rating */}
+          <motion.div
+            variants={itemVariants}
+            className="grid gap-6 md:grid-cols-2"
+          >
+            <div className="p-6 bg-white rounded-lg shadow-sm">
+              <h3 className="mb-2 text-sm text-gray-500">Account Type</h3>
+              <div className="flex items-center gap-2">
+                <div className="flex items-center justify-center w-8 h-8 bg-green-100 rounded-lg">
+                  <span className="font-semibold text-green-500">
+                    {vendors?.storeType?.charAt?.(0)?.toUpperCase()}
+                  </span>
+                </div>
+                <div className="font-semibold">{vendors?.storeType}</div>
+              </div>
+              <div className="mt-2">
+                <span className="px-3 py-1 text-xs text-white bg-green-500 rounded-full">
+                  Standard Account
+                </span>
+              </div>
+            </div>
+            <div className="p-6 bg-white rounded-lg shadow-sm">
+              <h3 className="mb-2 text-sm text-gray-500">Business Rating</h3>
+              <div className="text-2xl font-bold">3.5</div>
+              <button className="text-sm text-purple-600 hover:underline">
+                View Reviews
+              </button>
+            </div>
+          </motion.div>
+
+          {/* Personal Information */}
+          <motion.div
+            variants={itemVariants}
+            className="p-6 bg-white rounded-lg shadow-sm"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-semibold">Personal Information</h2>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-500">Profile Details</span>
+                <div className="relative">
+                  <button
+                    ref={editButtonRef}
+                    className="flex items-center gap-1 px-3 py-1 text-sm bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-50 edit-dropdown-toggle"
+                    onClick={() => setShowEditDropdown(!showEditDropdown)}
+                  >
+                    <Edit className="w-3 h-3" />
+                    Edit
+                  </button>
+
+                  {/* Edit Dropdown with fixed z-index and positioning */}
+                  {showEditDropdown && (
+                    <div className="fixed inset-0 z-[9999] pointer-events-none">
+                      <motion.div
+                        ref={dropdownRef}
+                        className="absolute w-48 py-1 bg-white rounded-lg shadow-lg pointer-events-auto"
+                        style={{
+                          position: "fixed",
+                          zIndex: 9999,
+                        }}
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <button
+                          className="w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+                          onClick={() => handleEditOption("password")}
+                        >
+                          Change Password
+                        </button>
+                        <button
+                          className="w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+                          onClick={() => handleEditOption("location")}
+                        >
+                          Change Location
+                        </button>
+                        <button
+                          className="w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+                          onClick={() => handleEditOption("account")}
+                        >
+                          {hasAccountDetails
+                            ? "Update Account Details"
+                            : "Add Account Details"}
+                        </button>
+                        <button
+                          className="w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+                          onClick={() => handleEditOption("email")}
+                        >
+                          Change Email Address
+                        </button>
+                        <button
+                          className="w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+                          onClick={() => handleEditOption("store")}
+                        >
+                          Change Store Name and Number
+                        </button>
+                      </motion.div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="grid gap-4">
+              <div>
+                <label className="block mb-1 text-sm text-gray-500">
+                  Company Name
+                </label>
+                <motion.input
+                  type="text"
+                  value={profile.companyName}
+                  readOnly
+                  className={`w-full p-2 border rounded-lg bg-gray-50 cursor-not-allowed ${
+                    errors.companyName ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.companyName && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {errors.companyName}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block mb-1 text-sm text-gray-500">
+                  Email Address
+                </label>
+                <motion.input
+                  type="email"
+                  value={profile.email}
+                  readOnly
+                  className={`w-full p-2 border rounded-lg bg-gray-50 cursor-not-allowed ${
+                    errors.email ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.email && (
+                  <p className="mt-1 text-xs text-red-500">{errors.email}</p>
+                )}
+              </div>
+              <div>
+                <label className="block mb-1 text-sm text-gray-500">
+                  Phone Number
+                </label>
+                <motion.input
+                  type="tel"
+                  value={profile.phone}
+                  readOnly
+                  className={`w-full p-2 border rounded-lg bg-gray-50 cursor-not-allowed ${
+                    errors.phone ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.phone && (
+                  <p className="mt-1 text-xs text-red-500">{errors.phone}</p>
+                )}
+              </div>
+              <div>
+                <label className="block mb-1 text-sm text-gray-500">
+                  Password
+                </label>
+                <div className="relative">
+                  <motion.input
+                    type={showPassword ? "text" : "password"}
+                    value={showPassword ? actualPassword : "••••••••••••"}
+                    className="w-full p-2 border rounded-lg cursor-not-allowed bg-gray-50"
+                    readOnly
+                  />
+                  <motion.button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute text-gray-500 -translate-y-1/2 right-3 top-1/2 hover:text-gray-700"
+                  ></motion.button>
+                </div>
+                <button
+                  type="button"
+                  className="mt-3 text-sm text-purple-600 hover:text-purple-700"
+                  onClick={() => handleEditOption("password")}
+                >
+                  Change password
+                </button>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Business Category */}
+          <motion.div
+            variants={itemVariants}
+            className="p-6 bg-white rounded-lg shadow-sm"
+          >
+            <h2 className="mb-4 font-semibold">Business Category</h2>
+            <div className="relative" >
+              <div
+                className={`flex items-center justify-between p-3 border rounded-lg `}
+              >
+                <div className="flex items-center gap-2">
+                  {/* <span>{craftCategories[0] || "No category selected"}</span> */}
+                  <span>property Agent</span>
+                </div>
+                
+              </div>
+
+            
+            </div>
+          </motion.div>
+
+          {/* Enhanced Payment Details Section */}
+          <motion.div
+            variants={itemVariants}
+            className="p-6 bg-white rounded-lg shadow-sm"
+          >
+            <h2 className="mb-4 font-semibold">Payment Details</h2>
+            <div className="grid gap-4">
+              <div>
+                <label className="block mb-1 text-sm text-gray-500">
+                  Account Name
+                </label>
+                <motion.input
+                  type="text"
+                  value={profile.accountName}
+                  readOnly
+                  placeholder={
+                    !profile.accountName ? "No account name added" : ""
+                  }
+                  className={`w-full p-2 border rounded-lg bg-gray-50 cursor-not-allowed ${
+                    errors.accountName ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.accountName && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {errors.accountName}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block mb-1 text-sm text-gray-500">
+                  Account Number
+                </label>
+                <motion.input
+                  type="text"
+                  value={profile.accountNumber}
+                  readOnly
+                  placeholder={
+                    !profile.accountNumber ? "No account number added" : ""
+                  }
+                  className={`w-full p-2 border rounded-lg bg-gray-50 cursor-not-allowed ${
+                    errors.accountNumber ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.accountNumber && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {errors.accountNumber}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block mb-1 text-sm text-gray-500">
+                  Bank Name
+                </label>
+                <div className="relative">
+                  <div className="flex items-center w-full gap-2 p-2 border rounded-lg cursor-not-allowed bg-gray-50">
+                    {profile.bankName && (
+                      <img
+                        src={currentBankLogo || "/placeholder.svg"}
+                        alt={profile.bankName}
+                        className="w-6 h-6 object-contain"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src =
+                            "/images/banks/default-bank.png";
+                        }}
+                      />
+                    )}
+                    <motion.input
+                      type="text"
+                      value={profile.bankName}
+                      readOnly
+                      placeholder={!profile.bankName ? "No bank selected" : ""}
+                      className={`flex-1 outline-none bg-gray-50 cursor-not-allowed ${
+                        errors.bankName ? "text-red-500" : ""
+                      }`}
+                    />
+                  </div>
+                </div>
+                {errors.bankName && (
+                  <p className="mt-1 text-xs text-red-500">{errors.bankName}</p>
+                )}
+              </div>
+              <button
+                type="button"
+                className="text-sm text-purple-600 hover:text-purple-700"
+                onClick={() => handleEditOption("account")}
+              >
+                {hasAccountDetails
+                  ? "Update account details"
+                  : "Add account details"}
+              </button>
+            </div>
+          </motion.div>
+
+          
+
+          {/* Action Buttons */}
+          <motion.div
+            variants={itemVariants}
+            className="flex justify-end gap-4"
+          >
+            <button
+              className="px-6 py-2 border border-green-500 rounded-lg hover:bg-green-50"
+              onClick={clearImages}
+            >
+              Discard Changes
+            </button>
+
+            <button
+              className="px-6 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600 disabled:bg-green-300 disabled:cursor-not-allowed"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Saving..." : "Save Changes"}
+            </button>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Enhanced Popups */}
+      <AnimatePresence>
+        {activePopup && (
+          <motion.div
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="w-full max-w-md overflow-hidden bg-white rounded-lg"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            >
+              <div className="p-6">
+                {/* Password Change Popup */}
+                {activePopup === "password" && (
+                  <>
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-xl font-semibold">Change Password</h2>
+                      <motion.button
+                        onClick={closePopup}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        <X className="w-5 h-5" />
+                      </motion.button>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block mb-1 text-sm text-gray-500">
+                          New Password
+                        </label>
+                        <motion.input
+                          type="password"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block mb-1 text-sm text-gray-500">
+                          Confirm New Password
+                        </label>
+                        <motion.input
+                          type="password"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                        />
+                      </div>
+                      <div className="flex justify-end gap-2 mt-6">
+                        <button
+                          className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg"
+                          onClick={closePopup}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600"
+                          onClick={handlePasswordChange}
+                        >
+                          Change Password
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* Location Change Popup */}
+                {activePopup === "location" && (
+                  <>
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-xl font-semibold">Change Location</h2>
+                      <motion.button
+                        onClick={closePopup}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        <X className="w-5 h-5" />
+                      </motion.button>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block mb-1 text-sm text-gray-500">
+                          Country
+                        </label>
+                        <motion.input
+                          type="text"
+                          value={country}
+                          onChange={(e) => setCountry(e.target.value)}
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block mb-1 text-sm text-gray-500">
+                          State
+                        </label>
+                        <motion.input
+                          type="text"
+                          value={state}
+                          onChange={(e) => setState(e.target.value)}
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block mb-1 text-sm text-gray-500">
+                          Address
+                        </label>
+                        <motion.textarea
+                          value={address}
+                          onChange={(e) => setAddress(e.target.value)}
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                          rows={3}
+                        />
+                      </div>
+                      <div className="flex justify-end gap-2 mt-6">
+                        <button
+                          className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                          onClick={closePopup}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600"
+                          onClick={handleLocationChange}
+                        >
+                          Update Location
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* Enhanced Account Change Popup */}
+                {activePopup === "account" && (
+                  <>
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-xl font-semibold">
+                        {hasAccountDetails
+                          ? "Update Account Details"
+                          : "Add Account Details"}
+                      </h2>
+                      <motion.button
+                        onClick={closePopup}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        <X className="w-5 h-5" />
+                      </motion.button>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block mb-1 text-sm text-gray-500">
+                          Account Number
+                        </label>
+                        <motion.input
+                          type="text"
+                          value={accountNumber}
+                          onChange={(e) => {
+                            const value = e.target.value
+                              .replace(/\D/g, "")
+                              .slice(0, 10);
+                            setAccountNumber(value);
+                            // Clear previous results when account number changes
+                            if (value !== accountNumber) {
+                              setFoundAccountName("");
+                              setFoundBankName("");
+                            }
+                          }}
+                          placeholder="Enter 10-digit account number"
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                          maxLength={10}
+                        />
+                        <p className="mt-1 text-xs text-gray-500">
+                          {accountNumber.length > 0 &&
+                            accountNumber.length < 10 &&
+                            `${10 - accountNumber.length} more digits required`}
+                        </p>
+                      </div>
+
+                      <div>
+                        <label className="block mb-1 text-sm text-gray-500">
+                          Select Bank
+                        </label>
+                        <motion.select
+                          value={selectedBankCode}
+                          onChange={(e) => {
+                            setSelectedBankCode(e.target.value);
+                            // Clear previous results when bank changes
+                            setFoundAccountName("");
+                            setFoundBankName("");
+                          }}
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                        >
+                          <option value="">Choose your bank</option>
+                          {bankCodes.map((bank) => (
+                            <option key={bank.code} value={bank.code}>
+                              {bank.name} ({bank.type})
+                            </option>
+                          ))}
+                        </motion.select>
+                      </div>
+
+                      <div className="flex justify-center">
+                        <button
+                          className={`flex items-center gap-2 px-4 py-2 text-white rounded-lg transition-colors ${
+                            accountNumber.length === 10 &&
+                            selectedBankCode &&
+                            !isSearchingAccount
+                              ? "bg-blue-500 hover:bg-blue-600"
+                              : "bg-gray-400 cursor-not-allowed"
+                          }`}
+                          onClick={searchAccount}
+                          disabled={
+                            accountNumber.length !== 10 ||
+                            !selectedBankCode ||
+                            isSearchingAccount
+                          }
+                        >
+                          {isSearchingAccount ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
+                              Verifying Account...
+                            </>
+                          ) : (
+                            <>
+                              <Search className="w-4 h-4" />
+                              Verify Account
+                            </>
+                          )}
+                        </button>
+                      </div>
+
+                      {/* Account verification results */}
+                      {foundAccountName && foundBankName && (
+                        <motion.div
+                          className="p-4 rounded-lg bg-green-50 border border-green-200"
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                              <motion.div
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{
+                                  delay: 0.2,
+                                  type: "spring",
+                                  stiffness: 200,
+                                }}
+                              >
+                                ✓
+                              </motion.div>
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="text-sm font-semibold text-green-800 mb-2">
+                                Account Verified Successfully
+                              </h4>
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-green-600 font-medium">
+                                    Account Name:
+                                  </span>
+                                  <span className="text-sm text-green-800 font-semibold">
+                                    {foundAccountName}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-green-600 font-medium">
+                                    Bank:
+                                  </span>
+                                  <div className="flex items-center gap-2">
+                                    {bankLogos[foundBankName] && (
+                                      <img
+                                        src={
+                                          bankLogos[foundBankName] ||
+                                          "/placeholder.svg" ||
+                                          "/placeholder.svg"
+                                        }
+                                        alt={foundBankName}
+                                        className="w-4 h-4 object-contain"
+                                      />
+                                    )}
+                                    <span className="text-sm text-green-800 font-semibold">
+                                      {foundBankName}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-green-600 font-medium">
+                                    Account Number:
+                                  </span>
+                                  <span className="text-sm text-green-800 font-mono">
+                                    {accountNumber}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {/* Error state for failed verification */}
+                      {accountNumber.length === 10 &&
+                        !foundAccountName &&
+                        !isSearchingAccount && (
+                          <motion.div
+                            className="p-3 rounded-lg bg-red-50 border border-red-200"
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <div className="flex items-center gap-2">
+                              <div className="w-5 h-5 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <span className="text-red-600 text-xs">✗</span>
+                              </div>
+                              <p className="text-sm text-red-700">
+                                Account verification failed. Please check the
+                                account number and try again.
+                              </p>
+                            </div>
+                          </motion.div>
+                        )}
+
+                      <div className="flex justify-end gap-2 mt-6">
+                        <button
+                          className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                          onClick={closePopup}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                            foundAccountName && foundBankName
+                              ? "bg-green-500 text-white hover:bg-green-600"
+                              : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                          } ${
+                            createRecipientCodeMutation.isPending
+                              ? "opacity-50 cursor-not-allowed"
+                              : ""
+                          }`}
+                          onClick={handleAccountChange}
+                          disabled={
+                            !foundAccountName ||
+                            !foundBankName ||
+                            createRecipientCodeMutation.isPending
+                          }
+                        >
+                          {createRecipientCodeMutation.isPending
+                            ? "Creating..."
+                            : hasAccountDetails
+                            ? "Update Account"
+                            : "Add Account"}
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* Email Change Popup */}
+                {activePopup === "email" && (
+                  <>
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-xl font-semibold">
+                        Change Email Address
+                      </h2>
+                      <motion.button
+                        onClick={closePopup}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        <X className="w-5 h-5" />
+                      </motion.button>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block mb-1 text-sm text-gray-500">
+                          New Email Address
+                        </label>
+                        <motion.input
+                          type="email"
+                          value={newEmail}
+                          onChange={(e) => setNewEmail(e.target.value)}
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                        />
+                      </div>
+                      <div className="flex justify-end gap-2 mt-6">
+                        <button
+                          className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg"
+                          onClick={closePopup}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600"
+                          onClick={handleEmailChange}
+                        >
+                          Update Email
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* Store Change Popup */}
+                {activePopup === "store" && (
+                  <>
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-xl font-semibold">
+                        Change Store Details
+                      </h2>
+                      <motion.button
+                        onClick={closePopup}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        <X className="w-5 h-5" />
+                      </motion.button>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block mb-1 text-sm text-gray-500">
+                          Store Name
+                        </label>
+                        <motion.input
+                          type="text"
+                          value={storeName}
+                          onChange={(e) => setStoreName(e.target.value)}
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block mb-1 text-sm text-gray-500">
+                          Store Number
+                        </label>
+                        <motion.input
+                          type="tel"
+                          value={storeNumber}
+                          onChange={(e) => setStoreNumber(e.target.value)}
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                        />
+                      </div>
+                      <div className="flex justify-end gap-2 mt-6">
+                        <button
+                          className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg"
+                          onClick={closePopup}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600"
+                          onClick={handleStoreChange}
+                        >
+                          Update Store
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}

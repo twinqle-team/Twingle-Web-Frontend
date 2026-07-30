@@ -16,17 +16,17 @@ import AccountTypeSelectionPage from "@/pages/accountTypeSelectionPage";
 import VendorLayout from "@/components/vendor/Layout/Layout";
 import Dashboard from "@/components/vendor/Main/Dashboard";
 
-import Property from "@/components/vendor/Product/Property/Property-form/Property";
 import PropertyList from "@/components/vendor/Product/Property/Property-list/PropertyList";
-import AutomotiveList from "@/components/vendor/Product/Auto/AutomotiveList";
-import Automotives from "@/components/vendor/Product/Auto/Automotive";
+import AutomotiveList from "@/components/vendor/Product/Auto/vehiclelist/AutomotiveList";
 import Review from "@/components/vendor/Review/Review";
 import Profile from "@/components/vendor/Setting/Profile";
 import Payment from "@/components/vendor/Payment/Payment";
 import Customer from "@/components/vendor/Customer/Customer";
-import Chat from "@/components/vendor/Chat/Chat";
+// import Chat from "@/components/vendor/Chat/Chat";
 import Billing from "@/components/vendor/Billing/Billing";
 import KYCVerification from "@/components/vendor/Kyc/KYCVerification";
+import Property from "@/components/vendor/Product/Property/Property-form/Property";
+import VehicleForm from "@/components/vendor/Product/Auto/vehicle/VehicleForm";
 
 
 import ProfileLayout from "@/components/layout/profileLayout";
@@ -104,15 +104,15 @@ const routes: RouteObject[] = [
     element: <VendorLayout />,
     children: [
       { index: true, element: withSuspense(Dashboard) },
-      { path: "All-Properties", element: withSuspense(Property) },
-      { path: "new-property", element: withSuspense(PropertyList) },
-      { path: "all-automotives", element: withSuspense(AutomotiveList) },
-      { path: "new-automotive", element: withSuspense(Automotives) },
+      { path: "new-property", element: withSuspense(Property) },
+      { path: "My-Properties", element: withSuspense(PropertyList) },
+      { path: "My-Automotives", element: withSuspense(AutomotiveList) },
+      { path: "new-automotive", element: withSuspense(VehicleForm) },
       { path: "reviews", element: withSuspense(Review) },
       { path: "settings", element: withSuspense(Profile) },
       { path: "Payment", element: withSuspense(Payment) },
       { path: "Customers", element: withSuspense(Customer) },
-      { path: "inbox", element: withSuspense(Chat) },
+      // { path: "inbox", element: withSuspense(Chat) },
       { path: "kyc", element: withSuspense(KYCVerification) },
       { path: "billing", element: withSuspense(Billing) },
     ],

@@ -1,4 +1,4 @@
-// src/components/kyc/CircularProgress.tsx
+
 import { motion } from 'framer-motion';
 import React from 'react';
 
