@@ -1,7 +1,8 @@
 import { FC, useCallback, useState, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, X, Video as VideoIcon, AlertCircle, Clock } from 'lucide-react';
+import { Upload, X, Video as  AlertCircle, Clock } from 'lucide-react';
+// import { Upload, X, Video as VideoIcon, AlertCircle, Clock } from 'lucide-react';
 
 interface UploadedVideo {
   id: string;
@@ -109,7 +110,7 @@ const VideoUploader: FC<VideoUploaderProps> = ({
 
       if (newErrors.length > 0) {
         setValidationErrors(newErrors);
-        newErrors.forEach((err) => {
+        newErrors.forEach(() => {
           if (videos.length + newVideos.length < minVideos) {
             // Only show toast for important errors
           }

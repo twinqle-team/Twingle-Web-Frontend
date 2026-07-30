@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
+// import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
 import { ChevronLeft, AlertCircle } from 'lucide-react';
@@ -96,6 +97,8 @@ export default function Property() {
   const facilities = watch('facilities');
   const customFacilities = watch('customFacilities') || [];
   const description = watch('description') || '';
+
+  console.log(description)
 
   const onSubmit = async (data: PropertyFormData) => {
     try {

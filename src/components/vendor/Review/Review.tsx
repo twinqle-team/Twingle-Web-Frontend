@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import { 
   Star, Users, Clock, TrendingUp, MessageSquare, Filter, Download, 
-  Reply, Eye, Trash2, Flag, ThumbsUp 
+  Reply,  Trash2, Flag, ThumbsUp 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useForm } from 'react-hook-form';
+// import { useForm } from 'react-hook-form';
 
 interface Review {
   id: number;
@@ -93,8 +93,8 @@ const StarRating = ({ rating }: { rating: number }) => (
 );
 
 const ReviewCard: React.FC<{ review: Review; onReply: (id: number) => void }> = ({ review, onReply }) => {
-  const [showReplyForm, setShowReplyForm] = useState(false);
-  const [replyText, setReplyText] = useState(review.reply?.text || "");
+  // const [showReplyForm, setShowReplyForm] = useState(false);
+  // const [replyText, setReplyText] = useState(review.reply?.text || "");
 
   return (
     <motion.div 
@@ -181,7 +181,8 @@ const ReviewCard: React.FC<{ review: Review; onReply: (id: number) => void }> = 
 };
 
 const Review: React.FC = () => {
-  const [reviews, setReviews] = useState(mockReviews);
+  const [reviews] = useState(mockReviews);
+  // const [reviews, setReviews] = useState(mockReviews);
   const [activeFilter, setActiveFilter] = useState('All Reviews');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -196,6 +197,8 @@ const Review: React.FC = () => {
   const handleReply = (id: number) => {
     setReplyingTo(id);
   };
+
+  console.log(replyingTo)
 
   const ratingBreakdown = [
     { stars: 5, count: 892, percent: 69 },

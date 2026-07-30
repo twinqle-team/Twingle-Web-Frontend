@@ -26,7 +26,7 @@ const Pagination: FC<PaginationProps> = ({
     const delta = 2;
     const range:any = [];
     const rangeWithDots:any = [];
-    let l;
+    // let l;
 
     for (let i = 1; i <= totalPages; i++) {
       if (i == 1 || i == totalPages || (i >= currentPage - delta && i <= currentPage + delta)) {

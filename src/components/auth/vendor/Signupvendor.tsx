@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { IoStorefrontOutline } from "react-icons/io5";
 import { Eye, EyeOff, Mail, Lock, User, HatGlasses } from "lucide-react";
 import { Link } from "react-router-dom";
 import SimpleSlider from "../../../lib/Sliding";
@@ -97,20 +98,18 @@ export default function Signupvendor() {
           onSubmit={handleSignup}
           className="flex w-full max-w-[600px] flex-col items-stretch gap-5 px-0 sm:gap-6"
         >
-            {/* CompanyName */}
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="flex h-[50px] w-full items-center gap-3">
-              <User className="text-gray-400" />
-              <input
-                type="text"
-                name="CompanyName"
-                placeholder="First Name"
-                value={formData.CompanyName}
-                onChange={handleChange}
-                className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-3 text-gray-700 placeholder:text-gray-400 focus:outline-none"
-                required
-              />
-            </div>
+                {/* CompanyName */}
+          <div className="flex h-[50px] w-full items-center gap-3">
+            <IoStorefrontOutline  className="text-gray-400" />
+            <input
+              type="text"
+              name="CompanyName"
+              placeholder="CompanyName"
+              value={formData.CompanyName}
+              onChange={handleChange}
+              className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-3 text-gray-700 placeholder:text-gray-400 focus:outline-none"
+              required
+            />
           </div>
                 {/* Email */}
           <div className="flex h-[50px] w-full items-center gap-3">

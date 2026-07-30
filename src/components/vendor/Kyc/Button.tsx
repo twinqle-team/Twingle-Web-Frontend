@@ -34,8 +34,8 @@ export const Button: React.FC<ButtonProps> = ({
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}
-      disabled={isLoading}
-      {...props}
+        disabled={isLoading}
+        {...(props as any)}
     >
       {isLoading && <span className="animate-spin mr-2">⟳</span>}
       {children}

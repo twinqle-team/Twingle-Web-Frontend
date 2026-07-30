@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+// import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
 import { ChevronRight, ArrowLeft, Save, Send } from 'lucide-react';
@@ -43,7 +44,7 @@ export default function vehicleForm() {
     setValue,
     reset,
   } = useForm<AutomotiveFormData>({
-    resolver: zodResolver(automotiveFormSchema),
+    resolver: zodResolver(automotiveFormSchema) as any,
     mode: 'onBlur',
     defaultValues: {
       features: [],
@@ -95,6 +96,8 @@ export default function vehicleForm() {
     }
   };
 
+
+  
   const handleSaveDraft = async () => {
     try {
       setIsSubmitting(true);
@@ -138,7 +141,8 @@ export default function vehicleForm() {
               <TextInput
                 label="Vehicle Title"
                 placeholder="Enter vehicle title"
-                error={errors.title?.message}
+                // react-hook-form errors are FieldError objects; pass the object instead of message string
+                error={errors.title}
                 {...register('title')}
               />
 
@@ -153,15 +157,15 @@ export default function vehicleForm() {
               <TextInput
                 label="Model"
                 placeholder="Enter model name"
-                error={errors.model?.message}
+                error={errors.model}
                 {...register('model')}
               />
 
               <NumberInput
                 label="Year"
                 placeholder="Enter year"
-                error={errors.year?.message}
-                {...register('year', { valueAsNumber: true })}
+                error={errors.year}
+                onChange={(value: number) => setValue('year', value)}
               />
 
               <SelectInput
@@ -241,8 +245,8 @@ export default function vehicleForm() {
                   <NumberInput
                     label="Mileage"
                     placeholder="Enter mileage"
-                    error={errors.mileage?.message}
-                    {...register('mileage', { valueAsNumber: true })}
+                    error={errors.mileage}
+                    onChange={(value: number) => setValue('mileage', value)}
                   />
                 </div>
                 <div className="w-32">
@@ -260,36 +264,36 @@ export default function vehicleForm() {
               <TextInput
                 label="Engine Capacity"
                 placeholder="e.g., 2.0L Turbo"
-                error={errors.engineCapacity?.message}
+                error={errors.engineCapacity}
                 {...register('engineCapacity')}
               />
 
               <TextInput
                 label="Exterior Color"
                 placeholder="e.g., Midnight Black"
-                error={errors.exteriorColor?.message}
+                error={errors.exteriorColor}
                 {...register('exteriorColor')}
               />
 
               <TextInput
                 label="Interior Color"
                 placeholder="e.g., Tan Leather"
-                error={errors.interiorColor?.message}
+                error={errors.interiorColor}
                 {...register('interiorColor')}
               />
 
               <TextInput
                 label="VIN (Vehicle Identification Number)"
                 placeholder="17-character VIN"
-                error={errors.vin?.message}
+                error={errors.vin}
                 {...register('vin')}
               />
 
               <NumberInput
                 label="Price ($)"
                 placeholder="Enter price"
-                error={errors.price?.message}
-                {...register('price', { valueAsNumber: true })}
+                error={errors.price}
+                onChange={(value: number) => setValue('price', value)}
               />
 
               <SelectInput
@@ -308,37 +312,37 @@ export default function vehicleForm() {
                 <Textarea
                   label="Vehicle Description"
                   placeholder="Describe the vehicle condition, features, history, and any other important details"
-                  minHeight="min-h-40"
+                  className="min-h-40"
                   maxLength={2000}
-                  currentLength={description?.length || 0}
-                  error={errors.description?.message}
-                  {...register('description')}
+                  error={errors.description}
+                  value={description}
+                  onChange={(value: string) => setValue('description', value)}
                 />
               </div>
             </div>
           </SectionCard>
 
           {/* Location Details */}
-          <SectionCard title="Dealer / Vehicle Location" subtitle="Where is this vehicle located">
+          <SectionCard title="Dealer / Vehicle Location" description="Where is this vehicle located">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <TextInput
                 label="City"
                 placeholder="Enter city"
-                error={errors.city?.message}
+                error={errors.city}
                 {...register('city')}
               />
 
               <TextInput
                 label="State / Province"
                 placeholder="Enter state"
-                error={errors.state?.message}
+                error={errors.state}
                 {...register('state')}
               />
 
               <TextInput
                 label="Zip / Postal Code"
                 placeholder="Enter zip code"
-                error={errors.zipCode?.message}
+                error={errors.zipCode}
                 {...register('zipCode')}
               />
 
@@ -355,16 +359,17 @@ export default function vehicleForm() {
                 <Textarea
                   label="Full Address"
                   placeholder="Enter complete address"
-                  minHeight="min-h-28"
-                  error={errors.fullAddress?.message}
-                  {...register('fullAddress')}
+                  className="min-h-28"
+                  error={errors.fullAddress}
+                  value={watch('fullAddress')}
+                  onChange={(value: string) => setValue('fullAddress', value)}
                 />
               </div>
             </div>
           </SectionCard>
 
           {/* Vehicle Media */}
-          <SectionCard title="Vehicle Media" subtitle="Upload images and videos of the vehicle">
+          <SectionCard title="Vehicle Media" description="Upload images and videos of the vehicle">
             <div className="space-y-8">
               <div>
                 <h4 className="font-semibold text-gray-900 mb-4">Upload Images</h4>
@@ -391,7 +396,7 @@ export default function vehicleForm() {
           </SectionCard>
 
           {/* Vehicle Features */}
-          <SectionCard title="Vehicle Features" subtitle="Select features available in this vehicle">
+          <SectionCard title="Vehicle Features" description="Select features available in this vehicle">
             <AutomotiveFeatureSelector
               selectedFeatures={selectedFeatures}
               customFeatures={customFeatures}

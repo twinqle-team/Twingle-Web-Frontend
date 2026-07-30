@@ -1,7 +1,7 @@
 import { FC, useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, X, Image as ImageIcon, AlertCircle } from 'lucide-react';
+import { Upload, X, Image as  AlertCircle } from 'lucide-react';
 
 interface UploadedImage {
   id: string;
@@ -90,7 +90,7 @@ const ImageUploader: FC<ImageUploaderProps> = ({
     >
       {/* Upload Area */}
       <motion.div
-        {...getRootProps()}
+        {...(getRootProps() as any)}
         className={`border-2 border-dashed rounded-xl p-8 transition-colors cursor-pointer
           ${isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}
           ${error ? 'border-red-500 bg-red-50' : ''}`}

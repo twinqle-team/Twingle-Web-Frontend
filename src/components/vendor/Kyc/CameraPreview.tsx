@@ -87,6 +87,8 @@ export const CameraPreview: React.FC<CameraPreviewProps> = ({ onCapture }) => {
     setTimeout(() => startCamera(), 100);
   };
 
+console.log(permissionGranted)
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
