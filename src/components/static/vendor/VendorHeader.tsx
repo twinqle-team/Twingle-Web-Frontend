@@ -1,24 +1,25 @@
 import React, { useState } from "react";
 import { Bell, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const VendorHeader: React.FC = () => {
   const [showNotifications, setShowNotifications] = useState(false);
 
-  // interface RootState {
-  //   vendor: {
-  //     vendor: {
-  //       name: string;
-  //     };
-  //     user: {
-  //       name: string;
-  //     };
-  //   };
-  // }
+  interface RootState {
+    vendor: {
+      vendor: {
+        name: string;
+      };
+      user: {
+        name: string;
+      };
+    };
+  }
 
   const user = useSelector((state: RootState) => state.vendor);
 
+  console.log(user)
   const notifications = [
     {
       id: 1,

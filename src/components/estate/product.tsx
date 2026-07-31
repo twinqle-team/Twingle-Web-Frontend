@@ -23,6 +23,7 @@ const sampleListings: Listing[] = propertyListings
     ...listing,
     address: listing.address,
     type: listing.type,
+    featured: (listing as any).featured ?? false,
   }));
 
 const itemsPerPage = 18;
