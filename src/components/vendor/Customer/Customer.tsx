@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { 
   Users, UserPlus, DollarSign, Home, Car, 
-  Download, Filter, Eye, Mail, Phone 
+  Filter, Eye,  
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 

@@ -4,13 +4,13 @@ import { MdVerified } from "react-icons/md";
 import type React from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { get_single_vendor } from "@/utils/vendorApi";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/redux/store"
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useUploadAvatar, useUploadBusinessLogo } from "@/hooks/vendor/editvendorApi";
 import { useCreateRecipientCode } from "@/hooks/vendor/useRecipientCode";
+import { get_single_vendor } from "@/utils/vendor/vendorApi";
 
 interface VendorProfile {
   companyName: string;
@@ -252,7 +252,7 @@ export default function Profile() {
 
   const user = useSelector((state: RootState) => state.user);
 
-  const { data: vendors } = useQuery({
+const { data: vendors } = useQuery({
     queryKey: ["vendor"],
     queryFn: () => {
       if (!user.token) {
