@@ -3,7 +3,9 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Search, User, Menu, X, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAppSelector } from "@/redux/hooks";
-import logo from "@/assets/Container.png";
+
+// Using direct URL for logo for better performance
+const LOGO_URL = "/src/assets/Container.png";
 
 type SearchOption = {
   label: string;
@@ -167,7 +169,7 @@ const Header: React.FC = () => {
           <motion.div variants={itemVariants} className="flex-shrink-0 min-w-0">
             <Link to="/" className="flex items-center gap-2 group">
               <img
-                src={logo}
+                src={LOGO_URL}
                 alt="Twingle Logo"
                 className="w-auto h-8 transition-opacity sm:h-10 md:h-14 lg:h-20 group-hover:opacity-80"
               />

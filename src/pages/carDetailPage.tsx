@@ -1,9 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   MapPin,
-  Share2,
-  Heart,
   ShieldCheck,
   FileText,
   Clock,
@@ -14,6 +12,7 @@ import { GiCarDoor, GiCarSeat } from "react-icons/gi";
 import { GrManual } from "react-icons/gr";
 import { Card, CardContent } from "@/components/ui/card";
 import { carListings } from "../data/carData";
+import { Button } from "@/components/ui/button";
 
 const CarDetailPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -76,7 +75,28 @@ const CarDetailPage: React.FC = () => {
       console.error("Unable to toggle fullscreen mode", error);
     }
   };
+ // share & save state
+  const [saved, setSaved] = useState(false);
 
+  const handleShare = async () => {
+    const shareData = {
+      title: car.title,
+      text: car.location ? `Check out this car in ${car.location}: ${car.title}` : `Check out this car: ${car.title}`,
+      url: window.location.href,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData as any);
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(window.location.href);
+        alert("Link copied to clipboard");
+      } else {
+        prompt("Copy this link:", window.location.href);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <div className="container px-4 py-8 mx-auto">
       {/* Listing header: title, dealer/location, rating, tags, actions */}
@@ -106,22 +126,70 @@ const CarDetailPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            className="p-2 rounded-md hover:bg-gray-100"
-            aria-label="save"
-            title="Save this listing"
-          >
-            <Heart size={18} />
-          </button>
-          <button
-            className="p-2 rounded-md hover:bg-gray-100"
-            aria-label="share"
-            title="Share this listing"
-          >
-            <Share2 size={18} />
-          </button>
-        </div>
+            <div className="flex flex-wrap items-center justify-start gap-3 md:justify-end">
+              <button
+                onClick={handleShare}
+                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50"
+                aria-label="Share property"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"
+                    stroke="#0f172a"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M16 6l-4-4-4 4"
+                    stroke="#0f172a"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 2v14"
+                    stroke="#0f172a"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                Share
+              </button>
+
+              <button
+                onClick={() => {
+                  setSaved((s) => !s);
+                }}
+                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50"
+                aria-pressed={saved}
+                aria-label="Save property"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19 21l-7-5-7 5V5a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1z"
+                    stroke="#0f172a"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                {saved ? "Saved" : "Save"}
+              </button>
+            </div>
       </div>
 
       {/* Car Image Display - layout: large hero + vertical thumbnails (supports 5 images) */}
@@ -484,12 +552,14 @@ const CarDetailPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <Link
-                    to={`/automotive/${listing.id}`}
-                    className="inline-flex items-center justify-center rounded-xl border border-[#004e27] px-4 py-2 text-sm font-semibold text-[#004e27] transition hover:bg-[#004e27]/10"
-                  >
-                    View details
-                  </Link>
+                <Button
+                  className="w-full py-6 text-white bg-[#004e27] hover:bg-[#004e27]"
+                  onClick={() =>
+                    window.location.assign(`/automotive/${car.id}`)
+                  }
+                >
+                  View Details
+                </Button>
                 </CardContent>
               </Card>
             ))}

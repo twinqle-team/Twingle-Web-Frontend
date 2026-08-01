@@ -1,7 +1,7 @@
-import heroBg from "../assets/hero-bg.png";
-import image from "../assets/image.png";
-import image1 from "../assets/image1.png";
-import image2 from "../assets/image2.png";
+// Using direct image URLs for better performance and reliability
+export const HERO_BG = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80";
+export const IMAGE_1 = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80";
+export const IMAGE_2 = "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=1200&q=80";
 
 export type PropertyListing = {
   id: number;
@@ -41,8 +41,8 @@ export const propertyListings: PropertyListing[] = [
     baths: 4,
     sqft: "4,800",
     type: "For Sale",
-    image: heroBg,
-    gallery: [heroBg, image, image1, image2],
+    image: HERO_BG,
+    gallery: [HERO_BG, IMAGE_1, IMAGE_2],
     description:
       "A spacious family home with bright living areas, charmequipped kitchen, and a landscaped yard ideal for entertaining guests.",
     features: ["Modern kitchen", "Large yard", "Private study", "3-car garage"],
@@ -68,8 +68,8 @@ export const propertyListings: PropertyListing[] = [
     baths: 5,
     sqft: "5,900",
     type: "For Sale",
-    image: image,
-    gallery: [image, heroBg, image1, image2],
+    image: IMAGE_1,
+    gallery: [IMAGE_1, HERO_BG, IMAGE_2],
     description:
       "A contemporary coastal home with expansive glass walls, open-plan living, and panoramic views over the harbor.",
     features: [
@@ -100,8 +100,8 @@ export const propertyListings: PropertyListing[] = [
     baths: 4,
     sqft: "3,650",
     type: "For Sale",
-    image: image1,
-    gallery: [image1, image, heroBg, image2],
+    image: IMAGE_2,
+    gallery: [IMAGE_2, IMAGE_1, HERO_BG],
     description:
       "An elegant estate blending classic architecture with modern comfort, set on a quiet tree-lined street.",
     features: ["Formal dining", "Library", "Media room", "Wine cellar"],
@@ -127,8 +127,8 @@ export const propertyListings: PropertyListing[] = [
     baths: 1,
     sqft: "950",
     type: "For Rent",
-    image: image2,
-    gallery: [image2, image1, image, heroBg],
+    image: IMAGE_2,
+    gallery: [IMAGE_2, IMAGE_1, HERO_BG],
     description:
       "A bright and modern apartment in the heart of the city, with premium finishes and easy access to dining and transit.",
     features: [

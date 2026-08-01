@@ -3,11 +3,33 @@ import { motion } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, User, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { z } from "zod";
-import SimpleSlider from "../../../lib/Sliding";
 import {
   signupSchema,
   type SignupFormData,
 } from "../../../lib/validationSchemas";
+import Sliding from "../../../lib/Sliding";
+
+// Google Icon Component
+const GoogleIcon = () => (
+  <svg className="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.03 2.53-2.16 3.31v2.77h3.49c2.04-1.88 3.24-4.64 3.24-7.89z"
+      fill="#4285F4"
+    />
+    <path
+      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.49-2.77c-.98.66-2.23 1.06-3.79 1.06-2.91 0-5.37-1.96-6.25-4.63H2.18v2.84C3.99 20.53 7.72 23 12 23z"
+      fill="#34A853"
+    />
+    <path
+      d="M5.75 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.72-.62z"
+      fill="#FBBC05"
+    />
+    <path
+      d="M12 5.38c1.64 0 3.11.56 4.27 1.67l3.2-3.2C17.45 2.09 14.97 1 12 1 7.72 1 3.99 3.47 2.18 7.07l3.57 2.84c.88-2.67 3.34-4.63 6.25-4.63z"
+      fill="#EA4335"
+    />
+  </svg>
+);
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -96,26 +118,29 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex min-h-screen w-full overflow-x-hidden bg-white p-0 md:flex-row">
+    <div className="flex w-full min-h-screen p-0 overflow-x-hidden bg-white">
+
+      {/* Left Side - Sliding Images */}
       <motion.div
         variants={leftVariants}
         initial="hidden"
         animate="visible"
-        className="hidden md:flex md:flex-1 h-screen overflow-hidden min-w-0"
+        className="hidden h-screen overflow-hidden md:flex md:w-1/2"
       >
-        <SimpleSlider />
+        <Sliding />
       </motion.div>
 
+      {/* Right Side - Signup Form */}
       <motion.div
         variants={rightVariants}
         initial="hidden"
         animate="visible"
-        className="flex h-screen flex-1 min-w-0 flex-col items-center justify-start bg-white px-4 py-8 sm:px-6 md:px-8 lg:px-10 max-w-full overflow-y-auto"
+        className="flex flex-col items-center justify-start flex-1 h-screen max-w-full min-w-0 px-4 py-8 overflow-y-auto bg-white sm:px-6 md:px-8 lg:px-10"
       >
         {/* <img
           src="src/assets/Container.png"
           alt="Twingle logo"
-          className="mb-4 h-14 w-auto sm:h-16"
+          className="w-auto mb-4 h-14 sm:h-16"
         /> */}
         <h1 className="mb-2 text-2xl font-bold">
           Welcome to <span className="text-[#004e27]">Twingle!</span>
@@ -145,7 +170,7 @@ export default function SignupPage() {
                 />
               </div>
               {errors.firstName && (
-                <div className="flex items-center gap-2 mt-2 text-red-500 text-sm">
+                <div className="flex items-center gap-2 mt-2 text-sm text-red-500">
                   <AlertCircle size={16} />
                   {errors.firstName}
                 </div>
@@ -166,7 +191,7 @@ export default function SignupPage() {
                 />
               </div>
               {errors.lastName && (
-                <div className="flex items-center gap-2 mt-2 text-red-500 text-sm">
+                <div className="flex items-center gap-2 mt-2 text-sm text-red-500">
                   <AlertCircle size={16} />
                   {errors.lastName}
                 </div>
@@ -190,7 +215,7 @@ export default function SignupPage() {
               />
             </div>
             {errors.email && (
-              <div className="flex items-center gap-2 mt-2 text-red-500 text-sm">
+              <div className="flex items-center gap-2 mt-2 text-sm text-red-500">
                 <AlertCircle size={16} />
                 {errors.email}
               </div>
@@ -212,23 +237,23 @@ export default function SignupPage() {
                   placeholder="Password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="h-full w-full bg-transparent text-gray-700 placeholder:text-gray-400 focus:outline-none"
+                  className="w-full h-full text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
                 />
                 {showPassword ? (
                   <EyeOff
-                    className="cursor-pointer text-gray-400"
+                    className="text-gray-400 cursor-pointer"
                     onClick={() => setShowPassword(false)}
                   />
                 ) : (
                   <Eye
-                    className="cursor-pointer text-gray-400"
+                    className="text-gray-400 cursor-pointer"
                     onClick={() => setShowPassword(true)}
                   />
                 )}
               </div>
             </div>
             {errors.password && (
-              <div className="flex items-center gap-2 mt-2 text-red-500 text-sm">
+              <div className="flex items-center gap-2 mt-2 text-sm text-red-500">
                 <AlertCircle size={16} />
                 {errors.password}
               </div>
@@ -250,23 +275,23 @@ export default function SignupPage() {
                   placeholder="Confirm Password"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="h-full w-full bg-transparent text-gray-700 placeholder:text-gray-400 focus:outline-none"
+                  className="w-full h-full text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
                 />
                 {showConfirmPassword ? (
                   <EyeOff
-                    className="cursor-pointer text-gray-400"
+                    className="text-gray-400 cursor-pointer"
                     onClick={() => setShowConfirmPassword(false)}
                   />
                 ) : (
                   <Eye
-                    className="cursor-pointer text-gray-400"
+                    className="text-gray-400 cursor-pointer"
                     onClick={() => setShowConfirmPassword(true)}
                   />
                 )}
               </div>
             </div>
             {errors.confirmPassword && (
-              <div className="flex items-center gap-2 mt-2 text-red-500 text-sm">
+              <div className="flex items-center gap-2 mt-2 text-sm text-red-500">
                 <AlertCircle size={16} />
                 {errors.confirmPassword}
               </div>
@@ -299,7 +324,7 @@ export default function SignupPage() {
             />
             <label
               htmlFor="terms"
-              className="cursor-pointer text-sm text-gray-600"
+              className="text-sm text-gray-600 cursor-pointer"
             >
               I agree to the{" "}
               <a
@@ -318,11 +343,23 @@ export default function SignupPage() {
             </label>
           </motion.div>
           {errors.agreeToTerms && (
-            <div className="flex items-center gap-2 text-red-500 text-sm">
+            <div className="flex items-center gap-2 text-sm text-red-500">
               <AlertCircle size={16} />
               {errors.agreeToTerms}
             </div>
           )}
+
+          {/* Google Sign Up Button */}
+          <motion.button
+            variants={itemVariants}
+            type="button"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex items-center justify-center w-full gap-3 py-3 font-semibold text-gray-700 transition-colors bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50"
+          >
+            <GoogleIcon />
+            Sign up with Google
+          </motion.button>
 
           <motion.button
             variants={itemVariants}
@@ -337,7 +374,7 @@ export default function SignupPage() {
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 1, repeat: Infinity }}
-                  className="h-5 w-5 rounded-full border-2 border-white border-t-transparent"
+                  className="w-5 h-5 border-2 border-white rounded-full border-t-transparent"
                 />
                 Creating account...
               </>

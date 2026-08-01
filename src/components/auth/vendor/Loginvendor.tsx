@@ -64,28 +64,26 @@ export default function Loginvendor() {
   };
 
   return (
-    <div className="flex min-h-screen overflow-x-hidden p-0">
-      {/* LeftSide Branding */}
+  <div className="flex min-h-screen p-0 overflow-x-hidden">
       <motion.div
         variants={leftVariants}
         initial="hidden"
         animate="visible"
-        className="hidden md:flex md:w-1/2 md:h-screen"
+        className="hidden md:flex md:h-screen md:w-1/2"
       >
         <SimpleSlider />
       </motion.div>
-
       {/* RightSide Login Form */}
       <motion.div
         variants={rightVariants}
         initial="hidden"
         animate="visible"
-        className="flex min-h-screen w-full flex-col items-center justify-center bg-white px-4 py-8 sm:px-6 md:w-1/2 md:px-8 lg:px-10"
+        className="flex flex-col items-center justify-center w-full min-h-screen px-4 py-8 bg-white sm:px-6 md:w-1/2 md:px-8 lg:px-10"
       >
         {/* <img
           src="src/assets/Container.png"
           alt=""
-          className="mb-4 h-14 w-auto sm:h-16"
+          className="w-auto mb-4 h-14 sm:h-16"
         /> */}
 
         <h1 className="mb-2 text-2xl font-bold">
@@ -162,7 +160,7 @@ export default function Loginvendor() {
             disabled={isLoading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3.5 font-semibold text-white transition-all hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-50 hover:shadow-lg"
           >
             {isLoading ? (
               <>
@@ -185,7 +183,7 @@ export default function Loginvendor() {
         >
           <Link
             to="/"
-            className="flex h-[50px] w-full items-center justify-center rounded-[5px] border border-gray-300 bg-transparent px-5 text-center text-sm font-semibold text-gray-500 transition-colors hover:bg-gray-100"
+            className="flex h-[50px] w-full items-center justify-center rounded-lg border border-gray-300 bg-transparent px-5 text-center text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 hover:border-gray-400"
           >
             Go Home
           </Link>

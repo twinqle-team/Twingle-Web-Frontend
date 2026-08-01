@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import { CarFront, Building2 } from "lucide-react";
-import carBg from "../../assets/image1.png";
-import heroBg from "../../assets/image2.png";
+
+// Using direct image URLs for better performance
+const HERO_BG = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80";
+const CAR_BG = "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80";
 
 type HeroTabKey = "real-estate" | "automotive";
 
@@ -22,7 +24,7 @@ const Hero: React.FC = () => {
     },
   } as const;
 
-  const images = [heroBg, carBg];
+  const images = [HERO_BG, CAR_BG];
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -97,9 +99,9 @@ const Hero: React.FC = () => {
                   className="w-full text-sm bg-transparent text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-0 sm:text-base"
                 />
               </div>
-              <button className="inline-flex h-[4.25rem] items-center justify-center rounded-3xl bg-[#004e27] px-8 text-sm font-semibold text-slate-950 transition hover:bg-[#004e27] sm:text-base">
-                Explore
-              </button>
+               <button className="inline-flex h-[4.25rem] items-center justify-center rounded-3xl bg-[#004e27] px-8 text-sm font-semibold text-white transition hover:bg-emerald-800 sm:text-base">
+                 Explore
+               </button>
             </div>
           </Tabs.Root>
         </div>

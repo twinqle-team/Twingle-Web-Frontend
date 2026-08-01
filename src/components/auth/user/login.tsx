@@ -2,7 +2,29 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, User, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
-import SimpleSlider from "../../../lib/Sliding";
+import Sliding from "../../../lib/Sliding";
+
+// Google Icon Component
+const GoogleIcon = () => (
+  <svg className="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.03 2.53-2.16 3.31v2.77h3.49c2.04-1.88 3.24-4.64 3.24-7.89z"
+      fill="#4285F4"
+    />
+    <path
+      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.49-2.77c-.98.66-2.23 1.06-3.79 1.06-2.91 0-5.37-1.96-6.25-4.63H2.18v2.84C3.99 20.53 7.72 23 12 23z"
+      fill="#34A853"
+    />
+    <path
+      d="M5.75 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.72-.62z"
+      fill="#FBBC05"
+    />
+    <path
+      d="M12 5.38c1.64 0 3.11.56 4.27 1.67l3.2-3.2C17.45 2.09 14.97 1 12 1 7.72 1 3.99 3.47 2.18 7.07l3.57 2.84c.88-2.67 3.34-4.63 6.25-4.63z"
+      fill="#EA4335"
+    />
+  </svg>
+);
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -37,23 +59,29 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen overflow-x-hidden p-0">
-      {/* LeftSide Branding */}
-      <div className="hidden md:flex md:w-1/2 md:h-screen">
-        <SimpleSlider />
-      </div>
+    <div className="flex min-h-screen p-0 overflow-x-hidden">
 
-      {/* RightSide Login Form */}
+      {/* Left Side - Sliding Images */}
       <motion.div
         variants={rightVariants}
         initial="hidden"
         animate="visible"
-        className="flex min-h-screen w-full flex-col items-center justify-center bg-white px-4 py-8 sm:px-6 md:w-1/2 md:px-8 lg:px-10"
+        className="hidden h-screen overflow-hidden md:flex md:w-1/2"
+      >
+        <Sliding />
+      </motion.div>
+
+      {/* Right Side - Login Form */}
+      <motion.div
+        variants={rightVariants}
+        initial="hidden"
+        animate="visible"
+        className="flex flex-col items-center justify-center w-full min-h-screen px-4 py-8 bg-white sm:px-6 md:w-1/2 md:px-8 lg:px-10"
       >
         {/* <img
           src="src/assets/Container.png"
           alt=""
-          className="mb-4 h-14 w-auto sm:h-16"
+          className="w-auto mb-4 h-14 sm:h-16"
         /> */}
 
         <h1 className="mb-2 text-2xl font-bold">
@@ -121,6 +149,18 @@ export default function LoginPage() {
               Forgot password?
             </Link>
           </motion.div>
+
+          {/* Google Sign In Button */}
+          <motion.button
+            variants={itemVariants}
+            type="button"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex items-center justify-center w-full gap-3 py-3 font-semibold text-gray-700 transition-colors bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50"
+          >
+            <GoogleIcon />
+            Sign in with Google
+          </motion.button>
 
           {/* Submit Button */}
           <motion.button

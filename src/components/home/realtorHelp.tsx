@@ -22,7 +22,7 @@ const RealtorHelp: React.FC = () => {
       icon: Clock,
       buttonText: "Place an ad",
       buttonVariant: "default" as const,
-      buttonColor: "bg-[#01a16f] hover:bg-[#007a52]",
+       buttonColor: "bg-[#004e27] hover:bg-[#007a52]",
     },
     {
       id: 3,
@@ -52,7 +52,7 @@ const RealtorHelp: React.FC = () => {
       icon: Car,
       buttonText: "List your car",
       buttonVariant: "default" as const,
-      buttonColor: "bg-[#01a16f] hover:bg-[#007a52]",
+      buttonColor: "bg-[#004e27] hover:bg-[#007a52]",
     },
   ];
 
@@ -79,7 +79,7 @@ const RealtorHelp: React.FC = () => {
         {/* Button */}
         <Button
           variant={service.buttonVariant}
-          className={`flex items-center gap-2 px-6 py-3 text-base font-semibold h-12 transition-all ${
+          className={`flex items-center gap-2 px-6 py-3 text-base font-semibold h-12 transition-all text-gray-100 ${
             service.buttonColor ||
             "border-2 border-gray-900 text-gray-900 hover:bg-gray-50"
           }`}
@@ -97,7 +97,7 @@ const RealtorHelp: React.FC = () => {
         {/* Header */}
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-4xl font-bold text-gray-900 sm:text-5xl">
-            See how <span className="font-bold text-[#33a980]">Twingle </span>
+            See how <span className="text-[#004e27] font-bold">Twingle </span>
             can help
           </h2>
           <p className="text-lg text-gray-600">

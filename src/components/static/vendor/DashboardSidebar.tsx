@@ -9,77 +9,18 @@ import { RiSecurePaymentFill } from "react-icons/ri";
 import { TiMessages } from "react-icons/ti";
 import { VscPreview } from "react-icons/vsc";
 import { FcAutomotive } from "react-icons/fc";
-import {  useSelector } from "react-redux";
-// import { useQuery } from "@tanstack/react-query";
 
-// import { logoutVendor } from "@/redux/slices/vendorSlice";
-// import { useDarkMode } from "../Context/DarkModeContext";
-
+import Logo from "@/assets/Container.png";
 import { Link } from "react-router-dom";
-// import { get_single_vendor } from "@/utils/vendorApi";
-interface DashboardSidebarProps {
-  darkMode: boolean;
-}
 
-const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
-
-
-  interface RootState {
-    vendor: {
-      token: string;
-      _id: string;
-      vendor: {
-        id: string;
-      };
-    };
-  }
-  const user = useSelector((state: RootState) => state.vendor)
-
-  console.log(user)
-
-  const itemVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { duration: 0.3 },
-    },
-  };
-
-  // const { data: vendors } = useQuery({
-  //   queryKey: ["vendor"],
-  //   queryFn: () => get_single_vendor(user.token),
-  // });
-  // const { darkMode } = useDarkMode();
-  // const dispatch = useDispatch();
-  // const navigate = useNavigate();
-
-  // const handle_logOut = () => {
-  //   dispatch(logoutVendor());
-  //   navigate("/login-vendor");
-  // };
+const DashboardSidebar: React.FC = () => {
   return (
-    <aside
-      className={`w-64 p-5 h-screen flex flex-col justify-between overflow-y-auto transition-colors ${
-        darkMode ? "bg-gray-900 text-gray-100" : "bg-[#F5F8FA] text-gray-900"
-      }`}
-    >
+    <aside className="w-64 p-5 h-screen flex flex-col justify-between overflow-y-auto bg-[#F5F8FA] text-gray-900">
       <div>
-
-        <div className="mb-5 text-2xl font-bold text-[#1E8863]">
-          {/* <Link to="/">
-
-            <img src={Logo} alt="Twingle" className=" w-20 h-20" />
-          </Link> */}
-           {/* Logo */}
-                    <motion.div variants={itemVariants} className="flex-shrink-0 min-w-0">
-                      <Link to="/" className="flex items-center gap-2 group">
-                        <img
-                          src="src/assets/Container.png"
-                          alt="Twinqle Logo"
-                          className="w-auto h-8 transition-opacity sm:h-10 md:h-14 lg:h-20 group-hover:opacity-80"
-                        />
-                      </Link>
-                    </motion.div>
+        <div className="mb-5 text-2xl font-bold text-[#004e27]">
+          <Link to="/">
+            <img src={Logo} alt="Twingle" className="w-20 h-20" />
+          </Link>
         </div>
         <nav>
           <NavItem title="Dashboard" to="/app" Icon={Home} />
@@ -92,7 +33,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
 
           <NavItem
             title="Customers"
-            to="customers"
+            to="Customers"
             Icon={FaPersonCircleCheck}
           />
 
@@ -102,26 +43,32 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
             Icon={FcAutomotive}
           />
           <NavItem title="Messages" to="inbox" Icon={TiMessages} />
-
-
-          <NavItem title="Payment" to="payment" Icon={RiSecurePaymentFill} />
-
-
+          <NavItem title="Payment" to="Payment" Icon={RiSecurePaymentFill} />
           <NavItem title="Verification" to="kyc" Icon={MdVerifiedUser} />
-
           <NavItem title="Billing" to="billing" Icon={ReceiptText} />
-
           <NavItem title="Reviews" to="reviews" Icon={VscPreview} />
-
           <NavItem title="Settings" to="settings" Icon={Settings} />
 
-          {/* <NavItem title="LogOut" onClick={handle_logOut} Icon={LogOutIcon} /> */}
           <br />
           <NavItem title="LogOut" Icon={AiOutlineLogout} />
         </nav>
       </div>
       <br />
 
+      <div className="flex items-center gap-3 p-3 bg-gray-200 rounded-lg">
+        <div className="bg-[#004e27] w-[40px] h-[40px] rounded-full text-white flex items-center justify-center">
+          <p>V</p>
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-[#004e27]">Vendor</p>
+          <div className="flex items-center justify-center mt-2">
+            <div className="w-[12px] h-[12px] bg-[#004e27] rounded-full"></div>
+            <span className="text-[#004e27] text-xs rounded ml-[3px]">
+              Online
+            </span>
+          </div>
+        </div>
+      </div>
     </aside>
   );
 };
@@ -149,6 +96,14 @@ const NavItem = ({
     }
   };
 
+  const getSubItemPath = (item: string) => {
+    if (item === "All Properties") return "All-Properties";
+    if (item === "New Property") return "new-property";
+    if (item === "All Automotives") return "All-Automotives";
+    if (item === "New Automotive") return "new-automotive";
+    return item.toLowerCase().replace(/ /g, "-");
+  };
+
   return (
     <div>
       <div
@@ -163,9 +118,7 @@ const NavItem = ({
             <NavLink
               to={to}
               className={({ isActive }) =>
-                isActive
-                  ? "font-semibold text-[#004e27]"
-                  : "text-gray-700 dark:text-gray-300"
+                isActive ? "font-semibold text-[#004e27]" : "text-gray-700"
               }
             >
               {title}
@@ -188,12 +141,12 @@ const NavItem = ({
           {subItems.map((item) => (
             <NavLink
               key={item}
-              to={item.toLowerCase().replace(/ /g, "-")}
+              to={getSubItemPath(item)}
               className={({ isActive }) =>
                 `block py-1 ${
                   isActive
-                    ? "text-[orange-500] font-semibold"
-                    : "hover:text-gray-600 dark:hover:text-gray-300"
+                    ? "text-orange-500 font-semibold"
+                    : "hover:text-gray-600"
                 }`
               }
             >

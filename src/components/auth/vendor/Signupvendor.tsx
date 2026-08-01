@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { IoStorefrontOutline } from "react-icons/io5";
-import { Eye, EyeOff, Mail, Lock, User, HatGlasses } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, HatGlasses, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import SimpleSlider from "../../../lib/Sliding";
 
@@ -150,9 +150,9 @@ export default function Signupvendor() {
           </div>
 
 
-          {/* New Country Select */}
+          {/* Country Select */}
           <div className="flex h-[50px] w-full items-center gap-3">
-            <User className="text-gray-400" />
+            <Globe className="text-gray-400" />
             <select
               name="country"
               value={formData.country}
@@ -274,7 +274,7 @@ export default function Signupvendor() {
             disabled={isLoading || !agreeToTerms}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3.5 font-semibold text-white transition-all hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-50 hover:shadow-lg"
           >
             {isLoading ? (
               <>
@@ -297,7 +297,7 @@ export default function Signupvendor() {
         >
           <Link
             to="/"
-            className="flex h-[50px] w-full items-center justify-center rounded-[5px] border border-gray-300 bg-transparent px-5 text-center text-sm font-semibold text-gray-500 transition-colors hover:bg-gray-100"
+            className="flex h-[50px] w-full items-center justify-center rounded-lg border border-gray-300 bg-transparent px-5 text-center text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 hover:border-gray-400"
           >
             Go Home
           </Link>

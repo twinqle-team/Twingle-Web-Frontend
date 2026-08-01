@@ -1,9 +1,10 @@
 import React from "react";
 import Hero from "@/components/home/hero";
-import Product from "@/components/home/product";
+import PropertiesGrid from "@/components/home/PropertiesGrid";
+import AutomotiveGrid from "@/components/home/AutomotiveGrid";
+// import VendorGrid from "@/components/home/VendorCard";
 import SecurityFeatures from "@/components/home/securityFeatures";
 import SubscribeSection from "@/components/home/subscribeSection";
-import Seller from "@/components/home/seller";
 import ServicesSlider from "@/components/home/servicesSlider";
 import RealtorHelp from "@/components/home/realtorHelp";
 import TrustAndReliability from "@/components/home/trustAndReliability";
@@ -53,10 +54,10 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       </div>
-      <Product />
       <RealtorHelp />
-      <SecurityFeatures />
-      <Seller />
+      <PropertiesGrid />
+      <AutomotiveGrid />
+      {/* <VendorGrid /> */}
       <TrustAndReliability />
       <ServicesSlider />
       <SubscribeSection />

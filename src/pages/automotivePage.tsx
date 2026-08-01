@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, Fuel, Gauge, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import heroBg from "../assets/pexels-alshreef-29884360.jpg";
+
+// Using direct image URLs for better performance
+const HERO_BG = "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80";
+const CAR_IMAGE_1 = "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&q=80";
+const CAR_IMAGE_2 = "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80";
+const CAR_IMAGE_3 = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80";
 
 type CarListing = {
   id: number;
@@ -30,11 +35,7 @@ const carListings: CarListing[] = Array.from({ length: 24 }).map(
     fuel: ["Hybrid", "Diesel", "Petrol"][index % 3],
     location: ["Dubai", "Abu Dhabi", "Sharjah"][index % 3],
     featured: index % 2 === 0,
-    image: [
-      heroBg,
-      "/src/assets/pexels-bylukemiller-14667492.jpg",
-      "/src/assets/pexels-mikebirdy-112460.jpg",
-    ][index % 3],
+    image: [HERO_BG, CAR_IMAGE_1, CAR_IMAGE_2, CAR_IMAGE_3][index % 4],
   }),
 );
 
@@ -58,9 +59,9 @@ const AutomotivePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#f7f8fa]">
       <div className="relative w-full min-h-[80vh] flex items-center justify-center overflow-hidden">
-        {/* Full Background Image */}
+          {/* Full Background Image */}
         <img
-          src={heroBg}
+          src={HERO_BG}
           alt="Hero background"
           className="absolute inset-0 object-cover w-full h-full"
         />
@@ -130,73 +131,6 @@ const AutomotivePage: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* <section className="relative overflow-hidden bg-slate-950 px-6 py-20 sm:px-8 lg:px-12 h-[80vh]">
-        <img
-          src={heroBg}
-          alt="Luxury cars"
-          className="absolute inset-0 object-cover w-full h-full opacity-40"
-        />
-        <div className="absolute inset-0 bg-slate-950/15" />
-
-        <div className="relative z-10 flex flex-col items-start max-w-6xl gap-8 mx-auto">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 text-sm font-medium border rounded-full border-emerald-400/30 bg-emerald-500/10 text-emerald-300">
-              <Sparkles size={16} />
-              New & certified vehicles
-            </div>
-            <h1 className="text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
-              Find your next{" "}
-              <span className="text-emerald-400">perfect car</span>
-            </h1>
-            <p className="mt-4 text-lg text-slate-200">
-              Discover premium cars for sale with transparent pricing, verified
-              details, and fast buying support.
-            </p>
-          </div>
-
-          <div className="w-full max-w-4xl p-4 bg-white shadow-2xl rounded-2xl sm:p-5">
-            <div className="grid gap-3 sm:grid-cols-2">
-              <select className="w-full px-4 py-3 pr-10 text-sm text-gray-700 border border-gray-200 rounded-lg outline-none bg-gray-50 focus:border-emerald-500 focus:bg-white">
-                <option>Make</option>
-                <option>BMW</option>
-                <option>Audi</option>
-                <option>Mercedes</option>
-              </select>
-
-              <select className="w-full px-4 py-3 pr-10 text-sm text-gray-700 border border-gray-200 rounded-lg outline-none bg-gray-50 focus:border-emerald-500 focus:bg-white">
-                <option>Body type</option>
-                <option>Sedan</option>
-                <option>SUV</option>
-                <option>Coupe</option>
-              </select>
-
-              <select className="w-full px-4 py-3 pr-10 text-sm text-gray-700 border border-gray-200 rounded-lg outline-none bg-gray-50 focus:border-emerald-500 focus:bg-white">
-                <option>Price</option>
-                <option>$30k - $50k</option>
-                <option>$50k - $80k</option>
-                <option>$80k+</option>
-              </select>
-
-              <select className="w-full px-4 py-3 pr-10 text-sm text-gray-700 border border-gray-200 rounded-lg outline-none bg-gray-50 focus:border-emerald-500 focus:bg-white">
-                <option>Fuel</option>
-                <option>Hybrid</option>
-                <option>Diesel</option>
-                <option>Petrol</option>
-              </select>
-            </div>
-
-            <div className="flex flex-col items-center justify-between gap-3 mt-4 sm:flex-row">
-              <button className="text-sm font-medium text-gray-700 transition hover:text-gray-900">
-                Advanced filters
-              </button>
-              <Button className="px-6 py-5 font-semibold text-white rounded-lg bg-[#019260] hover:bg-emerald-700">
-                Search Cars
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section> */}
 
       <section className="max-w-full px-6 py-12 sm:px-8 lg:px-12">
         <div className="flex flex-col gap-3 mb-8 sm:flex-row sm:items-end sm:justify-between">
