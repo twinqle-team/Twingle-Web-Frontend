@@ -3,7 +3,7 @@ import Hero from "@/components/home/hero";
 import PropertiesGrid from "@/components/home/PropertiesGrid";
 import AutomotiveGrid from "@/components/home/AutomotiveGrid";
 // import VendorGrid from "@/components/home/VendorCard";
-import SecurityFeatures from "@/components/home/securityFeatures";
+// import SecurityFeatures from "@/components/home/securityFeatures";
 import SubscribeSection from "@/components/home/subscribeSection";
 import ServicesSlider from "@/components/home/servicesSlider";
 import RealtorHelp from "@/components/home/realtorHelp";

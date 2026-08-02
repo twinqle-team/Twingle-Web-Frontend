@@ -85,9 +85,6 @@ const vendors: Vendor[] = [
 ];
 
 const VendorListingsPage: React.FC = () => {
-  const truncateName = (name: string) => {
-    return name.length > 25 ? name.slice(0, 25) + "..." : name;
-  };
 
   const truncateDescription = (desc: string) => {
     return desc.length > 100 ? desc.slice(0, 100) + "..." : desc;
