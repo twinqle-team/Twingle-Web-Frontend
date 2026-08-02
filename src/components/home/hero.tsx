@@ -45,30 +45,30 @@ const Hero: React.FC = () => {
 
       <div className="absolute inset-0 bg-slate-950/15"></div>
 
-      <div className="relative mx-auto flex min-h-[90vh] max-w-7xl flex-col justify-center px-6 py-10 text-white sm:px-8 lg:px-12">
-        <div className="max-w-3xl space-y-6">
-          <span className="inline-flex rounded-full border border-white/20 bg-white/5 px-4 py-1 text-xs uppercase tracking-[0.3em] text-slate-200">
+      <div className="relative mx-auto flex min-h-[90vh] max-w-7xl flex-col justify-center px-4 py-8 text-white sm:px-6 sm:py-10 lg:px-12 lg:py-12">
+        <div className="max-w-3xl space-y-4 sm:space-y-6">
+          <span className="inline-flex rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[0.7rem] uppercase tracking-[0.2em] text-slate-200 sm:px-4 sm:py-1.5 sm:text-xs sm:tracking-[0.3em]">
             Premium global marketplace
           </span>
 
-          <h1 className="text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
+          <h1 className="text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl xl:text-6xl">
             The Gold Standard for{" "}
             <span className="text-emerald-400">High-Value Assets</span>
           </h1>
 
-          <p className="max-w-2xl text-base leading-7 text-slate-200 sm:text-lg">
+          <p className="max-w-2xl text-sm leading-6 text-slate-200 sm:text-base sm:leading-7 lg:text-lg">
             Discover premium listings in real estate and automotive, curated for
             serious buyers and elite sellers.
           </p>
         </div>
 
-        <div className="mt-10 max-w-3xl rounded-[2rem] border border-white/10 bg-slate-950/10 p-4 shadow-xl shadow-slate-950/10 backdrop-blur-sm lg:mt-12 sm:p-6">
+        <div className="mt-8 max-w-3xl rounded-2xl border border-white/10 bg-slate-950/10 p-3 shadow-xl shadow-slate-950/10 backdrop-blur-sm sm:mt-10 sm:rounded-[2rem] sm:p-4 lg:mt-12 lg:p-6">
           <Tabs.Root
             value={activeTab}
             onValueChange={(value) => setActiveTab(value as HeroTabKey)}
-            className="space-y-4"
+            className="space-y-3 sm:space-y-4"
           >
-            <Tabs.List className="grid w-full grid-cols-2 gap-2 p-1 text-sm rounded-md bg-white/10 text-slate-200">
+            <Tabs.List className="grid w-full grid-cols-2 gap-1.5 p-1 text-xs rounded-md bg-white/10 text-slate-200 sm:gap-2 sm:p-1.5 sm:text-sm">
               {(Object.keys(tabConfig) as Array<keyof typeof tabConfig>).map(
                 (key) => {
                   const isActive = activeTab === key;
@@ -76,30 +76,31 @@ const Hero: React.FC = () => {
                     <Tabs.Trigger
                       key={key}
                       value={key}
-                      className={`inline-flex h-14 items-center justify-center gap-2 rounded-md px-4 font-semibold transition ${
+                      className={`inline-flex h-11 items-center justify-center gap-1.5 rounded-md px-2 font-semibold transition sm:h-12 sm:gap-2 sm:px-4 ${
                         isActive
                           ? "bg-white text-slate-950 shadow-lg shadow-slate-950/20"
                           : "border border-white/10 bg-transparent text-slate-200 hover:bg-white/15 hover:text-white"
                       }`}
                     >
                       {tabConfig[key].icon}
-                      <span>{tabConfig[key].label}</span>
+                      <span className="hidden xs:inline">{tabConfig[key].label}</span>
+                      <span className="xs:hidden">{tabConfig[key].label.split(' ')[0]}</span>
                     </Tabs.Trigger>
                   );
                 },
               )}
             </Tabs.List>
 
-            <div className="flex flex-col gap-3 mt-4 sm:flex-row">
-              <div className="flex min-h-[4.25rem] w-full items-center gap-3 rounded-3xl bg-white/95 px-4 shadow-lg shadow-slate-950/10 sm:flex-1">
+            <div className="flex flex-col gap-2.5 sm:gap-3">
+              <div className="flex min-h-[3.5rem] w-full items-center gap-2.5 rounded-2xl bg-white/95 px-3 shadow-lg shadow-slate-950/10 sm:min-h-[4.25rem] sm:gap-3 sm:rounded-3xl sm:px-4">
                 {tabConfig[activeTab].icon}
                 <input
                   type="search"
                   placeholder={tabConfig[activeTab].placeholder}
-                  className="w-full text-sm bg-transparent text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-0 sm:text-base"
+                  className="w-full text-xs bg-transparent text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-0 sm:text-sm"
                 />
               </div>
-               <button className="inline-flex h-[4.25rem] items-center justify-center rounded-3xl bg-[#004e27] px-8 text-sm font-semibold text-white transition hover:bg-emerald-800 sm:text-base">
+               <button className="inline-flex h-[3.5rem] items-center justify-center rounded-2xl bg-[#004e27] px-6 text-sm font-semibold text-white transition hover:bg-emerald-800 sm:h-[4.25rem] sm:rounded-3xl sm:px-8 sm:text-base">
                  Explore
                </button>
             </div>

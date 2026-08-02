@@ -3,9 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Search, User, Menu, X, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAppSelector } from "@/redux/hooks";
-
-// Using direct URL for logo for better performance
-const LOGO_URL = "/src/assets/Container.png";
+import LOGO_URL from "@/assets/Container.png"; // Using direct URL for logo for better performance
 
 type SearchOption = {
   label: string;

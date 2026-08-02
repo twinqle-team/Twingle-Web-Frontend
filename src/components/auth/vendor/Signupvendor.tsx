@@ -64,7 +64,7 @@ export default function Signupvendor() {
   };
 
   return (
-    <div className="flex min-h-screen p-0 overflow-x-hidden">
+    <div className="flex min-h-screen p-0 overflow-x-hidden bg-white">
       <motion.div
         variants={leftVariants}
         initial="hidden"
@@ -89,55 +89,53 @@ export default function Signupvendor() {
         <h1 className="mb-2 text-2xl font-bold">
           Welcome to <span className="text-[#004e27]">Twingle!</span>
         </h1>
-        <p className="mb-4 text-gray-600">
-          We’re excited to have you onboard—start selling and growing your
+        <p className="mb-4 text-sm text-center text-gray-600 sm:text-base">
+          We're excited to have you onboard—start selling and growing your
           business with us today!
         </p>
-        <br />
-        {/* <br /> */}
 
         <form
           onSubmit={handleSignup}
-          className="flex w-full max-w-[600px] flex-col items-stretch gap-5 px-0 sm:gap-6"
+          className="flex w-full max-w-[600px] flex-col items-stretch gap-4 px-0 sm:gap-5"
         >
                 {/* CompanyName */}
-          <div className="flex h-[50px] w-full items-center gap-3">
-            <IoStorefrontOutline  className="text-gray-400" />
+          <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+            <IoStorefrontOutline  className="w-5 h-5 text-gray-400" />
             <input
               type="text"
               name="CompanyName"
               placeholder="CompanyName"
               value={formData.CompanyName}
               onChange={handleChange}
-              className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-3 text-gray-700 placeholder:text-gray-400 focus:outline-none"
+              className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-2.5 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none sm:px-3"
               required
             />
 
           </div>
           {/* Email */}
-          <div className="flex h-[50px] w-full items-center gap-3">
-            <Mail className="text-gray-400" />
+          <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+            <Mail className="w-5 h-5 text-gray-400" />
             <input
               type="email"
               name="email"
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
-              className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-3 text-gray-700 placeholder:text-gray-400 focus:outline-none"
+              className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-2.5 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none sm:px-3"
               required
             />
           </div>
 
           {/*  Select Option for Agent Type */}
-          <div className="flex h-[50px] w-full items-center gap-3">
-            <HatGlasses className="text-gray-400" />
+          <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+            <HatGlasses className="w-5 h-5 text-gray-400" />
             <select
               name="agentType"
               value={formData.agentType}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, agentType: e.target.value }))
               }
-              className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-3 text-gray-700 focus:outline-none"
+              className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-2.5 text-sm text-gray-700 focus:outline-none sm:px-3"
               required
             >
               <option value="" disabled>
@@ -151,15 +149,15 @@ export default function Signupvendor() {
 
 
           {/* Country Select */}
-          <div className="flex h-[50px] w-full items-center gap-3">
-            <Globe className="text-gray-400" />
+          <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+            <Globe className="w-5 h-5 text-gray-400" />
             <select
               name="country"
               value={formData.country}
               onChange={(e) => 
                 setFormData((prev) => ({ ...prev, country: e.target.value }))
               }
-              className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-3 text-gray-700 focus:outline-none"
+              className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-2.5 text-sm text-gray-700 focus:outline-none sm:px-3"
               required
             >
               <option value="" disabled>Select Country</option>
@@ -183,26 +181,26 @@ export default function Signupvendor() {
           </div>
 
           {/* Password */}
-          <div className="flex h-[50px] w-full items-center gap-3">
-            <Lock className="text-gray-400" />
-            <div className="flex h-full w-full items-center gap-3 rounded-[5px] border border-gray-400 px-3">
+          <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+            <Lock className="w-5 h-5 text-gray-400" />
+            <div className="flex h-full w-full items-center gap-3 rounded-[5px] border border-gray-400 px-2.5 sm:px-3">
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full h-full text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
+                className="w-full h-full text-sm text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
                 required
               />
               {showPassword ? (
                 <EyeOff
-                  className="text-gray-400 cursor-pointer"
+                  className="w-4 h-4 text-gray-400 cursor-pointer"
                   onClick={() => setShowPassword(false)}
                 />
               ) : (
                 <Eye
-                  className="text-gray-400 cursor-pointer"
+                  className="w-4 h-4 text-gray-400 cursor-pointer"
                   onClick={() => setShowPassword(true)}
                 />
               )}
@@ -210,26 +208,26 @@ export default function Signupvendor() {
           </div>
 
           {/* confrim Password */}
-          <div className="flex h-[50px] w-full items-center gap-3">
-            <Lock className="text-gray-400" />
-            <div className="flex h-full w-full items-center gap-3 rounded-[5px] border border-gray-400 px-3">
+          <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+            <Lock className="w-5 h-5 text-gray-400" />
+            <div className="flex h-full w-full items-center gap-3 rounded-[5px] border border-gray-400 px-2.5 sm:px-3">
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
                 placeholder="Confirm Password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="w-full h-full text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
+                className="w-full h-full text-sm text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
                 required
               />
               {showConfirmPassword ? (
                 <EyeOff
-                  className="text-gray-400 cursor-pointer"
+                  className="w-4 h-4 text-gray-400 cursor-pointer"
                   onClick={() => setShowConfirmPassword(false)}
                 />
               ) : (
                 <Eye
-                  className="text-gray-400 cursor-pointer"
+                  className="w-4 h-4 text-gray-400 cursor-pointer"
                   onClick={() => setShowConfirmPassword(true)}
                 />
               )}
@@ -274,7 +272,7 @@ export default function Signupvendor() {
             disabled={isLoading || !agreeToTerms}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3.5 font-semibold text-white transition-all hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-50 hover:shadow-lg"
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-all hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-50 hover:shadow-lg sm:py-3.5"
           >
             {isLoading ? (
               <>
@@ -297,7 +295,7 @@ export default function Signupvendor() {
         >
           <Link
             to="/"
-            className="flex h-[50px] w-full items-center justify-center rounded-lg border border-gray-300 bg-transparent px-5 text-center text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 hover:border-gray-400"
+            className="flex h-[48px] w-full items-center justify-center rounded-lg border border-gray-300 bg-transparent px-5 text-center text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 hover:border-gray-400 sm:h-[50px]"
           >
             Go Home
           </Link>
@@ -305,7 +303,7 @@ export default function Signupvendor() {
             Already have an account?{" "}
             <Link
               to="/vendor-login"
-              className="font-semibold text-teal-500 transition-colors hover:text-teal-600"
+              className="font-semibold text-[#004e27] transition-colors hover:text-[#004e27]/80"
             >
               Login
             </Link>
@@ -314,7 +312,7 @@ export default function Signupvendor() {
             Want a customer account instead?{" "}
             <Link
               to="/signup"
-              className="font-semibold text-teal-500 transition-colors hover:text-teal-600"
+              className="font-semibold text-[#004e27] transition-colors hover:text-[#004e27]/80"
             >
               User signup
             </Link>

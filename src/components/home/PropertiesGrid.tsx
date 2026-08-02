@@ -231,11 +231,11 @@ const PropertiesGrid: React.FC = () => {
           </Link>
         </div>
 
-        <div className="grid gap-6 pl-10 mx-auto sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {topAgents.map((agent) => (
             <div
               key={agent.id}
-              className="max-w-md overflow-hidden transition-all duration-300 bg-white border border-gray-100 shadow-md group rounded-xl hover:shadow-xl"
+              className="overflow-hidden transition-all duration-300 bg-white border border-gray-100 shadow-md group rounded-xl hover:shadow-xl"
             >
               {/* Header with Background */}
               <div className="relative h-32">

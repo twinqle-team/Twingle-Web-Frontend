@@ -97,7 +97,7 @@ export default function VerifyOtpPage() {
   };
 
   return (
-    <div className="flex min-h-screen overflow-x-hidden p-0">
+    <div className="flex min-h-screen p-0 overflow-x-hidden bg-white">
       <motion.div
         variants={leftVariants}
         initial="hidden"
@@ -111,25 +111,25 @@ export default function VerifyOtpPage() {
         variants={rightVariants}
         initial="hidden"
         animate="visible"
-        className="flex min-h-screen w-full flex-col items-center justify-center bg-white px-4 py-8 sm:px-6 md:w-1/2 md:px-8 lg:px-10"
+        className="flex flex-col items-center justify-center w-full min-h-screen px-4 py-8 bg-white sm:px-6 md:w-1/2 md:px-8 lg:px-10"
       >
         <img
           src="src/assets/Container.png"
           alt="Twingle logo"
-          className="mb-4 h-14 w-auto sm:h-16"
+          className="w-auto mb-4 h-14 sm:h-16"
         />
 
-        <div className="flex w-full max-w-[600px] flex-col items-stretch gap-5 px-0 sm:gap-6">
+        <div className="flex w-full max-w-[600px] flex-col items-stretch gap-4 px-0 sm:gap-5">
           <motion.div
             variants={itemVariants}
             className="rounded-[12px] border border-gray-200 bg-slate-50 px-5 py-4 text-center"
           >
-            <div className="mb-3 flex justify-center">
-              <div className="rounded-full bg-[#004e27]/10 p-3 text-[#004e27]">
-                <ShieldCheck className="h-6 w-6" />
+            <div className="flex justify-center mb-3">
+              <div className="rounded-full bg-[#004e27]/10 p-2.5 text-[#004e27] sm:p-3">
+                <ShieldCheck className="w-5 h-5 sm:h-6 sm:w-6" />
               </div>
             </div>
-            <h1 className="text-2xl font-semibold text-gray-800">
+            <h1 className="text-xl font-semibold text-gray-800 sm:text-2xl">
               Verify Code
             </h1>
             <p className="mt-2 text-sm text-gray-600">
@@ -145,7 +145,7 @@ export default function VerifyOtpPage() {
             onSubmit={handleSubmit}
             className="flex flex-col items-stretch gap-5"
           >
-            <div className="flex items-center justify-between gap-2 sm:gap-3">
+            <div className="flex items-center justify-between gap-2 sm:gap-3 md:gap-4">
               {otp.map((digit, index) => (
                 <input
                   key={index}
@@ -159,7 +159,7 @@ export default function VerifyOtpPage() {
                   onChange={(e) => handleChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={handlePaste}
-                  className="h-12 w-12 rounded-[8px] border border-gray-300 text-center text-lg font-semibold text-gray-700 outline-none focus:border-[#004e27] focus:ring-2 focus:ring-[#004e27]/10 sm:h-14 sm:w-14 bg-white"
+                  className="h-11 w-11 rounded-[8px] border border-gray-300 text-center text-base font-semibold text-gray-700 outline-none focus:border-[#004e27] focus:ring-2 focus:ring-[#004e27]/10 sm:h-12 sm:w-12 md:h-14 md:w-14 md:text-lg bg-white"
                 />
               ))}
             </div>
@@ -169,14 +169,14 @@ export default function VerifyOtpPage() {
               disabled={isLoading || otp.some((digit) => !digit)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50 sm:py-3.5"
             >
               {isLoading ? (
                 <>
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity }}
-                    className="h-5 w-5 rounded-full border-2 border-white border-t-transparent"
+                    className="w-5 h-5 border-2 border-white rounded-full border-t-transparent"
                   />
                   Verifying...
                 </>
@@ -194,7 +194,7 @@ export default function VerifyOtpPage() {
               to="/vendor-forgot"
               className="inline-flex items-center gap-2 text-sm font-medium text-[#004e27] transition-colors hover:text-[#004e27]/80"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="w-4 h-4" />
               Back to reset password
             </Link>
           </motion.div>

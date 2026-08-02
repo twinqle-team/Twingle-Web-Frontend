@@ -51,13 +51,13 @@ const TrustAndReliability: React.FC = () => {
   ];
 
   const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => (
-    <div className="bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-lg transition-shadow">
+    <div className="p-8 transition-shadow bg-white border border-gray-200 rounded-2xl hover:shadow-lg">
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-start gap-4">
           <img
             src={testimonial.image}
             alt={testimonial.name}
-            className="w-16 h-16 rounded-lg object-cover"
+            className="object-cover w-16 h-16 rounded-lg"
           />
           <div>
             <h3 className="text-lg font-semibold text-gray-900">
@@ -76,30 +76,30 @@ const TrustAndReliability: React.FC = () => {
         </svg>
       </div>
 
-      <p className="text-gray-700 text-base leading-relaxed mb-6">
+      <p className="mb-6 text-base leading-relaxed text-gray-700">
         {testimonial.text}
       </p>
 
       <div className="flex gap-1">
         {Array.from({ length: testimonial.rating }).map((_, i) => (
-          <Star key={i} size={20} className="fill-yellow-400 text-yellow-400" />
+          <Star key={i} size={20} className="text-yellow-400 fill-yellow-400" />
         ))}
       </div>
     </div>
   );
 
   return (
-    <div className="w-full py-20 px-6 sm:px-8 lg:px-12 bg-gray-50">
-      <div className="max-w-7xl mx-auto">
+    <div className="w-full px-6 py-20 sm:px-8 lg:px-12 bg-gray-50">
+      <div className="mx-auto max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
+        <div className="mb-16 text-center">
+          <h2 className="text-4xl font-bold text-gray-900 sm:text-5xl">
             Trust and Reliability Focused
           </h2>
         </div>
 
         {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4 lg:gap-8">
           {testimonials.map((testimonial) => (
             <TestimonialCard key={testimonial.id} testimonial={testimonial} />
           ))}

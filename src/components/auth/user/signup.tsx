@@ -125,7 +125,7 @@ export default function SignupPage() {
         variants={leftVariants}
         initial="hidden"
         animate="visible"
-        className="hidden h-screen overflow-hidden md:flex md:w-1/2"
+        className="hidden md:flex md:h-screen md:w-1/2"
       >
         <Sliding />
       </motion.div>
@@ -135,7 +135,7 @@ export default function SignupPage() {
         variants={rightVariants}
         initial="hidden"
         animate="visible"
-        className="flex flex-col items-center justify-start flex-1 h-screen max-w-full min-w-0 px-4 py-8 overflow-y-auto bg-white sm:px-6 md:px-8 lg:px-10"
+        className="flex flex-col items-center justify-start flex-1 min-h-screen px-4 py-8 overflow-y-auto bg-white sm:px-6 md:px-8 lg:px-10"
       >
         {/* <img
           src="src/assets/Container.png"
@@ -145,26 +145,26 @@ export default function SignupPage() {
         <h1 className="mb-2 text-2xl font-bold">
           Welcome to <span className="text-[#004e27]">Twingle!</span>
         </h1>
-        <p className="mb-4 text-gray-600">
-          We’re excited to have you onboard—start buying with us today!
+        <p className="mb-4 text-sm text-gray-600 sm:text-base">
+          We're excited to have you onboard—start buying with us today!
         </p>
-        <br />
+
         <form
           onSubmit={handleSignup}
-          className="flex w-full max-w-[620px] flex-col items-stretch gap-4 px-0 sm:gap-5 md:gap-6"
+          className="flex w-full max-w-[620px] flex-col items-stretch gap-4 px-0 sm:gap-5"
         >
           {/* First Name and Last Name */}
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <div className="flex h-[50px] w-full items-center gap-3">
-                <User className="text-gray-400" />
+              <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+                <User className="w-5 h-5 text-gray-400" />
                 <input
                   type="text"
                   name="firstName"
                   placeholder="First Name"
                   value={formData.firstName}
                   onChange={handleChange}
-                  className={`h-full w-full rounded-[5px] border bg-transparent px-3 text-gray-700 placeholder:text-gray-400 focus:outline-none ${
+                  className={`h-full w-full rounded-[5px] border bg-transparent px-2.5 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none sm:px-3 ${
                     errors.firstName ? "border-red-500" : "border-gray-400"
                   }`}
                 />
@@ -177,15 +177,15 @@ export default function SignupPage() {
               )}
             </div>
             <div>
-              <div className="flex h-[50px] w-full items-center gap-3">
-                <User className="text-gray-400" />
+              <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+                <User className="w-5 h-5 text-gray-400" />
                 <input
                   type="text"
                   name="lastName"
                   placeholder="Last Name"
                   value={formData.lastName}
                   onChange={handleChange}
-                  className={`h-full w-full rounded-[5px] border bg-transparent px-3 text-gray-700 placeholder:text-gray-400 focus:outline-none ${
+                  className={`h-full w-full rounded-[5px] border bg-transparent px-2.5 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none sm:px-3 ${
                     errors.lastName ? "border-red-500" : "border-gray-400"
                   }`}
                 />
@@ -201,15 +201,15 @@ export default function SignupPage() {
 
           {/* Email Field */}
           <div>
-            <div className="flex h-[50px] w-full items-center gap-3">
-              <Mail className="text-gray-400" />
+            <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+              <Mail className="w-5 h-5 text-gray-400" />
               <input
                 type="email"
                 name="email"
                 placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`h-full w-full rounded-[5px] border bg-transparent px-3 text-gray-700 placeholder:text-gray-400 focus:outline-none ${
+                className={`h-full w-full rounded-[5px] border bg-transparent px-2.5 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none sm:px-3 ${
                   errors.email ? "border-red-500" : "border-gray-400"
                 }`}
               />
@@ -224,10 +224,10 @@ export default function SignupPage() {
 
           {/* Password Field */}
           <div>
-            <div className="flex h-[50px] w-full items-center gap-3">
-              <Lock className="text-gray-400" />
+            <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+              <Lock className="w-5 h-5 text-gray-400" />
               <div
-                className={`flex h-full w-full items-center gap-3 rounded-[5px] border px-3 ${
+                className={`flex h-full w-full items-center gap-3 rounded-[5px] border px-2.5 sm:px-3 ${
                   errors.password ? "border-red-500" : "border-gray-400"
                 }`}
               >
@@ -237,16 +237,16 @@ export default function SignupPage() {
                   placeholder="Password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full h-full text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
+                  className="w-full h-full text-sm text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
                 />
                 {showPassword ? (
                   <EyeOff
-                    className="text-gray-400 cursor-pointer"
+                    className="w-4 h-4 text-gray-400 cursor-pointer"
                     onClick={() => setShowPassword(false)}
                   />
                 ) : (
                   <Eye
-                    className="text-gray-400 cursor-pointer"
+                    className="w-4 h-4 text-gray-400 cursor-pointer"
                     onClick={() => setShowPassword(true)}
                   />
                 )}
@@ -262,10 +262,10 @@ export default function SignupPage() {
 
           {/* Confirm Password Field */}
           <div>
-            <div className="flex h-[50px] w-full items-center gap-3">
-              <Lock className="text-gray-400" />
+            <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+              <Lock className="w-5 h-5 text-gray-400" />
               <div
-                className={`flex h-full w-full items-center gap-3 rounded-[5px] border px-3 ${
+                className={`flex h-full w-full items-center gap-3 rounded-[5px] border px-2.5 sm:px-3 ${
                   errors.confirmPassword ? "border-red-500" : "border-gray-400"
                 }`}
               >
@@ -275,16 +275,16 @@ export default function SignupPage() {
                   placeholder="Confirm Password"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="w-full h-full text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
+                  className="w-full h-full text-sm text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
                 />
                 {showConfirmPassword ? (
                   <EyeOff
-                    className="text-gray-400 cursor-pointer"
+                    className="w-4 h-4 text-gray-400 cursor-pointer"
                     onClick={() => setShowConfirmPassword(false)}
                   />
                 ) : (
                   <Eye
-                    className="text-gray-400 cursor-pointer"
+                    className="w-4 h-4 text-gray-400 cursor-pointer"
                     onClick={() => setShowConfirmPassword(true)}
                   />
                 )}
@@ -300,26 +300,13 @@ export default function SignupPage() {
 
           <motion.div
             variants={itemVariants}
-            className={`flex w-full flex-col gap-3 rounded-[5px] border px-4 py-3 sm:flex-row sm:items-start ${
-              errors.agreeToTerms
-                ? "border-red-500 bg-red-50"
-                : "border-gray-200 bg-slate-50"
-            }`}
+            className="flex w-full items-start gap-3 rounded-[5px] border border-gray-200 bg-slate-50 px-4 py-3"
           >
             <input
               id="terms"
               type="checkbox"
               checked={agreeToTerms}
-              onChange={(e) => {
-                setAgreeToTerms(e.target.checked);
-                if (errors.agreeToTerms) {
-                  setErrors((prev) => {
-                    const newErrors = { ...prev };
-                    delete newErrors.agreeToTerms;
-                    return newErrors;
-                  });
-                }
-              }}
+              onChange={(e) => setAgreeToTerms(e.target.checked)}
               className="mt-1 h-4 w-4 cursor-pointer rounded border-gray-300 text-[#004e27]"
             />
             <label
@@ -355,7 +342,7 @@ export default function SignupPage() {
             type="button"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="flex items-center justify-center w-full gap-3 py-3 font-semibold text-gray-700 transition-colors bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50"
+            className="flex items-center justify-center w-full gap-3 py-2.5 font-semibold text-gray-700 transition-colors bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 sm:py-3"
           >
             <GoogleIcon />
             Sign up with Google
@@ -367,7 +354,7 @@ export default function SignupPage() {
             disabled={isLoading || !agreeToTerms}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50 sm:py-3.5"
           >
             {isLoading ? (
               <>
@@ -390,7 +377,7 @@ export default function SignupPage() {
         >
           <Link
             to="/"
-            className="flex h-[50px] w-full items-center justify-center rounded-[5px] border border-gray-300 bg-transparent px-5 text-center text-sm font-semibold text-gray-500 transition-colors hover:bg-gray-100"
+            className="flex h-[48px] w-full items-center justify-center rounded-[5px] border border-gray-300 bg-transparent px-5 text-center text-sm font-semibold text-gray-500 transition-colors hover:bg-gray-100 sm:h-[50px]"
           >
             Go Home
           </Link>
