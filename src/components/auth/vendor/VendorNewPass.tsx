@@ -1,38 +1,37 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, User, Lock } from "lucide-react";
+// import { IoStorefrontOutline } from "react-icons/io5";
+import { Eye, EyeOff, Lock, } from "lucide-react";
 import { Link } from "react-router-dom";
 import SimpleSlider from "../../../lib/Sliding";
 
-const LOGIN_EMAIL_STORAGE_KEY = "twingle_login_email";
-
-export default function Loginvendor() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export default function VendorNewPass() {
+  const [formData, setFormData] = useState({
+    CompanyName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    agentType: "",
+    country: "", // Added for country selection
+  });
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
 
-  useEffect(() => {
-    const storedEmail = window.localStorage.getItem(LOGIN_EMAIL_STORAGE_KEY);
-    if (storedEmail) {
-      setEmail(storedEmail);
-    }
-  }, []);
-
-  const handleEmailChange = (value: string) => {
-    setEmail(value);
-    if (value.trim()) {
-      window.localStorage.setItem(LOGIN_EMAIL_STORAGE_KEY, value.trim());
-    } else {
-      window.localStorage.removeItem(LOGIN_EMAIL_STORAGE_KEY);
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleNewpassword = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
     setIsLoading(true);
     // API call would go here
+
     setTimeout(() => setIsLoading(false), 2000);
   };
 
@@ -64,60 +63,55 @@ export default function Loginvendor() {
   };
 
   return (
-    <div className="flex min-h-screen overflow-x-hidden p-0">
-      {/* LeftSide Branding */}
+    <div className="flex min-h-screen p-0 overflow-x-hidden">
       <motion.div
         variants={leftVariants}
         initial="hidden"
         animate="visible"
-        className="hidden md:flex md:w-1/2 md:h-screen"
+        className="hidden md:flex md:h-screen md:w-1/2"
       >
         <SimpleSlider />
       </motion.div>
 
-      {/* RightSide Login Form */}
       <motion.div
         variants={rightVariants}
         initial="hidden"
         animate="visible"
-        className="flex min-h-screen w-full flex-col items-center justify-center bg-white px-4 py-8 sm:px-6 md:w-1/2 md:px-8 lg:px-10"
+        className="flex flex-col items-center justify-center w-full min-h-screen px-4 py-8 bg-white sm:px-6 md:w-1/2 md:px-8 lg:px-10"
       >
         {/* <img
           src="src/assets/Container.png"
-          alt=""
-          className="mb-4 h-14 w-auto sm:h-16"
+          alt="Twingle logo"
+          className="w-auto mb-4 h-14 sm:h-16"
         /> */}
 
         <h1 className="mb-2 text-2xl font-bold">
-          Log in to <span className="text-[#004e27]">Twingle.com</span>
+          Welcome to <span className="text-[#004e27]">Twingle!</span>
         </h1>
-        <p className="mb-6 text-gray-600">
-          Enter your valid email address and password to log in to your account.
+        <p className="mb-4 text-gray-600">
+          We’re excited to have you onboard—start selling and growing your
+          business with us today!
         </p>
+        <br />
+        {/* <br /> */}
 
         <form
-          onSubmit={handleLogin}
+          onSubmit={handleNewpassword}
           className="flex w-full max-w-[600px] flex-col items-stretch gap-5 px-0 sm:gap-6"
         >
-          <div className="flex h-[50px] w-full items-center gap-3">
-            <User className="text-gray-400" />
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => handleEmailChange(e.target.value)}
-              className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-3 text-gray-700 placeholder:text-gray-400 focus:outline-none"
-            />
-          </div>
+
+          {/* Password */}
           <div className="flex h-[50px] w-full items-center gap-3">
             <Lock className="text-gray-400" />
-            <div className="flex h-full w-full items-center gap-3 border border-gray-400 rounded-[5px] px-3">
+            <div className="flex h-full w-full items-center gap-3 rounded-[5px] border border-gray-400 px-3">
               <input
                 type={showPassword ? "text" : "password"}
+                name="New password"
                 placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={formData.password}
+                onChange={handleChange}
                 className="w-full h-full text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
+                required
               />
               {showPassword ? (
                 <EyeOff
@@ -133,34 +127,37 @@ export default function Loginvendor() {
             </div>
           </div>
 
-          {/* Remember Me & Forgot Password */}
-          <motion.div
-            variants={itemVariants}
-            className="flex w-full items-center justify-between gap-4 rounded-[5px] border border-gray-200 bg-slate-50 px-4 py-3"
-          >
-            <label className="flex items-center gap-2 cursor-pointer">
+          {/* confrim Password */}
+          <div className="flex h-[50px] w-full items-center gap-3">
+            <Lock className="text-gray-400" />
+            <div className="flex h-full w-full items-center gap-3 rounded-[5px] border border-gray-400 px-3">
               <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 text-[#004e27] border-gray-300 rounded cursor-pointer"
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                placeholder="Confirm NewPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className="w-full h-full text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
+                required
               />
-              <span className="text-sm text-gray-600">Remember me</span>
-            </label>
-            <Link
-              to="/vendor-forgot"
-              className="text-sm font-medium text-[#004e27] transition-colors hover:text-[#004e27]/80"
-            >
-              Forgot password?
-            </Link>
-          </motion.div>
+              {showConfirmPassword ? (
+                <EyeOff
+                  className="text-gray-400 cursor-pointer"
+                  onClick={() => setShowConfirmPassword(false)}
+                />
+              ) : (
+                <Eye
+                  className="text-gray-400 cursor-pointer"
+                  onClick={() => setShowConfirmPassword(true)}
+                />
+              )}
+            </div>
+          </div>
 
-          <Link to="/app">
-{/* Submit Button */}
           <motion.button
             variants={itemVariants}
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading }
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50"
@@ -172,15 +169,14 @@ export default function Loginvendor() {
                   transition={{ duration: 1, repeat: Infinity }}
                   className="w-5 h-5 border-2 border-white rounded-full border-t-transparent"
                 />
-                Signing in...
+                Creating account...
               </>
             ) : (
-              "Login to my account"
+              "Reset my account"
             )}
           </motion.button>
-          </Link>
         </form>
-        {/* Bottom Links */}
+
         <motion.div
           variants={itemVariants}
           className="mt-4 flex w-full max-w-[600px] flex-col items-center gap-4 border-t border-gray-200 pt-4"
@@ -192,21 +188,21 @@ export default function Loginvendor() {
             Go Home
           </Link>
           <p className="text-sm text-gray-600">
-            Don't have an account?{" "}
+            Already have an account?{" "}
             <Link
-              to="/vendor-signup"
+              to="/vendor-login"
               className="font-semibold text-teal-500 transition-colors hover:text-teal-600"
             >
-              Register
+              Login
             </Link>
           </p>
           <p className="text-sm text-gray-600">
-            Looking for the customer account?{" "}
+            Want a customer account instead?{" "}
             <Link
-              to="/login"
+              to="/signup"
               className="font-semibold text-teal-500 transition-colors hover:text-teal-600"
             >
-              User login
+              User signup
             </Link>
           </p>
         </motion.div>

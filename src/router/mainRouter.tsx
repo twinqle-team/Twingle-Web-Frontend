@@ -31,6 +31,9 @@ import VehicleForm from "@/components/vendor/Product/Auto/vehicle/VehicleForm";
 
 import ProfileLayout from "@/components/layout/profileLayout";
 import ProfileDashboard from "@/components/userProfile/profileDashboard";
+import VendorNewPass from "@/components/auth/vendor/VendorNewPass";
+import Verifyvendor from "@/components/auth/vendor/Verifyvendor";
+import Verify from "@/components/auth/vendor/Verify";
 
 
 const Home = lazy(() => import("@/pages/homePage"));
@@ -61,6 +64,10 @@ const routes: RouteObject[] = [
   {
     path: "/verify-otp",
     element: <VerifyOtpPage />,
+  },
+  {
+    path: "/verify",
+    element: <Verify />,
   },
   {
     path: "/profile",
@@ -97,7 +104,11 @@ const routes: RouteObject[] = [
   },
   {
     path: "/vendor-verify",
-    element: <VerifyOtpPage />,
+    element: <Verifyvendor />,
+  },
+  {
+    path: "/new",
+    element: <VendorNewPass />,
   },
   {
     path: "/app",

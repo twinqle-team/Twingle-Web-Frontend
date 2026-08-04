@@ -16,7 +16,7 @@ export default function AccountTypeSelectionPage() {
             Choose your account
           </p>
           <h1 className="text-3xl font-semibold text-gray-900 sm:text-4xl">
-            How do you want to join Twingle?
+            How do you want to join Twinqle?
           </h1>
           <p className="max-w-2xl mx-auto mt-3 text-sm text-gray-600 sm:text-base">
             Select the option that best matches your needs and we’ll take you to
@@ -33,7 +33,7 @@ export default function AccountTypeSelectionPage() {
               <UserRound size={24} />
             </div>
             <h2 className="text-xl font-semibold text-gray-900">
-              Register as a normal user
+              Register as a user
             </h2>
             <p className="mt-2 text-sm leading-6 text-gray-600">
               Perfect for buyers, renters, or anyone looking to explore

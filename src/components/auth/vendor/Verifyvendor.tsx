@@ -6,7 +6,7 @@ import SimpleSlider from "../../../lib/Sliding";
 
 const OTP_LENGTH = 6;
 
-export default function VerifyOtpPage() {
+export default function Verifyvendor() {
   const location = useLocation();
   const navigate = useNavigate();
   const email = (location.state as { email?: string } | null)?.email ?? "";
@@ -164,6 +164,7 @@ export default function VerifyOtpPage() {
               ))}
             </div>
 
+            <Link to="/vendor-login">
             <motion.button
               type="submit"
               disabled={isLoading || otp.some((digit) => !digit)}
@@ -184,6 +185,7 @@ export default function VerifyOtpPage() {
                 "Verify code"
               )}
             </motion.button>
+            </Link>
           </motion.form>
 
           <motion.div
