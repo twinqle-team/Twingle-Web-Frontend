@@ -1,0 +1,10 @@
+src/components/estate/product.tsx(20,7): error TS2322: Type '{ address: string; type: string; id: number; title: string; price: string; city: string; beds: number; baths: number; sqft: string; image: string; gallery: string[]; description: string; features: string[]; amenities: string[]; agent: { ...; }; inspectionVideo?: { ...; } | undefined; }[]' is not assignable to type 'Listing[]'.
+  Property 'featured' is missing in type '{ address: string; type: string; id: number; title: string; price: string; city: string; beds: number; baths: number; sqft: string; image: string; gallery: string[]; description: string; features: string[]; amenities: string[]; agent: { name: string; phone: string; email: string; }; inspectionVideo?: { title: string...' but required in type 'Listing'.
+src/components/vendor/Kyc/Button.tsx(33,6): error TS2322: Type '{ children: (Element | ReactNode)[]; disabled: boolean | undefined; form?: string | undefined; formAction?: string | ((formData: FormData) => void | Promise<...>) | undefined; ... 285 more ...; className: string; }' is not assignable to type 'Omit<HTMLMotionProps<"button">, "ref">'.
+  Types of property 'onDrag' are incompatible.
+    Type 'DragEventHandler<HTMLButtonElement> | undefined' is not assignable to type '((event: PointerEvent | MouseEvent | TouchEvent, info: PanInfo) => void) | undefined'.
+      Type 'DragEventHandler<HTMLButtonElement>' is not assignable to type '(event: PointerEvent | MouseEvent | TouchEvent, info: PanInfo) => void'.
+        Types of parameters 'event' and 'event' are incompatible.
+          Type 'PointerEvent | MouseEvent | TouchEvent' is not assignable to type 'DragEvent<HTMLButtonElement>'.
+            Type 'PointerEvent' is missing the following properties from type 'DragEvent<HTMLButtonElement>': dataTransfer, nativeEvent, isDefaultPrevented, isPropagationStopped, persist
+src/components/vendor/Kyc/CameraPreview.tsx(19,10): error TS6133: 'permissionGranted' is declared but its value is never read.

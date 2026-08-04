@@ -111,10 +111,10 @@
 //     <motion.div
 //       initial={{ x: -300, opacity: 0 }}
 //       animate={{ x: 0, opacity: 1 }}
-//       className="bg-white border-r w-80 flex flex-col"
+//       className="flex flex-col bg-white border-r w-80"
 //     >
 //       {/* Header */}
-//       <div className="p-4 border-b flex-shrink-0">
+//       <div className="flex-shrink-0 p-4 border-b">
 //         <div className="flex items-center justify-between mb-4">
 //           <h1 className="text-xl font-bold">Chats</h1>
 //           <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
@@ -138,7 +138,7 @@
 //                   onChange={(e) => setSearchQuery(e.target.value)}
 //                   ref={searchInputRef}
 //                 />
-//                 <Search className="absolute w-4 h-4 text-gray-400 left-2 top-1/2 transform -translate-y-1/2" />
+//                 <Search className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 left-2 top-1/2" />
 //               </div>
 
 //               {isSearchLoading || createChatMutation.isLoading ? (
@@ -152,7 +152,7 @@
 //                     onSelect={() => handleSelectContact(contact)}
 //                     disabled={createChatMutation.isLoading}
 //                   >
-//                     <div className="flex items-center gap-3 w-full">
+//                     <div className="flex items-center w-full gap-3">
 //                       <div className="relative">
 //                         <img
 //                           src={
@@ -191,7 +191,7 @@
 //           </DropdownMenu>
 //         </div>
 //         <div className="relative">
-//           <Search className="absolute w-5 h-5 text-gray-400 left-3 top-1/2 transform -translate-y-1/2" />
+//           <Search className="absolute w-5 h-5 text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
 //           <input
 //             type="text"
 //             placeholder="Search chats..."
@@ -208,7 +208,7 @@
 //           {filteredChats.length === 0 ? (
 //             <div className="flex flex-col items-center justify-center h-full p-4 text-center text-gray-500">
 //               <p>No chats found</p>
-//               <p className="text-sm mt-2">
+//               <p className="mt-2 text-sm">
 //                 {chatSearchQuery ? "No chats match your search" : "Start a new chat by clicking the + button"}
 //               </p>
 //             </div>
@@ -235,7 +235,7 @@
 //                     <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
 //                   )}
 //                 </div>
-//                 <div className="flex-1 text-left min-w-0">
+//                 <div className="flex-1 min-w-0 text-left">
 //                   <div className="flex items-start justify-between">
 //                     <div className="truncate">
 //                       <p className="font-semibold truncate">{chat.name}</p>
@@ -262,3 +262,13 @@
 //     </motion.div>
 //   );
 // }
+
+import React from 'react'
+
+const Chat: React.FC = () => {
+  return (
+    <div>Chat</div>
+  )
+}
+
+export default Chat

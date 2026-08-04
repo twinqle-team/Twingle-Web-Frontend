@@ -1,30 +1,31 @@
 import React, { useState } from "react";
-import login1 from "@/assets/login1.png";
-import login2 from "@/assets/login2.png";
-import login3 from "@/assets/login3.png";
-import logo from "@/assets/Container.png";
+import LOGO_URL from "@/assets/Container.png";
 import SliderModule from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Link } from "react-router-dom";
 
 const Slider = (SliderModule as any).default || SliderModule;
 
 const Sliding: React.FC = () => {
   const [slides] = useState([
     {
-      img: login1,
-      title: "Find Your Perfect Place",
-      subtitle: "Discover modern homes built for your lifestyle.",
+      img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+      title: "Find Your Dream Home",
+      subtitle:
+        "Discover modern, luxurious properties designed for your perfect lifestyle",
     },
     {
-      img: login2,
-      title: "Move Beyond Limits",
-      subtitle: "Premium properties and vehicles, all in one place.",
+      img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80",
+      title: "Premium Properties & Vehicles",
+      subtitle:
+        "Exclusive listings of luxury homes and premium vehicles, all in one place",
     },
     {
-      img: login3,
-      title: "Live The Luxury Life",
-      subtitle: "Where dream spaces meet dream drives.",
+      img: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=80",
+      title: "Live the Luxury Life",
+      subtitle:
+        "Where exceptional spaces meet extraordinary drives — your dream lifestyle awaits",
     },
   ]);
   const settings = {
@@ -40,9 +41,13 @@ const Sliding: React.FC = () => {
   };
   return (
     <div className="relative w-full h-screen overflow-hidden">
-      <div className="absolute z-20 top-4 left-4">
-        <img src={logo} alt="Logo" className="w-auto h-12" />
-      </div>
+      <Link to="/" className="absolute z-20 top-4 left-4 group">
+        <img
+          src={LOGO_URL}
+          alt="Twingle Logo"
+          className="w-auto h-8 transition-opacity sm:h-10 md:h-14 lg:h-20 group-hover:opacity-80"
+        />
+      </Link>
       <Slider {...settings} className="h-screen">
         {slides.map((slide, index) => (
           <div key={index} className="relative w-full h-screen">
@@ -53,15 +58,17 @@ const Sliding: React.FC = () => {
             />
 
             {/* Overlay for the slide */}
-            <div className="absolute inset-0 w-full h-full bg-black opacity-30"></div>
+            <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-black/50 via-black/40 to-black/60"></div>
 
-            <div className="absolute inset-0 z-10 flex flex-col justify-center px-8 text-white md:px-16 lg:px-20">
-              <h2 className="max-w-xl text-3xl font-semibold md:text-4xl lg:text-5xl">
-                {slide.title}
-              </h2>
-              <p className="max-w-lg mt-4 text-sm text-gray-100 md:text-base lg:text-lg">
-                {slide.subtitle}
-              </p>
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center text-white md:px-12 lg:px-24">
+              <div className="max-w-4xl mx-auto">
+                <h2 className="mb-6 text-4xl font-bold leading-tight md:text-5xl lg:text-6xl drop-shadow-lg">
+                  {slide.title}
+                </h2>
+                <p className="max-w-3xl mx-auto text-lg leading-relaxed text-gray-100 md:text-xl lg:text-2xl drop-shadow-md">
+                  {slide.subtitle}
+                </p>
+              </div>
             </div>
           </div>
         ))}

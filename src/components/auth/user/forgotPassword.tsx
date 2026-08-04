@@ -81,7 +81,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="flex min-h-screen overflow-x-hidden bg-white p-0">
+    <div className="flex min-h-screen p-0 overflow-x-hidden bg-white">
       <motion.div
         variants={leftVariants}
         initial="hidden"
@@ -100,7 +100,7 @@ export default function ForgotPasswordPage() {
         <img
           src="src/assets/Container.png"
           alt="Twingle logo"
-          className="mb-4 h-14 w-auto sm:h-16"
+          className="w-auto mb-4 h-14 sm:h-16"
         />
 
         <div className="flex w-full max-w-[560px] flex-col items-stretch gap-4 px-0 sm:gap-5 md:gap-6">
@@ -112,7 +112,7 @@ export default function ForgotPasswordPage() {
               Reset Password
             </h1>
             <p className="mt-2 text-sm text-gray-600">
-              Enter your email address and we’ll send a verification code.
+              Enter your email address and we'll send a verification code.
             </p>
           </motion.div>
 
@@ -122,8 +122,8 @@ export default function ForgotPasswordPage() {
             className="flex flex-col items-stretch gap-5"
           >
             <div>
-              <div className="flex h-[50px] w-full items-center gap-3">
-                <Mail className="text-gray-400" />
+              <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+                <Mail className="w-5 h-5 text-gray-400 sm:w-5 sm:h-5" />
                 <input
                   type="email"
                   placeholder="Email"
@@ -138,13 +138,13 @@ export default function ForgotPasswordPage() {
                       });
                     }
                   }}
-                  className={`h-full w-full rounded-[5px] border bg-transparent px-3 text-gray-700 placeholder:text-gray-400 focus:outline-none ${
+                  className={`h-full w-full rounded-[5px] border bg-transparent px-2.5 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none sm:px-3 ${
                     errors.email ? "border-red-500" : "border-gray-400"
                   }`}
                 />
               </div>
               {errors.email && (
-                <div className="flex items-center gap-2 mt-2 text-red-500 text-sm">
+                <div className="flex items-center gap-2 mt-2 text-sm text-red-500">
                   <AlertCircle size={16} />
                   {errors.email}
                 </div>
@@ -156,14 +156,14 @@ export default function ForgotPasswordPage() {
               disabled={isLoading}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50 sm:py-3.5"
             >
               {isLoading ? (
                 <>
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity }}
-                    className="h-5 w-5 rounded-full border-2 border-white border-t-transparent"
+                    className="w-5 h-5 border-2 border-white rounded-full border-t-transparent"
                   />
                   Sending code...
                 </>
@@ -181,7 +181,7 @@ export default function ForgotPasswordPage() {
               to="/login"
               className="inline-flex items-center gap-2 text-sm font-medium text-[#004e27] transition-colors hover:text-[#004e27]/80"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="w-4 h-4" />
               Back to login
             </Link>
           </motion.div>

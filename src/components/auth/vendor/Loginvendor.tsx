@@ -64,69 +64,67 @@ export default function Loginvendor() {
   };
 
   return (
-    <div className="flex min-h-screen overflow-x-hidden p-0">
-      {/* LeftSide Branding */}
+  <div className="flex min-h-screen p-0 overflow-x-hidden bg-white">
       <motion.div
         variants={leftVariants}
         initial="hidden"
         animate="visible"
-        className="hidden md:flex md:w-1/2 md:h-screen"
+        className="hidden md:flex md:h-screen md:w-1/2"
       >
         <SimpleSlider />
       </motion.div>
-
       {/* RightSide Login Form */}
       <motion.div
         variants={rightVariants}
         initial="hidden"
         animate="visible"
-        className="flex min-h-screen w-full flex-col items-center justify-center bg-white px-4 py-8 sm:px-6 md:w-1/2 md:px-8 lg:px-10"
+        className="flex flex-col items-center justify-center w-full min-h-screen px-4 py-8 bg-white sm:px-6 md:w-1/2 md:px-8 lg:px-10"
       >
         {/* <img
           src="src/assets/Container.png"
           alt=""
-          className="mb-4 h-14 w-auto sm:h-16"
+          className="w-auto mb-4 h-14 sm:h-16"
         /> */}
 
         <h1 className="mb-2 text-2xl font-bold">
           Log in to <span className="text-[#004e27]">Twingle.com</span>
         </h1>
-        <p className="mb-6 text-gray-600">
+        <p className="mb-6 text-sm text-center text-gray-600 sm:text-base">
           Enter your valid email address and password to log in to your account.
         </p>
 
         <form
           onSubmit={handleLogin}
-          className="flex w-full max-w-[600px] flex-col items-stretch gap-5 px-0 sm:gap-6"
+          className="flex w-full max-w-[600px] flex-col items-stretch gap-4 px-0 sm:gap-5"
         >
-          <div className="flex h-[50px] w-full items-center gap-3">
-            <User className="text-gray-400" />
+          <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+            <User className="w-5 h-5 text-gray-400" />
             <input
               type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => handleEmailChange(e.target.value)}
-              className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-3 text-gray-700 placeholder:text-gray-400 focus:outline-none"
+              className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-2.5 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none sm:px-3"
             />
           </div>
-          <div className="flex h-[50px] w-full items-center gap-3">
-            <Lock className="text-gray-400" />
-            <div className="flex h-full w-full items-center gap-3 border border-gray-400 rounded-[5px] px-3">
+          <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+            <Lock className="w-5 h-5 text-gray-400" />
+            <div className="flex h-full w-full items-center gap-3 border border-gray-400 rounded-[5px] px-2.5 sm:px-3">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-full text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
+                className="w-full h-full text-sm text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
               />
               {showPassword ? (
                 <EyeOff
-                  className="text-gray-400 cursor-pointer"
+                  className="w-4 h-4 text-gray-400 cursor-pointer"
                   onClick={() => setShowPassword(false)}
                 />
               ) : (
                 <Eye
-                  className="text-gray-400 cursor-pointer"
+                  className="w-4 h-4 text-gray-400 cursor-pointer"
                   onClick={() => setShowPassword(true)}
                 />
               )}
@@ -136,7 +134,7 @@ export default function Loginvendor() {
           {/* Remember Me & Forgot Password */}
           <motion.div
             variants={itemVariants}
-            className="flex w-full items-center justify-between gap-4 rounded-[5px] border border-gray-200 bg-slate-50 px-4 py-3"
+            className="flex w-full flex-col gap-3 rounded-[5px] border border-gray-200 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
           >
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -163,7 +161,7 @@ export default function Loginvendor() {
             disabled={isLoading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-all hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-50 hover:shadow-lg sm:py-3.5"
           >
             {isLoading ? (
               <>
@@ -187,7 +185,7 @@ export default function Loginvendor() {
         >
           <Link
             to="/"
-            className="flex h-[50px] w-full items-center justify-center rounded-[5px] border border-gray-300 bg-transparent px-5 text-center text-sm font-semibold text-gray-500 transition-colors hover:bg-gray-100"
+            className="flex h-[48px] w-full items-center justify-center rounded-lg border border-gray-300 bg-transparent px-5 text-center text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 hover:border-gray-400 sm:h-[50px]"
           >
             Go Home
           </Link>
@@ -195,7 +193,7 @@ export default function Loginvendor() {
             Don't have an account?{" "}
             <Link
               to="/vendor-signup"
-              className="font-semibold text-teal-500 transition-colors hover:text-teal-600"
+              className="font-semibold text-[#004e27] transition-colors hover:text-[#004e27]/80"
             >
               Register
             </Link>
@@ -204,7 +202,7 @@ export default function Loginvendor() {
             Looking for the customer account?{" "}
             <Link
               to="/login"
-              className="font-semibold text-teal-500 transition-colors hover:text-teal-600"
+              className="font-semibold text-[#004e27] transition-colors hover:text-[#004e27]/80"
             >
               User login
             </Link>
