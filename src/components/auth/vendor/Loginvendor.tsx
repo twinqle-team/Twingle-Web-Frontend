@@ -153,7 +153,8 @@ export default function Loginvendor() {
             </Link>
           </motion.div>
 
-          {/* Submit Button */}
+          <Link to="/app">
+{/* Submit Button */}
           <motion.button
             variants={itemVariants}
             type="submit"
@@ -175,6 +176,7 @@ export default function Loginvendor() {
               "Login to my account"
             )}
           </motion.button>
+          </Link>
         </form>
         {/* Bottom Links */}
         <motion.div

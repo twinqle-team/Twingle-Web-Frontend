@@ -852,7 +852,7 @@ const { data: vendors } = useQuery({
             variants={itemVariants}
             className="overflow-hidden bg-white rounded-lg shadow-sm"
           >
-            <div className="relative h-48 bg-white border border-b-green-100">
+            <div className="relative h-48 bg-white border border-b-[#004E27]">
               {bannerImage ? (
                 <img
                   src={bannerImage || "/placeholder.svg"}
@@ -878,7 +878,7 @@ const { data: vendors } = useQuery({
                 }`}
               >
                 {uploadBusinessLogoMutation.isPending ? (
-                  <div className="w-5 h-5 border-2 border-gray-300 rounded-full border-t-green-500 animate-spin"></div>
+                  <div className="w-5 h-5 border-2 border-gray-300 rounded-full border-t-[#004E27] animate-spin"></div>
                 ) : (
                   <Camera className="w-5 h-5" />
                 )}
@@ -909,14 +909,14 @@ const { data: vendors } = useQuery({
                   />
                   <label
                     htmlFor="profile-upload"
-                    className={`absolute bottom-0 right-0 bg-green-500 p-1.5 rounded-full cursor-pointer hover:bg-green-600 ${
+                    className={`absolute bottom-0 right-0 bg-[#004E27] p-1.5 rounded-full cursor-pointer hover:bg-[#004E27] ${
                       uploadAvatarMutation.isPending
                         ? "opacity-50 cursor-not-allowed"
                         : ""
                     }`}
                   >
                     {uploadAvatarMutation.isPending ? (
-                      <div className="w-4 h-4 border-2 border-white rounded-full border-t-green-500 animate-spin"></div>
+                      <div className="w-4 h-4 border-2 border-white rounded-full border-t-[#004E27] animate-spin"></div>
                     ) : (
                       <Camera className="w-4 h-4 text-white" />
                     )}
@@ -946,15 +946,15 @@ const { data: vendors } = useQuery({
             <div className="p-6 bg-white rounded-lg shadow-sm">
               <h3 className="mb-2 text-sm text-gray-500">Account Type</h3>
               <div className="flex items-center gap-2">
-                <div className="flex items-center justify-center w-8 h-8 bg-green-100 rounded-lg">
-                  <span className="font-semibold text-green-500">
+                <div className="flex items-center justify-center w-8 h-8 bg-[#004E27] rounded-lg">
+                  <span className="font-semibold text-[#004E27]">
                     {vendors?.storeType?.charAt?.(0)?.toUpperCase()}
                   </span>
                 </div>
                 <div className="font-semibold">{vendors?.storeType}</div>
               </div>
               <div className="mt-2">
-                <span className="px-3 py-1 text-xs text-white bg-green-500 rounded-full">
+                <span className="px-3 py-1 text-xs text-white bg-[#004E27] rounded-full">
                   Standard Account
                 </span>
               </div>
@@ -1241,14 +1241,14 @@ const { data: vendors } = useQuery({
             className="flex justify-end gap-4"
           >
             <button
-              className="px-6 py-2 border border-green-500 rounded-lg hover:bg-green-50"
+              className="px-6 py-2 border border-[#004E27] rounded-lg hover:bg-[#004E27]"
               onClick={clearImages}
             >
               Discard Changes
             </button>
 
             <button
-              className="px-6 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600 disabled:bg-green-300 disabled:cursor-not-allowed"
+              className="px-6 py-2 text-white bg-[#004E27] rounded-lg hover:bg-[#004E27] disabled:bg-[#004E27] disabled:cursor-not-allowed"
               onClick={handleSubmit}
               disabled={isSubmitting}
             >
@@ -1296,7 +1296,7 @@ const { data: vendors } = useQuery({
                           type="password"
                           value={newPassword}
                           onChange={(e) => setNewPassword(e.target.value)}
-                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#004E27] focus:border-[#004E27] outline-[#004E27]"
                         />
                       </div>
                       <div>
@@ -1307,7 +1307,7 @@ const { data: vendors } = useQuery({
                           type="password"
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
-                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#004E27] focus:border-[#004E27] outline-[#004E27]"
                         />
                       </div>
                       <div className="flex justify-end gap-2 mt-6">
@@ -1318,7 +1318,7 @@ const { data: vendors } = useQuery({
                           Cancel
                         </button>
                         <button
-                          className="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600"
+                          className="px-4 py-2 text-white bg-[#004E27] rounded-lg hover:bg-[#004E27]"
                           onClick={handlePasswordChange}
                         >
                           Change Password
@@ -1349,7 +1349,7 @@ const { data: vendors } = useQuery({
                           type="text"
                           value={country}
                           onChange={(e) => setCountry(e.target.value)}
-                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#004E27] focus:border-[#004E27] outline-[#004E27]"
                         />
                       </div>
                       <div>
@@ -1360,7 +1360,7 @@ const { data: vendors } = useQuery({
                           type="text"
                           value={state}
                           onChange={(e) => setState(e.target.value)}
-                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#004E27] focus:border-[#004E27] outline-[#004E27]"
                         />
                       </div>
                       <div>
@@ -1370,7 +1370,7 @@ const { data: vendors } = useQuery({
                         <motion.textarea
                           value={address}
                           onChange={(e) => setAddress(e.target.value)}
-                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#004E27] focus:border-[#004E27] outline-[#004E27]"
                           rows={3}
                         />
                       </div>
@@ -1382,7 +1382,7 @@ const { data: vendors } = useQuery({
                           Cancel
                         </button>
                         <button
-                          className="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600"
+                          className="px-4 py-2 text-white bg-[#004E27] rounded-lg hover:bg-[#004E27]"
                           onClick={handleLocationChange}
                         >
                           Update Location
@@ -1428,7 +1428,7 @@ const { data: vendors } = useQuery({
                             }
                           }}
                           placeholder="Enter 10-digit account number"
-                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#004E27] focus:border-[#004E27] outline-[#004E27]"
                           maxLength={10}
                         />
                         <p className="mt-1 text-xs text-gray-500">
@@ -1450,7 +1450,7 @@ const { data: vendors } = useQuery({
                             setFoundAccountName("");
                             setFoundBankName("");
                           }}
-                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#004E27] focus:border-[#004E27] outline-[#004E27]"
                         >
                           <option value="">Choose your bank</option>
                           {bankCodes.map((bank) => (
@@ -1494,13 +1494,13 @@ const { data: vendors } = useQuery({
                       {/* Account verification results */}
                       {foundAccountName && foundBankName && (
                         <motion.div
-                          className="p-4 rounded-lg bg-green-50 border border-green-200"
+                          className="p-4 rounded-lg bg-[#004E27]border border-[#004E27]"
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3 }}
                         >
                           <div className="flex items-start gap-3">
-                            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <div className="w-8 h-8 bg-[#004E27] rounded-full flex items-center justify-center flex-shrink-0">
                               <motion.div
                                 initial={{ scale: 0 }}
                                 animate={{ scale: 1 }}
@@ -1514,20 +1514,20 @@ const { data: vendors } = useQuery({
                               </motion.div>
                             </div>
                             <div className="flex-1">
-                              <h4 className="text-sm font-semibold text-green-800 mb-2">
+                              <h4 className="text-sm font-semibold text-[#004E27] mb-2">
                                 Account Verified Successfully
                               </h4>
                               <div className="space-y-1">
                                 <div className="flex items-center gap-2">
-                                  <span className="text-xs text-green-600 font-medium">
+                                  <span className="text-xs text-[#004E27] font-medium">
                                     Account Name:
                                   </span>
-                                  <span className="text-sm text-green-800 font-semibold">
+                                  <span className="text-sm text-[#004E27] font-semibold">
                                     {foundAccountName}
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  <span className="text-xs text-green-600 font-medium">
+                                  <span className="text-xs text-[#004E27] font-medium">
                                     Bank:
                                   </span>
                                   <div className="flex items-center gap-2">
@@ -1542,16 +1542,16 @@ const { data: vendors } = useQuery({
                                         className="w-4 h-4 object-contain"
                                       />
                                     )}
-                                    <span className="text-sm text-green-800 font-semibold">
+                                    <span className="text-sm text-[#004E27] font-semibold">
                                       {foundBankName}
                                     </span>
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  <span className="text-xs text-green-600 font-medium">
+                                  <span className="text-xs text-[#004E27] font-medium">
                                     Account Number:
                                   </span>
-                                  <span className="text-sm text-green-800 font-mono">
+                                  <span className="text-sm text-[#004E27] font-mono">
                                     {accountNumber}
                                   </span>
                                 </div>
@@ -1593,7 +1593,7 @@ const { data: vendors } = useQuery({
                         <button
                           className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                             foundAccountName && foundBankName
-                              ? "bg-green-500 text-white hover:bg-green-600"
+                              ? "bg-[#004E27] text-white hover:bg-[#004E27]"
                               : "bg-gray-200 text-gray-500 cursor-not-allowed"
                           } ${
                             createRecipientCodeMutation.isPending
@@ -1641,7 +1641,7 @@ const { data: vendors } = useQuery({
                           type="email"
                           value={newEmail}
                           onChange={(e) => setNewEmail(e.target.value)}
-                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#004E27] focus:border-[#004E27] outline-[#004E27]"
                         />
                       </div>
                       <div className="flex justify-end gap-2 mt-6">
@@ -1652,7 +1652,7 @@ const { data: vendors } = useQuery({
                           Cancel
                         </button>
                         <button
-                          className="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600"
+                          className="px-4 py-2 text-white bg-[#004E27] rounded-lg hover:bg-[#004E27]"
                           onClick={handleEmailChange}
                         >
                           Update Email
@@ -1685,7 +1685,7 @@ const { data: vendors } = useQuery({
                           type="text"
                           value={storeName}
                           onChange={(e) => setStoreName(e.target.value)}
-                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#004E27] focus:border-[#004E27] outline-[#004E27]"
                         />
                       </div>
                       <div>
@@ -1696,7 +1696,7 @@ const { data: vendors } = useQuery({
                           type="tel"
                           value={storeNumber}
                           onChange={(e) => setStoreNumber(e.target.value)}
-                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-green-500"
+                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#004E27] focus:border-[#004E27] outline-[#004E27]"
                         />
                       </div>
                       <div className="flex justify-end gap-2 mt-6">
@@ -1707,7 +1707,7 @@ const { data: vendors } = useQuery({
                           Cancel
                         </button>
                         <button
-                          className="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600"
+                          className="px-4 py-2 text-white bg-[#004E27] rounded-lg hover:bg-[#004E27]"
                           onClick={handleStoreChange}
                         >
                           Update Store

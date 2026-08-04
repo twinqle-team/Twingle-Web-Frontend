@@ -53,7 +53,7 @@ const Footer: React.FC = () => {
               <div className="flex items-center justify-center bg-white rounded-full w-9 h-9">
                 <Home size={18} className="text-black" />
               </div>
-              <span className="font-bold text-[30px]">Twingle</span>
+              <span className="font-bold text-[30px]">Twinqle</span>
             </div>
 
             <div className="flex flex-wrap gap-x-16 gap-y-6">
@@ -68,7 +68,7 @@ const Footer: React.FC = () => {
               <div>
                 <p className="mb-1 text-base text-emerald-100">Live Support?</p>
                 <p className="text-lg font-semibold md:text-xl">
-                  hi@twingle.com
+                  hi@twinqle.com
                 </p>
               </div>
             </div>

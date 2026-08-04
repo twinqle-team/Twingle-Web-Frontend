@@ -12,7 +12,7 @@ export default function Signupvendor() {
     password: "",
     confirmPassword: "",
     agentType: "",
-    country: "", // Added for country selection
+    country: "", 
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -147,10 +147,10 @@ export default function Signupvendor() {
             </select>
           </div>
 
+          {/* New Country Select */}
+          <div className="flex h-[50px] w-full items-center gap-3">
+            <User className="text-gray-400" />
 
-          {/* Country Select */}
-          <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
-            <Globe className="w-5 h-5 text-gray-400" />
             <select
               name="country"
               value={formData.country}
@@ -266,6 +266,7 @@ export default function Signupvendor() {
             </label>
           </motion.div>
 
+          <Link to="/vendor-verify">
           <motion.button
             variants={itemVariants}
             type="submit"
@@ -287,6 +288,7 @@ export default function Signupvendor() {
               "Create my account"
             )}
           </motion.button>
+          </Link>
         </form>
 
         <motion.div

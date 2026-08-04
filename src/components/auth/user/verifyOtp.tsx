@@ -200,7 +200,7 @@ export default function VerifyOtpPage() {
               </div>
             )}
 
-            <motion.button
+                    <motion.button
               type="submit"
               disabled={isLoading || otp.some((digit) => !digit)}
               whileHover={{ scale: 1.02 }}
@@ -220,6 +220,7 @@ export default function VerifyOtpPage() {
                 "Verify code"
               )}
             </motion.button>
+           
           </motion.form>
 
           <motion.div

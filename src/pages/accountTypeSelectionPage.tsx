@@ -15,8 +15,10 @@ export default function AccountTypeSelectionPage() {
           <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand sm:mb-3 sm:text-sm sm:tracking-[0.25em]">
             Choose your account
           </p>
-          <h1 className="text-2xl font-semibold text-gray-900 sm:text-3xl lg:text-4xl">
-            How do you want to join Twingle?
+
+          <h1 className="text-3xl font-semibold text-gray-900 sm:text-4xl">
+            How do you want to join Twinqle?
+
           </h1>
           <p className="max-w-2xl mx-auto mt-2 text-xs text-gray-600 sm:mt-3 sm:text-sm sm:text-base">
             Select the option that best matches your needs and we'll take you to
@@ -32,8 +34,10 @@ export default function AccountTypeSelectionPage() {
           <div className="flex items-center justify-center w-10 h-10 mb-3 rounded-full text-brand bg-brand-100 sm:w-12 sm:h-12 sm:mb-4">
               <UserRound size={20} className="sm:w-6 sm:h-6" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-900 sm:text-xl">
-              Register as a User
+
+            <h2 className="text-xl font-semibold text-gray-900">
+              Register as a user
+
             </h2>
             <p className="mt-2 text-xs leading-5 text-gray-600 sm:text-sm sm:leading-6">
               Perfect for buyers, renters, or anyone looking to explore
