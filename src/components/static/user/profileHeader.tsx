@@ -122,43 +122,47 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       animate="visible"
       className="sticky top-0 z-40 bg-white border-b border-gray-100 shadow-sm"
     >
-      <div className="px-6 py-4">
-        <div className="flex items-center justify-between gap-6">
-
+      <div className="px-4 sm:px-6 py-3 sm:py-4">
+        <div className="flex items-center justify-between gap-4">
           {/* Logo Image */}
-          <Link to="/">
+          <Link to="/" className="flex-shrink-0">
             <img
               src="src/assets/Container.png"
               alt="Twingle Logo"
-              className="w-auto h-10 sm:h-12 md:h-14 lg:h-16"
+              className="w-auto h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16"
             />
           </Link>
 
-
-          {/* Search Bar */}
-          <form onSubmit={handleSearch} className="flex-1 max-w-md">
-            <div className="relative flex items-center px-4 py-3 bg-gray-100 rounded-lg">
-              <Search size={20} className="flex-shrink-0 mr-3 text-gray-400" />
+          {/* Search Bar - Hidden on mobile, visible on md and up */}
+          <form
+            onSubmit={handleSearch}
+            className="hidden md:flex flex-1 max-w-md mx-4"
+          >
+            <div className="relative flex items-center w-full px-4 py-2 sm:py-3 bg-gray-100 rounded-lg">
+              <Search
+                size={18}
+                className="flex-shrink-0 mr-2 sm:mr-3 text-gray-400"
+              />
               <input
                 type="text"
                 placeholder="Search your dashboard..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 text-base text-gray-700 placeholder-gray-500 bg-transparent outline-none"
+                className="flex-1 text-sm sm:text-base text-gray-700 placeholder-gray-500 bg-transparent outline-none"
               />
             </div>
           </form>
 
           {/* Right Side Actions */}
-          <div className="flex items-center gap-4">
-            {/* Help Icon */}
+          <div className="flex items-center gap-2 sm:gap-4">
+            {/* Help Icon - Hidden on small mobile */}
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              className="p-2 transition-colors rounded-lg hover:bg-gray-100"
+              className="hidden sm:block p-2 transition-colors rounded-lg hover:bg-gray-100"
               title="Help & Support"
             >
-              <HelpCircle size={22} className="text-gray-600" />
+              <HelpCircle size={20} className="text-gray-600" />
             </motion.button>
 
             {/* Notification Bell */}
@@ -167,11 +171,11 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowNotifications(!showNotifications)}
-                className="relative p-2 transition-colors rounded-lg hover:bg-gray-100"
+                className="relative p-1.5 sm:p-2 transition-colors rounded-lg hover:bg-gray-100"
               >
-                <Bell size={22} className="text-gray-600" />
+                <Bell size={18} className="sm:text-[22px] text-gray-600" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                  <span className="absolute top-0 right-0 flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 text-[10px] sm:text-xs font-bold text-white bg-red-500 rounded-full">
                     {unreadCount}
                   </span>
                 )}
@@ -265,15 +269,17 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
-                className="flex items-center gap-3 px-3 py-2 pl-4 transition-colors border-l border-gray-200 rounded-lg hover:bg-gray-50"
+                className="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 pl-3 sm:pl-4 transition-colors border-l border-gray-200 rounded-lg hover:bg-gray-50"
               >
-                <div className="text-right">
-                  <p className="text-lg font-semibold text-gray-900">{name}</p>
+                <div className="hidden sm:block text-right">
+                  <p className="text-sm sm:text-lg font-semibold text-gray-900">
+                    {name}
+                  </p>
                 </div>
                 <img
                   src={avatarUrl}
                   alt={name}
-                  className="w-12 h-12 rounded-full border-2 border-[#33a078] object-cover"
+                  className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full border-2 border-[#33a078] object-cover"
                 />
               </motion.button>
 

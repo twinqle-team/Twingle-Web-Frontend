@@ -28,10 +28,10 @@ const Home = lazy(() => import("@/pages/homePage"));
 const RealEstate = lazy(() => import("@/pages/realEstatePage"));
 const Automotive = lazy(() => import("@/pages/automotivePage"));
 const About = lazy(() => import("@/pages/verificationPage"));
-const Listings = lazy(() => import("@/pages/listingsPage"));
+const Listings = lazy(() => import("@/pages/vendorsListingPage"));
 const CarDetail = lazy(() => import("@/pages/carDetailPage"));
 const PropertyDetail = lazy(() => import("@/pages/propertyDetailPage"));
-const VendorListingsPage = lazy(() => import("@/pages/vendorListingsPage"));
+const VendorDetailPage = lazy(() => import("@/pages/vendorDetailPage"));
 
 // Lazy load vendor routes
 const VendorDashboard = lazy(() => import("@/components/vendor/Main/Dashboard"));
@@ -117,7 +117,7 @@ const routes: RouteObject[] = [
       { path: "property/:id", element: <Suspense fallback={<Spinner />}><PropertyDetail /></Suspense> },
       { path: "about", element: <Suspense fallback={<Spinner />}><About /></Suspense> },
       { path: "listings/:type", element: <Suspense fallback={<Spinner />}><Listings /></Suspense> },
-      { path: "vendors", element: <Suspense fallback={<Spinner />}><VendorListingsPage /></Suspense> },
+      { path: "vendor/:type/:id", element: <Suspense fallback={<Spinner />}><VendorDetailPage /></Suspense> },
       { path: "verification", element: <Navigate to="/about" replace /> },
     ],
   },
@@ -153,12 +153,7 @@ const routes: RouteObject[] = [
   },
   {
     path: "/new",
-    element: <VendorNewPass />,
-    element: (
-      <Suspense fallback={<Spinner />}>
-        <VerifyOtpPage />
-      </Suspense>
-    ),
+    element: <VendorNewPass />
   },
   {
     path: "/app",

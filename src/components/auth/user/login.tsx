@@ -87,7 +87,7 @@ export default function LoginPage() {
         <h1 className="mb-2 text-2xl font-bold">
           Log in to <span className="text-[#004e27]">Twingle.com</span>
         </h1>
-        <p className="mb-6 text-sm text-gray-600 sm:text-base">
+        <p className="mb-6 text-sm text-gray-600 sm:text-base text-center">
           Enter your valid email address and password to log in to your account.
         </p>
         <form
