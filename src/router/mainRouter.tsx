@@ -15,14 +15,14 @@ import Loginvendor from "@/components/auth/vendor/Loginvendor";
 import AccountTypeSelectionPage from "@/pages/accountTypeSelectionPage";
 import VendorLayout from "@/components/vendor/Layout/Layout";
 
-
-
 import ProfileLayout from "@/components/layout/profileLayout";
-import ProfileDashboard from "@/components/userProfile/profileDashboard";
+import ProfilePage from "@/components/userProfile/profilePage";
+import OrdersPage from "@/components/userProfile/ordersPage";
+import SavedPage from "@/components/userProfile/savedPage";
+import MessagesPage from "@/components/userProfile/messagesPage";
 import VendorNewPass from "@/components/auth/vendor/VendorNewPass";
 import Verifyvendor from "@/components/auth/vendor/Verifyvendor";
 import Verify from "@/components/auth/vendor/Verify";
-
 
 const Home = lazy(() => import("@/pages/homePage"));
 const RealEstate = lazy(() => import("@/pages/realEstatePage"));
@@ -34,15 +34,26 @@ const PropertyDetail = lazy(() => import("@/pages/propertyDetailPage"));
 const VendorDetailPage = lazy(() => import("@/pages/vendorDetailPage"));
 
 // Lazy load vendor routes
-const VendorDashboard = lazy(() => import("@/components/vendor/Main/Dashboard"));
-const VendorProperty = lazy(() => import("@/components/vendor/Product/Property/Property-form/Property"));
-const VendorPropertyList = lazy(() => import("@/components/vendor/Product/Property/Property-list/PropertyList"));
-const VendorAutomotiveList = lazy(() => import("@/components/vendor/Product/Auto/vehiclelist/AutomotiveList"));
+const VendorDashboard = lazy(
+  () => import("@/components/vendor/Main/Dashboard"),
+);
+const VendorProperty = lazy(
+  () => import("@/components/vendor/Product/Property/Property-form/Property"),
+);
+const VendorPropertyList = lazy(
+  () =>
+    import("@/components/vendor/Product/Property/Property-list/PropertyList"),
+);
+const VendorAutomotiveList = lazy(
+  () => import("@/components/vendor/Product/Auto/vehiclelist/AutomotiveList"),
+);
 // const VendorAutomotive = lazy(() => import("@/components/vendor/Product/Auto/Automotive"));
 const VendorReview = lazy(() => import("@/components/vendor/Review/Review"));
 const VendorProfile = lazy(() => import("@/components/vendor/Setting/Profile"));
 const VendorPayment = lazy(() => import("@/components/vendor/Payment/Payment"));
-const VendorCustomer = lazy(() => import("@/components/vendor/Customer/Customer"));
+const VendorCustomer = lazy(
+  () => import("@/components/vendor/Customer/Customer"),
+);
 const VendorChat = lazy(() => import("@/components/vendor/Chat/Chat"));
 const VendorBilling = lazy(() => import("@/components/vendor/Billing/Billing"));
 const VendorKYC = lazy(() => import("@/components/vendor/Kyc/KYCVerification"));
@@ -96,13 +107,37 @@ const routes: RouteObject[] = [
     path: "/profile",
     element: <ProfileLayout />,
     children: [
-      { 
-        index: true, 
+      {
+        index: true,
         element: (
           <Suspense fallback={<Spinner />}>
-            <ProfileDashboard />
+            <ProfilePage />
           </Suspense>
-        ) 
+        ),
+      },
+      {
+        path: "orders",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <OrdersPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "saved",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <SavedPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "messages",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <MessagesPage />
+          </Suspense>
+        ),
       },
     ],
   },
@@ -110,14 +145,70 @@ const routes: RouteObject[] = [
     path: "/",
     element: <Layout />,
     children: [
-      { index: true, element: <Suspense fallback={<Spinner />}><Home /></Suspense> },
-      { path: "real-estate", element: <Suspense fallback={<Spinner />}><RealEstate /></Suspense> },
-      { path: "automotive", element: <Suspense fallback={<Spinner />}><Automotive /></Suspense> },
-      { path: "automotive/:id", element: <Suspense fallback={<Spinner />}><CarDetail /></Suspense> },
-      { path: "property/:id", element: <Suspense fallback={<Spinner />}><PropertyDetail /></Suspense> },
-      { path: "about", element: <Suspense fallback={<Spinner />}><About /></Suspense> },
-      { path: "listings/:type", element: <Suspense fallback={<Spinner />}><Listings /></Suspense> },
-      { path: "vendor/:type/:id", element: <Suspense fallback={<Spinner />}><VendorDetailPage /></Suspense> },
+      {
+        index: true,
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <Home />
+          </Suspense>
+        ),
+      },
+      {
+        path: "real-estate",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <RealEstate />
+          </Suspense>
+        ),
+      },
+      {
+        path: "automotive",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <Automotive />
+          </Suspense>
+        ),
+      },
+      {
+        path: "automotive/:id",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <CarDetail />
+          </Suspense>
+        ),
+      },
+      {
+        path: "property/:id",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <PropertyDetail />
+          </Suspense>
+        ),
+      },
+      {
+        path: "about",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <About />
+          </Suspense>
+        ),
+      },
+      {
+        path: "listings/:type",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <Listings />
+          </Suspense>
+        ),
+      },
+      {
+        path: "vendor/:type/:id",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <VendorDetailPage />
+          </Suspense>
+        ),
+      },
       { path: "verification", element: <Navigate to="/about" replace /> },
     ],
   },
@@ -153,30 +244,105 @@ const routes: RouteObject[] = [
   },
   {
     path: "/new",
-    element: <VendorNewPass />
+    element: <VendorNewPass />,
   },
   {
     path: "/app",
     element: <VendorLayout />,
     children: [
-
-      { index: true, element: <Suspense fallback={<Spinner />}><VendorDashboard /></Suspense> },
-      { path: "All-Properties", element: <Suspense fallback={<Spinner />}><VendorProperty /></Suspense> },
-      { path: "new-property", element: <Suspense fallback={<Spinner />}><VendorPropertyList /></Suspense> },
-      { path: "all-automotives", element: <Suspense fallback={<Spinner />}><VendorAutomotiveList /></Suspense> },
+      {
+        index: true,
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <VendorDashboard />
+          </Suspense>
+        ),
+      },
+      {
+        path: "All-Properties",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <VendorProperty />
+          </Suspense>
+        ),
+      },
+      {
+        path: "new-property",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <VendorPropertyList />
+          </Suspense>
+        ),
+      },
+      {
+        path: "all-automotives",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <VendorAutomotiveList />
+          </Suspense>
+        ),
+      },
       // { path: "new-automotive", element: <Suspense fallback={<Spinner />}><VendorAutomotive /></Suspense> },
-      { path: "reviews", element: <Suspense fallback={<Spinner />}><VendorReview /></Suspense> },
-      { path: "settings", element: <Suspense fallback={<Spinner />}><VendorProfile /></Suspense> },
-      { path: "Payment", element: <Suspense fallback={<Spinner />}><VendorPayment /></Suspense> },
-      { path: "Customers", element: <Suspense fallback={<Spinner />}><VendorCustomer /></Suspense> },
-      { path: "inbox", element: <Suspense fallback={<Spinner />}><VendorChat /></Suspense> },
-      { path: "kyc", element: <Suspense fallback={<Spinner />}><VendorKYC /></Suspense> },
-      { path: "billing", element: <Suspense fallback={<Spinner />}><VendorBilling /></Suspense> },
-
+      {
+        path: "reviews",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <VendorReview />
+          </Suspense>
+        ),
+      },
+      {
+        path: "settings",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <VendorProfile />
+          </Suspense>
+        ),
+      },
+      {
+        path: "Payment",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <VendorPayment />
+          </Suspense>
+        ),
+      },
+      {
+        path: "Customers",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <VendorCustomer />
+          </Suspense>
+        ),
+      },
+      {
+        path: "inbox",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <VendorChat />
+          </Suspense>
+        ),
+      },
+      {
+        path: "kyc",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <VendorKYC />
+          </Suspense>
+        ),
+      },
+      {
+        path: "billing",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <VendorBilling />
+          </Suspense>
+        ),
+      },
     ],
   },
 
   //adminRouter
-  ];
+];
 
 export const router = createBrowserRouter(routes);

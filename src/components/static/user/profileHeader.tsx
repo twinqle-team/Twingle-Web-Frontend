@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Search, Bell, HelpCircle, X } from "lucide-react";
+import { ArrowLeft, Bell, HelpCircle, X, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface Notification {
   id: number;
@@ -15,15 +15,13 @@ interface Notification {
 interface ProfileHeaderProps {
   name?: string;
   avatarUrl?: string;
-  onSearch?: (query: string) => void;
 }
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   name = "Alexander Thorne",
   avatarUrl = "https://api.dicebear.com/7.x/avataaars/svg?seed=Alexander",
-  onSearch,
 }) => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
@@ -67,6 +65,15 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     },
   };
 
+  const handleBack = () => {
+    navigate("/");
+  };
+
+  const handleLogout = () => {
+    // Add logout logic here (clear tokens, redirect to login, etc.)
+    navigate("/login");
+  };
+
   const dropdownVariants = {
     hidden: { opacity: 0, y: -10, scale: 0.95 },
     visible: {
@@ -81,11 +88,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       scale: 0.95,
       transition: { duration: 0.15 },
     },
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSearch?.(searchQuery);
   };
 
   const handleNotificationClick = (id: number) => {
@@ -124,34 +126,16 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     >
       <div className="px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center justify-between gap-4">
-          {/* Logo Image */}
-          <Link to="/" className="flex-shrink-0">
-            <img
-              src="src/assets/Container.png"
-              alt="Twingle Logo"
-              className="w-auto h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16"
-            />
-          </Link>
-
-          {/* Search Bar - Hidden on mobile, visible on md and up */}
-          <form
-            onSubmit={handleSearch}
-            className="hidden md:flex flex-1 max-w-md mx-4"
+          {/* Back Button */}
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleBack}
+            className="flex-shrink-0 p-2 transition-colors rounded-lg hover:bg-gray-100"
+            title="Go back"
           >
-            <div className="relative flex items-center w-full px-4 py-2 sm:py-3 bg-gray-100 rounded-lg">
-              <Search
-                size={18}
-                className="flex-shrink-0 mr-2 sm:mr-3 text-gray-400"
-              />
-              <input
-                type="text"
-                placeholder="Search your dashboard..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 text-sm sm:text-base text-gray-700 placeholder-gray-500 bg-transparent outline-none"
-              />
-            </div>
-          </form>
+            <ArrowLeft size={20} className="text-gray-700" />
+          </motion.button>
 
           {/* Right Side Actions */}
           <div className="flex items-center gap-2 sm:gap-4">
@@ -189,7 +173,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className="absolute right-0 mt-2 bg-white border border-gray-100 rounded-lg shadow-xl w-96"
+                    className="absolute right-0 mt-2 bg-white border border-gray-100 rounded-lg shadow-xl w-[calc(100vw-2rem)] max-w-sm sm:max-w-md md:max-w-lg"
                   >
                     <div className="p-4 border-b border-gray-100">
                       <div className="flex items-center justify-between">
@@ -291,12 +275,25 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className="absolute right-0 w-48 mt-2 bg-white border border-gray-100 rounded-lg shadow-xl"
+                    className="absolute right-0 w-56 mt-2 bg-white border border-gray-100 rounded-lg shadow-xl overflow-hidden"
                   >
-                    <div className="p-4">
+                    <div className="p-4 border-b border-gray-100">
                       <p className="text-sm font-semibold text-gray-900">
                         {name}
                       </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        View your profile
+                      </p>
+                    </div>
+                    <div className="p-2">
+                      <motion.button
+                        whileHover={{ backgroundColor: "#f9fafb" }}
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-3 py-2 text-red-600 rounded-lg transition-colors"
+                      >
+                        <LogOut size={18} />
+                        <span className="text-sm font-medium">Logout</span>
+                      </motion.button>
                     </div>
                   </motion.div>
                 )}
