@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { MessageSquare, Search, Plus } from "lucide-react";
+import {  Search, Plus } from "lucide-react";
 
 const MessagesPage: React.FC = () => {
   const conversations = [
