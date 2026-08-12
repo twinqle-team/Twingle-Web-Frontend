@@ -169,7 +169,7 @@ const MessagesPage: React.FC = () => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="h-full flex flex-col"
+            className="flex flex-col"
     >
       <div className="flex-shrink-0 mb-4 sm:mb-6">
         <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
@@ -181,7 +181,7 @@ const MessagesPage: React.FC = () => {
       </div>
 
       {/* Two-panel chat container */}
-      <div className="flex flex-1 min-h-0 overflow-hidden bg-white border border-gray-200 rounded-2xl shadow-sm">
+                  <div className="flex h-[calc(100dvh-200px)] sm:h-[calc(100dvh-160px)] min-h-[360px] overflow-hidden bg-white border border-gray-200 rounded-2xl shadow-sm">
         {/* ===== CHAT LIST PANEL ===== */}
         <aside
           className={`${
