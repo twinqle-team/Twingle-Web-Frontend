@@ -24,6 +24,9 @@ import VendorNewPass from "@/components/auth/vendor/VendorNewPass";
 import Verifyvendor from "@/components/auth/vendor/Verifyvendor";
 import Verify from "@/components/auth/vendor/Verify";
 
+
+import OrderPage from "@/components/checkout pages/orderPage";
+
 const Home = lazy(() => import("@/pages/homePage"));
 const RealEstate = lazy(() => import("@/pages/realEstatePage"));
 const Automotive = lazy(() => import("@/pages/automotivePage"));
@@ -102,6 +105,10 @@ const routes: RouteObject[] = [
   {
     path: "/verify",
     element: <Verify />,
+  },
+  {
+    path: "/checkout",
+    element: <OrderPage />,
   },
   {
     path: "/profile",

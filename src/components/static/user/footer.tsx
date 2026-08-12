@@ -50,8 +50,8 @@ const Footer: React.FC = () => {
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-start">
           <div className="flex flex-col justify-center gap-10">
             <div className="flex items-center gap-2">
-              <div className="flex items-center justify-center bg-white rounded-full w-9 h-9">
-                <Home size={18} className="text-black" />
+              <div className="flex items-center justify-center bg-gold-500 rounded-full w-9 h-9">
+                <Home size={18} className="text-slate-900" />
               </div>
               <span className="font-bold text-[30px]">Twinqle</span>
             </div>
@@ -61,13 +61,13 @@ const Footer: React.FC = () => {
                 <p className="mb-1 text-base text-emerald-100">
                   Total Free Customer Care
                 </p>
-                <p className="text-lg font-semibold md:text-xl">
+                <p className="text-lg font-semibold md:text-xl text-gold-300">
                   +(088) 123 456 789
                 </p>
               </div>
               <div>
                 <p className="mb-1 text-base text-emerald-100">Live Support?</p>
-                <p className="text-lg font-semibold md:text-xl">
+                <p className="text-lg font-semibold md:text-xl text-gold-300">
                   hi@twinqle.com
                 </p>
               </div>
@@ -135,7 +135,7 @@ const Footer: React.FC = () => {
           <div className="flex flex-col items-start gap-8">
             <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-3">
               <div className="space-y-4">
-                <h3 className="text-base font-semibold text-emerald-50">
+                <h3 className="text-base font-semibold text-gold-300">
                   Popular Search
                 </h3>
                 <ul className="space-y-3">
@@ -143,7 +143,7 @@ const Footer: React.FC = () => {
                     <li key={link.label}>
                       <a
                         href={link.href}
-                        className="text-base transition-colors text-emerald-100 hover:text-white"
+                        className="text-base transition-colors text-emerald-100 hover:text-gold-300"
                       >
                         {link.label}
                       </a>
@@ -153,7 +153,7 @@ const Footer: React.FC = () => {
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-base font-semibold text-emerald-50">
+                <h3 className="text-base font-semibold text-gold-300">
                   Quick Links
                 </h3>
                 <ul className="space-y-3">
@@ -161,7 +161,7 @@ const Footer: React.FC = () => {
                     <li key={link.label}>
                       <a
                         href={link.href}
-                        className="text-base transition-colors text-emerald-100 hover:text-white"
+                        className="text-base transition-colors text-emerald-100 hover:text-gold-300"
                       >
                         {link.label}
                       </a>
@@ -171,7 +171,7 @@ const Footer: React.FC = () => {
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-base font-semibold text-emerald-50">
+                <h3 className="text-base font-semibold text-gold-300">
                   Discovery
                 </h3>
                 <ul className="space-y-3">
@@ -179,7 +179,7 @@ const Footer: React.FC = () => {
                     <li key={link.label}>
                       <a
                         href={link.href}
-                        className="text-base transition-colors text-emerald-100 hover:text-white"
+                        className="text-base transition-colors text-emerald-100 hover:text-gold-300"
                       >
                         {link.label}
                       </a>

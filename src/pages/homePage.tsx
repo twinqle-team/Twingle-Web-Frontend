@@ -44,7 +44,7 @@ const HomePage: React.FC = () => {
             <p className="mt-3 text-xl font-semibold sm:mt-4 sm:text-2xl">$4.2B+</p>
           </div>
           <div className="p-4 bg-white border rounded-2xl border-slate-200/70 sm:p-5 sm:rounded-3xl">
-            <div className="flex items-center gap-2 text-rose-500 sm:gap-3">
+            <div className="flex items-center gap-2 text-gold-500 sm:gap-3">
               <Clock3 className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="text-[0.6rem] uppercase tracking-[0.2em] text-slate-400 sm:text-[0.65rem] sm:tracking-[0.32em]">
                 Real-time updates
