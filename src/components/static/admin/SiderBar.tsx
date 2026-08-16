@@ -2,21 +2,26 @@ import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import { Home, ReceiptText, Settings, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
-import { MdRealEstateAgent, MdVerifiedUser } from "react-icons/md";
+import { MdRealEstateAgent } from "react-icons/md";
 import { FaPersonCircleCheck } from "react-icons/fa6";
 import { AiOutlineLogout } from "react-icons/ai";
 import { RiSecurePaymentFill } from "react-icons/ri";
 import { TiMessages } from "react-icons/ti";
 import { VscPreview } from "react-icons/vsc";
 import { FcAutomotive } from "react-icons/fc";
+import {  useSelector } from "react-redux";
+// import { useQuery } from "@tanstack/react-query";
 
-import { useSelector } from "react-redux";
+// import { logoutVendor } from "@/redux/slices/vendorSlice";
+// import { useDarkMode } from "../Context/DarkModeContext";
+
+import { Link } from "react-router-dom";
 // import { get_single_vendor } from "@/utils/vendorApi";
-interface DashboardSidebarProps {
+interface SideBarProps {
   darkMode: boolean;
 }
 
-const DashboardSidebar: React.FC<DashboardSidebarProps> = ({  }) => {
+const SideBar: React.FC<SideBarProps> = ({ darkMode }) => {
 
 
   interface RootState {
@@ -32,7 +37,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({  }) => {
 
   console.log(user)
 
-  
+ 
 
   // const { data: vendors } = useQuery({
   //   queryKey: ["vendor"],
@@ -47,15 +52,17 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({  }) => {
   //   navigate("/login-vendor");
   // };
   return (
-    <aside className="w-64 p-5 h-screen flex flex-col justify-between overflow-y-auto bg-[#F5F8FA] text-gray-900">
+    <aside
+      className={`w-64 p-5 h-screen flex flex-col justify-between overflow-y-auto transition-colors ${
+        darkMode ? "bg-gray-900 text-gray-100" : "bg-[#F5F8FA] text-gray-900"
+      }`}
+    >
       <div>
 
         <div className="mb-5 text-2xl font-bold text-[#1E8863]">
-          {/* <Link to="/">
-
-            <img src={Logo} alt="Twingle" className=" w-20 h-20" />
-          </Link> */}
-           <span>TWINQLE</span>
+          <Link to="/">
+            <span>TWINQLE</span>
+          </Link>
         </div>
         <nav>
           <NavItem title="Dashboard" to="/app" Icon={Home} />
@@ -68,7 +75,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({  }) => {
 
           <NavItem
             title="Customers"
-            to="Customers"
+            to="customers"
             Icon={FaPersonCircleCheck}
           />
 
@@ -78,32 +85,23 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({  }) => {
             Icon={FcAutomotive}
           />
           <NavItem title="Messages" to="inbox" Icon={TiMessages} />
-          <NavItem title="Payment" to="Payment" Icon={RiSecurePaymentFill} />
-          <NavItem title="Verification" to="kyc" Icon={MdVerifiedUser} />
-          <NavItem title="Billing" to="billing" Icon={ReceiptText} />
+
+
+          <NavItem title="Payment" to="payment" Icon={RiSecurePaymentFill} />
+
+          <NavItem title="USers Manger" to="all" Icon={ReceiptText} />
+
           <NavItem title="Reviews" to="reviews" Icon={VscPreview} />
+
           <NavItem title="Settings" to="settings" Icon={Settings} />
 
+          {/* <NavItem title="LogOut" onClick={handle_logOut} Icon={LogOutIcon} /> */}
           <br />
           <NavItem title="LogOut" Icon={AiOutlineLogout} />
         </nav>
       </div>
       <br />
 
-      <div className="flex items-center gap-3 p-3 bg-gray-200 rounded-lg">
-        <div className="bg-[#004e27] w-[40px] h-[40px] rounded-full text-white flex items-center justify-center">
-          <p>V</p>
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-[#004e27]">Vendor</p>
-          <div className="flex items-center justify-center mt-2">
-            <div className="w-[12px] h-[12px] bg-[#004e27] rounded-full"></div>
-            <span className="text-[#004e27] text-xs rounded ml-[3px]">
-              Online
-            </span>
-          </div>
-        </div>
-      </div>
     </aside>
   );
 };
@@ -131,14 +129,6 @@ const NavItem = ({
     }
   };
 
-  const getSubItemPath = (item: string) => {
-    if (item === "All Properties") return "All-Properties";
-    if (item === "New Property") return "new-property";
-    if (item === "All Automotives") return "All-Automotives";
-    if (item === "New Automotive") return "new-automotive";
-    return item.toLowerCase().replace(/ /g, "-");
-  };
-
   return (
     <div>
       <div
@@ -153,7 +143,9 @@ const NavItem = ({
             <NavLink
               to={to}
               className={({ isActive }) =>
-                isActive ? "font-semibold text-[#004e27]" : "text-gray-700"
+                isActive
+                  ? "font-semibold text-[#004e27]"
+                  : "text-gray-700 dark:text-gray-300"
               }
             >
               {title}
@@ -176,12 +168,12 @@ const NavItem = ({
           {subItems.map((item) => (
             <NavLink
               key={item}
-              to={getSubItemPath(item)}
+              to={item.toLowerCase().replace(/ /g, "-")}
               className={({ isActive }) =>
                 `block py-1 ${
                   isActive
-                    ? "text-orange-500 font-semibold"
-                    : "hover:text-gray-600"
+                    ? "text-[orange-500] font-semibold"
+                    : "hover:text-gray-600 dark:hover:text-gray-300"
                 }`
               }
             >
@@ -194,4 +186,4 @@ const NavItem = ({
   );
 };
 
-export default DashboardSidebar;
+export default SideBar;

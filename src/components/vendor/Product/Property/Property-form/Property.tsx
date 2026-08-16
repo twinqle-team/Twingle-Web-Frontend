@@ -1,13 +1,11 @@
-'use client';
-
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 // import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { ChevronLeft, AlertCircle } from 'lucide-react';
+import {  AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
-// import Link from 'next/link';
+
 
 import {
   propertyFormSchema,
@@ -16,7 +14,7 @@ import {
   PROPERTY_STATUS,
   COUNTRIES,
 } from '@/components/vendor/Product/Property/Property-form/schema';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import NumberInput from '../../../reuse/NumberInput';
 import SelectInput from '../../../reuse/SelectInput';
 import ImageUploader from '../../../reuse/ImageUploader';
@@ -149,18 +147,10 @@ export default function Property() {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100"
+        className="top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100"
       >
         <div className="max-w-6xl mx-auto px-4 py-4 md:py-6">
-          <div className="flex items-center justify-between mb-4">
-            <Link
-              to="/properties"
-              className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium transition-colors"
-            >
-              <ChevronLeft size={20} />
-              Back to Properties
-            </Link>
-          </div>
+          
 
           <div className="mb-4">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
@@ -170,25 +160,6 @@ export default function Property() {
               Fill in the property information below to list your property.
             </p>
           </div>
-
-          {/* Breadcrumb */}
-          <nav className="text-sm text-gray-600">
-            <ol className="flex items-center gap-2">
-              <li>
-                <Link to="/properties" className="hover:text-gray-900 transition-colors">
-                  Dashboard
-                </Link>
-              </li>
-              <li>/</li>
-              <li>
-                <Link to="/properties" className="hover:text-gray-900 transition-colors">
-                  Properties
-                </Link>
-              </li>
-              <li>/</li>
-              <li className="text-gray-900 font-semibold">Add Property</li>
-            </ol>
-          </nav>
         </div>
       </motion.div>
 
@@ -502,15 +473,15 @@ export default function Property() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-lg"
+        className=" bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-lg"
       >
         <div className="max-w-6xl mx-auto px-4 py-4 md:py-6 flex items-center justify-end gap-4">
-          <Link
+          {/* <Link
             to="/properties"
             className="px-6 py-3 border-2 border-gray-200 text-gray-900 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
           >
             Cancel
-          </Link>
+          </Link> */}
           
 
           <button

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { ChevronRight, ArrowLeft, Save, Send } from 'lucide-react';
+import { Save, Send } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { automotiveFormSchema, AutomotiveFormData, VEHICLE_BRANDS, COUNTRIES } from '@/lib/auto/automotiveValidationSchema';
 import SectionCard from '@/components/vendor/reuse/SectionCard';
@@ -118,15 +118,8 @@ export default function vehicleForm() {
       className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-purple-50 pb-32"
     >
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200">
+      <div className="top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
-            <span>Dashboard</span>
-            <ChevronRight size={16} />
-            <span>Automotive</span>
-            <ChevronRight size={16} />
-            <span className="text-blue-600 font-semibold">Add Vehicle</span>
-          </div>
           <h1 className="text-3xl font-bold text-gray-900">Add New Vehicle</h1>
           <p className="text-gray-600 mt-1">Fill in the vehicle information below to publish your automotive listing.</p>
         </div>
@@ -408,16 +401,10 @@ export default function vehicleForm() {
       </form>
 
       {/* Sticky Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl">
+      <div className=" bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between gap-4">
-            <button
-              onClick={() => window.history.back()}
-              className="flex items-center gap-2 px-6 py-3 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-            >
-              <ArrowLeft size={20} />
-              Cancel
-            </button>
+            
 
             <button
               onClick={handleSaveDraft}

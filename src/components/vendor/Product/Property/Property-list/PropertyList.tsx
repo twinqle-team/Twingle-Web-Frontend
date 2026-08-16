@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, ChevronRight, Home } from 'lucide-react';
+import { Plus, Home } from 'lucide-react';
 import { useProperties } from '@/hooks/useProperties';
 import { FilterState } from '@/components/vendor/types/property';
 import { Toaster } from 'react-hot-toast';
@@ -16,7 +16,7 @@ import Pagination from './Pagination';
 // being inferred incorrectly elsewhere in the project.
 const PropertyCardAny: any = PropertyCard;
 
-export default function PropertiesPage() {
+export default function PropertiesList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const [filters, setFilters] = useState<FilterState>({
@@ -56,7 +56,7 @@ export default function PropertiesPage() {
 
   const handleAddProperty = () => {
     // Navigate to add property page
-    window.location.href = '/dashboard/property/create';
+    window.location.href = '/app/new-property';
   };
 
   return (
@@ -70,14 +70,6 @@ export default function PropertiesPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-gray-600 mb-6">
-            <span>Dashboard</span>
-            <ChevronRight size={16} />
-            <span>Properties</span>
-            <ChevronRight size={16} />
-            <span className="text-gray-900 font-semibold">My Properties</span>
-          </div>
 
           {/* Title and description */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
