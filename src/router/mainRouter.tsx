@@ -22,7 +22,6 @@ import Review from "@/components/vendor/Review/Review";
 import Profile from "@/components/vendor/Setting/Profile";
 import Payment from "@/components/vendor/Payment/Payment";
 import Customer from "@/components/vendor/Customer/Customer";
-// import Chat from "@/components/vendor/Chat/Chat";
 import Billing from "@/components/vendor/Billing/Billing";
 import KYCVerification from "@/components/vendor/Kyc/KYCVerification";
 import Property from "@/components/vendor/Product/Property/Property-form/Property";
@@ -31,23 +30,16 @@ import VehicleForm from "@/components/vendor/Product/Auto/vehicle/VehicleForm";
 
 import ProfileLayout from "@/components/layout/profileLayout";
 import ProfileDashboard from "@/components/userProfile/profileDashboard";
-// import VendorNewPass from "@/components/auth/vendor/VendorNewPass";
 import Verifyvendor from "@/components/auth/vendor/Verifyvendor";
 import Verify from "@/components/auth/vendor/Verify";
-// import Property from "@/components/vendor/Product/Property/Property-form/Property";
-// import PropertiesList from "@/components/vendor/Product/Property/Property-list/PropertyList";
-// import AutomotiveList from "@/components/vendor/Product/Auto/vehiclelist/AutomotiveList";
-// import vehicleForm from "@/components/vendor/Product/Auto/vehicle/VehicleForm";
-// import AdminSignUp from "@/components/auth/admin/AdminSignUp";
-// import AdminLogin from "@/components/auth/admin/AdminLogin";
-// import AdminLayout from "@/components/admin/layout/AdminLayout";
-// import AdminDash from "@/components/admin/main/AdminDash";
-// import Chat from "@/components/vendor/Chat/Chat";
-// import Adminchat from "@/components/admin/chat/Adminchat";
-// import AdminSetting from "@/components/admin/setting/Adminsetting";
-// import AdminReview from "@/components/admin/reviews/AdminReview";
-import { withSuspense } from "./withSuspense";
-// import AllUsers from "@/components/admin/usersManger/AllUsers";
+import AdminSignUp from "@/components/auth/admin/AdminSignUp";
+import AdminLogin from "@/components/auth/admin/AdminLogin";
+import AdminLayout from "@/components/admin/layout/AdminLayout";
+import Chat from "@/components/vendor/Chat/Chat";
+import AdminDash from "@/components/admin/main/AdminDash";
+import Adminchat from "@/components/admin/chat/Adminchat";
+import AdminSetting from "@/components/admin/setting/Adminsetting";
+import AdminReview from "@/components/admin/reviews/AdminReview";
 
 
 const Home = lazy(() => import("@/pages/homePage"));
@@ -59,19 +51,7 @@ const CarDetail = lazy(() => import("@/pages/carDetailPage"));
 const PropertyDetail = lazy(() => import("@/pages/propertyDetailPage"));
 const VendorListingsPage = lazy(() => import("@/pages/vendorListingsPage"));
 
-// Lazy load vendor routes
-// const VendorDashboard = lazy(() => import("@/components/vendor/Main/Dashboard"));
-// const VendorProperty = lazy(() => import("@/components/vendor/Product/Property/Property-form/Property"));
-// const VendorPropertyList = lazy(() => import("@/components/vendor/Product/Property/Property-list/PropertyList"));
-// const VendorAutomotiveList = lazy(() => import("@/components/vendor/Product/Auto/vehiclelist/AutomotiveList"));
-// const VendorAutomotive = lazy(() => import("@/components/vendor/Product/Auto/Automotive"));
-// const VendorReview = lazy(() => import("@/components/vendor/Review/Review"));
-// const VendorProfile = lazy(() => import("@/components/vendor/Setting/Profile"));
-// const VendorPayment = lazy(() => import("@/components/vendor/Payment/Payment"));
-// const VendorCustomer = lazy(() => import("@/components/vendor/Customer/Customer"));
-// const VendorChat = lazy(() => import("@/components/vendor/Chat/Chat"));
-// const VendorBilling = lazy(() => import("@/components/vendor/Billing/Billing"));
-// const VendorKYC = lazy(() => import("@/components/vendor/Kyc/KYCVerification"));
+
 
 const routes: RouteObject[] = [
   {
@@ -190,22 +170,48 @@ const routes: RouteObject[] = [
     path: "/app",
     element: <VendorLayout />,
     children: [
-      { index: true, element: withSuspense(Dashboard) },
-      { path: "new-property", element: withSuspense(Property) },
-      { path: "My-Properties", element: withSuspense(PropertyList) },
-      { path: "My-Automotives", element: withSuspense(AutomotiveList) },
-      { path: "new-automotive", element: withSuspense(VehicleForm) },
-      { path: "reviews", element: withSuspense(Review) },
-      { path: "settings", element: withSuspense(Profile) },
-      { path: "Payment", element: withSuspense(Payment) },
-      { path: "Customers", element: withSuspense(Customer) },
-      // { path: "inbox", element: withSuspense(Chat) },
-      { path: "kyc", element: withSuspense(KYCVerification) },
-      { path: "billing", element: withSuspense(Billing) },
+      { index: true, element: <Suspense fallback={<Spinner />}><Dashboard /></Suspense> },
+      { path: "new-property", element: <Suspense fallback={<Spinner />}><Property /></Suspense> },
+      { path: "My-Properties", element: <Suspense fallback={<Spinner />}><PropertyList /></Suspense> },
+      { path: "My-Automotives", element: <Suspense fallback={<Spinner />}><AutomotiveList /></Suspense> },
+      { path: "new-automotive", element: <Suspense fallback={<Spinner />}><VehicleForm /></Suspense> },
+      { path: "reviews", element: <Suspense fallback={<Spinner />}><Review /></Suspense> },
+      { path: "settings", element: <Suspense fallback={<Spinner />}><Profile /></Suspense> },
+      { path: "Payment", element: <Suspense fallback={<Spinner />}><Payment /></Suspense> },
+      { path: "Customers", element: <Suspense fallback={<Spinner />}><Customer /></Suspense> },
+      { path: "inbox", element: <Suspense fallback={<Spinner />}><Chat /></Suspense> },
+      { path: "kyc", element: <Suspense fallback={<Spinner />}><KYCVerification /></Suspense> },
+      { path: "billing", element: <Suspense fallback={<Spinner />}><Billing /></Suspense> },
     ],
   },
 
   //adminRouter
+  {
+    path: "/admin-signup",
+    element: (
+      <Suspense fallback={<Spinner />}>
+        <AdminSignUp />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/admin-login",
+    element: (
+      <Suspense fallback={<Spinner />}>
+        <AdminLogin />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    children: [
+      { index: true, element: <Suspense fallback={<Spinner />}><AdminDash /></Suspense> },
+      { path: "inbox", element: <Suspense fallback={<Spinner />}><Adminchat /></Suspense> },
+      { path: "settings", element: <Suspense fallback={<Spinner />}><AdminSetting /></Suspense> },
+      { path: "reviews", element: <Suspense fallback={<Spinner />}><AdminReview /></Suspense> },
+    ],
+  },  
 ];
 
 export const router = createBrowserRouter(routes);
