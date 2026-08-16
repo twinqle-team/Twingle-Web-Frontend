@@ -78,7 +78,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, change, icon: Icon, c
   </motion.div>
 );
 
-const Dashboard: React.FC = () => {
+const AdminDash: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState('30 Days');
   // const [searchTerm, setSearchTerm] = useState('');
   // const [showNotifications, setShowNotifications] = useState(false);
@@ -100,7 +100,7 @@ const Dashboard: React.FC = () => {
         <div className="flex-1 space-y-10">
           {/* WELCOME */}
           <div>
-            <p className="text-gray-600 mt-1">Welcome back, <b>PaulAuto/Properties</b> 👋</p>
+            <p className="text-gray-600 mt-1">Welcome back, <b>Admin</b> 👋</p>
             <p className="text-sm text-gray-500 mt-2 max-w-md">Monitor your marketplace performance, listings, revenue, customers, vendors, and recent activities.</p>
           </div>
 
@@ -328,4 +328,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default AdminDash;

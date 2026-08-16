@@ -171,7 +171,7 @@ const initialConversations: Conversation[] = [
   },
 ];
 
-const Chat: React.FC = () => {
+const Adminchat: React.FC = () => {
   const [conversations, setConversations] =
     useState<Conversation[]>(initialConversations);
   const [activeId, setActiveId] = useState<number | null>(null);
@@ -440,7 +440,7 @@ const Chat: React.FC = () => {
           Messages
         </h1>
         <p className="mt-2 text-gray-600">
-          Chat with buyers and support Team
+          Chat with buyers, sellers
         </p>
       </div>
 
@@ -1147,4 +1147,4 @@ const Chat: React.FC = () => {
   );
 };
 
-export default Chat;
+export default Adminchat;

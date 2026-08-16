@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import { Home, ReceiptText, Settings, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
-import { MdRealEstateAgent, MdVerifiedUser } from "react-icons/md";
+import { MdRealEstateAgent } from "react-icons/md";
 import { FaPersonCircleCheck } from "react-icons/fa6";
 import { AiOutlineLogout } from "react-icons/ai";
 import { RiSecurePaymentFill } from "react-icons/ri";
@@ -17,11 +17,11 @@ import {  useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
 // import { get_single_vendor } from "@/utils/vendorApi";
-interface DashboardSidebarProps {
+interface SideBarProps {
   darkMode: boolean;
 }
 
-const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
+const SideBar: React.FC<SideBarProps> = ({ darkMode }) => {
 
 
   interface RootState {
@@ -89,10 +89,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ darkMode }) => {
 
           <NavItem title="Payment" to="payment" Icon={RiSecurePaymentFill} />
 
-
-          <NavItem title="Verification" to="kyc" Icon={MdVerifiedUser} />
-
-          <NavItem title="Billing" to="billing" Icon={ReceiptText} />
+          <NavItem title="USers Manger" to="all" Icon={ReceiptText} />
 
           <NavItem title="Reviews" to="reviews" Icon={VscPreview} />
 
@@ -189,4 +186,4 @@ const NavItem = ({
   );
 };
 
-export default DashboardSidebar;
+export default SideBar;
