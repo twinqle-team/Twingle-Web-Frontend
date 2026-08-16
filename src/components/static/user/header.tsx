@@ -339,7 +339,7 @@ const Header: React.FC = () => {
             ) : (
               <Link
                 to="/select-account"
-                className="hidden rounded-lg bg-[#004e27] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#004e27] sm:block mr-4"
+                className="hidden rounded-lg bg-[#004e27] px-4 py-2 text-sm font-semibold text-white transition hover:bg-gold-500 hover:text-slate-900 sm:block mr-4"
               >
                 Get Started
               </Link>

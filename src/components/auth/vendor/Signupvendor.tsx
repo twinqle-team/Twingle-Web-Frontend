@@ -149,7 +149,7 @@ export default function Signupvendor() {
 
           {/* New Country Select */}
           <div className="flex h-[50px] w-full items-center gap-3">
-            <User className="text-gray-400" />
+            <Globe className="text-gray-400" />
 
             <select
               name="country"

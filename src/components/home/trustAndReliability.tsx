@@ -82,7 +82,7 @@ const TrustAndReliability: React.FC = () => {
 
       <div className="flex gap-1">
         {Array.from({ length: testimonial.rating }).map((_, i) => (
-          <Star key={i} size={20} className="text-yellow-400 fill-yellow-400" />
+          <Star key={i} size={20} className="text-gold-400 fill-gold-400" />
         ))}
       </div>
     </div>

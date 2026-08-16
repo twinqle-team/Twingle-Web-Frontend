@@ -72,13 +72,13 @@ const AutomotivePage: React.FC = () => {
         {/* Content */}
         <div className="relative z-10 w-full px-4 py-10 sm:px-6 sm:py-12 lg:px-12 lg:py-16">
           <div className="max-w-5xl mx-auto mb-4 sm:mb-5">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 mb-3 text-xs font-medium border rounded-full border-[#004e27]/30 bg-[#004e27]/10 text-[#004e27] sm:px-3 sm:py-1 sm:text-sm">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 mb-3 text-xs font-medium border rounded-full border-gold-400/40 bg-gold-500/10 text-gold-400 sm:px-3 sm:py-1 sm:text-sm">
               <Sparkles size={14} className="sm:w-4 sm:h-4" />
               New & certified vehicles
             </div>
             <h1 className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl xl:text-6xl">
               Find your next <br />
-              <span className="text-emerald-400">perfect car</span>
+              <span className="text-gold-400">perfect car</span>
             </h1>
             <p className="mt-3 text-sm text-slate-200 sm:mt-4 sm:text-base lg:text-lg">
               Discover premium cars for sale with transparent pricing, verified details, and fast buying support.
@@ -121,7 +121,7 @@ const AutomotivePage: React.FC = () => {
                 <button className="text-xs font-medium text-gray-700 transition hover:text-gray-900 sm:text-sm">
                   Advanced filters
                 </button>
-                <Button className="w-full px-5 py-3.5 font-semibold text-white rounded-lg bg-[#004e27] hover:bg-[#004e27] sm:w-auto sm:py-5">
+                <Button className="w-full px-5 py-3.5 font-semibold text-white rounded-lg bg-[#004e27] hover:bg-gold-500 hover:text-slate-900 sm:w-auto sm:py-5">
                   Search Cars
                 </Button>
               </div>
@@ -158,7 +158,7 @@ const AutomotivePage: React.FC = () => {
                   className="object-cover w-full h-full"
                 />
                 {car.featured && (
-                  <span className="absolute px-2 py-0.5 text-[10px] font-semibold tracking-wide text-white uppercase rounded-full left-3 top-3 bg-[#004e27] sm:px-3 sm:py-1 sm:text-xs">
+                  <span className="absolute px-2 py-0.5 text-[10px] font-semibold tracking-wide text-slate-900 uppercase rounded-full left-3 top-3 bg-gold-500 sm:px-3 sm:py-1 sm:text-xs">
                     Featured
                   </span>
                 )}
@@ -182,17 +182,17 @@ const AutomotivePage: React.FC = () => {
 
                 <div className="flex items-center justify-between pt-2.5 text-xs text-gray-600 border-t border-gray-100 sm:pt-3">
                   <div className="flex items-center gap-1.5">
-                    <Gauge size={14} className="text-emerald-600 sm:w-4 sm:h-4" />
+                    <Gauge size={14} className="text-gold-500 sm:w-4 sm:h-4" />
                     <span>{car.mileage}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <Fuel size={14} className="text-emerald-600 sm:w-4 sm:h-4" />
+                    <Fuel size={14} className="text-gold-500 sm:w-4 sm:h-4" />
                     <span>{car.fuel}</span>
                   </div>
                 </div>
 
                 <Button
-                  className="w-full py-3.5 text-sm font-semibold text-white bg-[#004e27] hover:bg-[#004e27] sm:py-6 sm:text-base"
+                  className="w-full py-3.5 text-sm font-semibold text-white bg-[#004e27] hover:bg-gold-500 hover:text-slate-900 sm:py-6 sm:text-base"
                   onClick={() =>
                     window.location.assign(`/automotive/${car.id}`)
                   }

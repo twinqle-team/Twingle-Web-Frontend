@@ -47,13 +47,13 @@ const Hero: React.FC = () => {
 
       <div className="relative mx-auto flex min-h-[90vh] max-w-7xl flex-col justify-center px-4 py-8 text-white sm:px-6 sm:py-10 lg:px-12 lg:py-12">
         <div className="max-w-3xl space-y-4 sm:space-y-6">
-          <span className="inline-flex rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[0.7rem] uppercase tracking-[0.2em] text-slate-200 sm:px-4 sm:py-1.5 sm:text-xs sm:tracking-[0.3em]">
+          <span className="inline-flex rounded-full border border-gold-400/40 bg-gold-500/10 px-3 py-1 text-[0.7rem] uppercase tracking-[0.2em] text-gold-300 sm:px-4 sm:py-1.5 sm:text-xs sm:tracking-[0.3em]">
             Premium global marketplace
           </span>
 
           <h1 className="text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl xl:text-6xl">
             The Gold Standard for{" "}
-            <span className="text-emerald-400">High-Value Assets</span>
+            <span className="text-gold-400">High-Value Assets</span>
           </h1>
 
           <p className="max-w-2xl text-sm leading-6 text-slate-200 sm:text-base sm:leading-7 lg:text-lg">
@@ -100,7 +100,7 @@ const Hero: React.FC = () => {
                   className="w-full text-xs bg-transparent text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-0 sm:text-sm"
                 />
               </div>
-               <button className="inline-flex h-[3.5rem] items-center justify-center rounded-2xl bg-[#004e27] px-6 text-sm font-semibold text-white transition hover:bg-emerald-800 sm:h-[4.25rem] sm:rounded-3xl sm:px-8 sm:text-base">
+               <button className="inline-flex h-[3.5rem] items-center justify-center rounded-2xl bg-gold-500 px-6 text-sm font-semibold text-slate-900 shadow-lg shadow-gold-500/30 transition hover:bg-gold-600 sm:h-[4.25rem] sm:rounded-3xl sm:px-8 sm:text-base">
                  Explore
                </button>
             </div>
