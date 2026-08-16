@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { Bell, X } from "lucide-react";
+import { Bell, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 
 
-const VendorHeader: React.FC = () => {
+const VendorHeader: React.FC  <{ onToggleSidebar?: () => void }> = ({
+  onToggleSidebar,
+}) => {
   const [showNotifications, setShowNotifications] = useState(false);
 
   interface RootState {
@@ -63,7 +65,13 @@ const VendorHeader: React.FC = () => {
         </span>
       </h1>
       <div className="flex items-center gap-4">
-        
+        <button
+          onClick={onToggleSidebar}
+          aria-label="Open Menu"
+          className="p-2 rounded md:hidden hover:bg-gray-100 dark:hover:bg-gray-800"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
 
         {/* Notifications */}
         <div className="relative">
