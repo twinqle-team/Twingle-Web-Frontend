@@ -31,21 +31,21 @@ import VehicleForm from "@/components/vendor/Product/Auto/vehicle/VehicleForm";
 
 import ProfileLayout from "@/components/layout/profileLayout";
 import ProfileDashboard from "@/components/userProfile/profileDashboard";
-import VendorNewPass from "@/components/auth/vendor/VendorNewPass";
+// import VendorNewPass from "@/components/auth/vendor/VendorNewPass";
 import Verifyvendor from "@/components/auth/vendor/Verifyvendor";
 import Verify from "@/components/auth/vendor/Verify";
-import Property from "@/components/vendor/Product/Property/Property-form/Property";
-import PropertiesList from "@/components/vendor/Product/Property/Property-list/PropertyList";
-import AutomotiveList from "@/components/vendor/Product/Auto/vehiclelist/AutomotiveList";
-import vehicleForm from "@/components/vendor/Product/Auto/vehicle/VehicleForm";
-import AdminSignUp from "@/components/auth/admin/AdminSignUp";
-import AdminLogin from "@/components/auth/admin/AdminLogin";
-import AdminLayout from "@/components/admin/layout/AdminLayout";
-import AdminDash from "@/components/admin/main/AdminDash";
-import Chat from "@/components/vendor/Chat/Chat";
-import Adminchat from "@/components/admin/chat/Adminchat";
-import AdminSetting from "@/components/admin/setting/Adminsetting";
-import AdminReview from "@/components/admin/reviews/AdminReview";
+// import Property from "@/components/vendor/Product/Property/Property-form/Property";
+// import PropertiesList from "@/components/vendor/Product/Property/Property-list/PropertyList";
+// import AutomotiveList from "@/components/vendor/Product/Auto/vehiclelist/AutomotiveList";
+// import vehicleForm from "@/components/vendor/Product/Auto/vehicle/VehicleForm";
+// import AdminSignUp from "@/components/auth/admin/AdminSignUp";
+// import AdminLogin from "@/components/auth/admin/AdminLogin";
+// import AdminLayout from "@/components/admin/layout/AdminLayout";
+// import AdminDash from "@/components/admin/main/AdminDash";
+// import Chat from "@/components/vendor/Chat/Chat";
+// import Adminchat from "@/components/admin/chat/Adminchat";
+// import AdminSetting from "@/components/admin/setting/Adminsetting";
+// import AdminReview from "@/components/admin/reviews/AdminReview";
 import { withSuspense } from "./withSuspense";
 // import AllUsers from "@/components/admin/usersManger/AllUsers";
 
@@ -60,18 +60,18 @@ const PropertyDetail = lazy(() => import("@/pages/propertyDetailPage"));
 const VendorListingsPage = lazy(() => import("@/pages/vendorListingsPage"));
 
 // Lazy load vendor routes
-const VendorDashboard = lazy(() => import("@/components/vendor/Main/Dashboard"));
-const VendorProperty = lazy(() => import("@/components/vendor/Product/Property/Property-form/Property"));
-const VendorPropertyList = lazy(() => import("@/components/vendor/Product/Property/Property-list/PropertyList"));
-const VendorAutomotiveList = lazy(() => import("@/components/vendor/Product/Auto/vehiclelist/AutomotiveList"));
+// const VendorDashboard = lazy(() => import("@/components/vendor/Main/Dashboard"));
+// const VendorProperty = lazy(() => import("@/components/vendor/Product/Property/Property-form/Property"));
+// const VendorPropertyList = lazy(() => import("@/components/vendor/Product/Property/Property-list/PropertyList"));
+// const VendorAutomotiveList = lazy(() => import("@/components/vendor/Product/Auto/vehiclelist/AutomotiveList"));
 // const VendorAutomotive = lazy(() => import("@/components/vendor/Product/Auto/Automotive"));
-const VendorReview = lazy(() => import("@/components/vendor/Review/Review"));
-const VendorProfile = lazy(() => import("@/components/vendor/Setting/Profile"));
-const VendorPayment = lazy(() => import("@/components/vendor/Payment/Payment"));
-const VendorCustomer = lazy(() => import("@/components/vendor/Customer/Customer"));
-const VendorChat = lazy(() => import("@/components/vendor/Chat/Chat"));
-const VendorBilling = lazy(() => import("@/components/vendor/Billing/Billing"));
-const VendorKYC = lazy(() => import("@/components/vendor/Kyc/KYCVerification"));
+// const VendorReview = lazy(() => import("@/components/vendor/Review/Review"));
+// const VendorProfile = lazy(() => import("@/components/vendor/Setting/Profile"));
+// const VendorPayment = lazy(() => import("@/components/vendor/Payment/Payment"));
+// const VendorCustomer = lazy(() => import("@/components/vendor/Customer/Customer"));
+// const VendorChat = lazy(() => import("@/components/vendor/Chat/Chat"));
+// const VendorBilling = lazy(() => import("@/components/vendor/Billing/Billing"));
+// const VendorKYC = lazy(() => import("@/components/vendor/Kyc/KYCVerification"));
 
 const routes: RouteObject[] = [
   {
@@ -177,15 +177,15 @@ const routes: RouteObject[] = [
     path: "/vendor-verify",
     element: <Verifyvendor />,
   },
-  {
-    path: "/new",
-    element: <VendorNewPass />,
-    element: (
-      <Suspense fallback={<Spinner />}>
-        <VerifyOtpPage />
-      </Suspense>
-    ),
-  },
+  // {
+  //   path: "/new",
+  //   element: <VendorNewPass />,
+  //   element: (
+  //     <Suspense fallback={<Spinner />}>
+  //       <VerifyOtpPage />
+  //     </Suspense>
+  //   ),
+  // },
   {
     path: "/app",
     element: <VendorLayout />,
