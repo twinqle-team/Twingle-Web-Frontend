@@ -3,6 +3,7 @@ import { Bell, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 
+
 const VendorHeader: React.FC = () => {
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -43,30 +44,11 @@ const VendorHeader: React.FC = () => {
       time: "2:20pm",
     },
     {
-      id: 3,
-      message: "OKonkwo Hilary added your product on wishlist",
-      date: "Sep 20, 2024",
-      time: "2:20pm",
-    },
-    {
-      id: 3,
-      message: "OKonkwo Hilary added your product on wishlist",
-      date: "Sep 20, 2024",
-      time: "2:20pm",
-    },
-    {
-      id: 3,
-      message: "OKonkwo Hilary added your product on wishlist",
-      date: "Sep 20, 2024",
-      time: "2:20pm",
-    },
-    {
-      id: 1,
-      message: "Giovanni Kamper commented on your post",
-      detail: "This Looks great!! Let's get started on it.",
-      date: "Sep 20, 2024",
-      time: "2:20pm",
-      avatar: "/path-to-avatar1.png",
+      id: 4,
+      message: "New customer review posted",
+      detail: "Great service! Highly recommended.",
+      date: "Sep 21, 2024",
+      time: "10:15am",
     },
   ];
 
@@ -119,7 +101,7 @@ const VendorHeader: React.FC = () => {
                 <div className="overflow-y-auto max-h-64">
                   {notifications.map((notification) => (
                     <div
-                      key={notification.id}
+                      key={`${notification.id}-${notification.message}`}
                       className="flex items-start gap-3 p-4 border-b hover:bg-gray-100"
                     >
                       {notification.avatar ? (
@@ -161,10 +143,10 @@ const VendorHeader: React.FC = () => {
      
             <div className="flex items-center gap-3 pl-6 border-l border-gray-200">
               <div className="text-right">
-                <p className="font-medium text-sm">Admin Oluwaseun</p>
+                <p className="text-sm font-medium">Admin Oluwaseun</p>
                 <p className="text-xs text-green-600">Online</p>
               </div>
-              <div className="w-9 h-9 bg-gradient-to-br from-green-400 to-emerald-600 rounded-2xl flex items-center justify-center text-white font-semibold ring-2 ring-white">AO</div>
+              <div className="flex items-center justify-center font-semibold text-white w-9 h-9 bg-gradient-to-br from-green-400 to-emerald-600 rounded-2xl ring-2 ring-white">AO</div>
             </div>
 
          

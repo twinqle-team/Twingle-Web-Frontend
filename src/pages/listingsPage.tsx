@@ -135,41 +135,41 @@ export default function ListingsPage() {
   const Icon = content.icon;
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-8">
-        <div className="overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-sm">
+    <div className="min-h-screen px-4 py-6 bg-slate-50 sm:px-6 sm:py-8 lg:px-8">
+      <div className="flex flex-col gap-6 mx-auto max-w-7xl sm:gap-8">
+        <div className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm sm:rounded-[32px]">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 px-6 pt-6 text-sm font-medium text-slate-600 transition hover:text-[#004e27]"
+            className="inline-flex items-center gap-2 px-4 pt-4 text-xs font-medium text-slate-600 transition hover:text-[#004e27] sm:px-6 sm:pt-6 sm:text-sm"
           >
-            <ArrowLeft size={16} />
+            <ArrowLeft size={16} className="sm:w-4 sm:h-4" />
             Back to home
           </Link>
 
-          <div className={`m-6 rounded-[28px] ${content.panel} p-6 sm:p-8`}>
-            <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className={`m-4 rounded-2xl ${content.panel} p-4 sm:m-6 sm:rounded-[28px] sm:p-6 lg:p-8`}>
+            <div className="flex flex-col gap-4 sm:gap-5 lg:flex-row lg:items-end lg:justify-between">
               <div>
                 <div
-                  className={`mb-3 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-sm font-medium shadow-sm ${content.accent}`}
+                  className={`mb-2 inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-0.5 text-xs font-medium shadow-sm sm:mb-3 sm:px-3 sm:py-1 sm:text-sm ${content.accent}`}
                 >
-                  <Icon size={16} />
+                  <Icon size={14} className="sm:w-4 sm:h-4" />
                   {content.title}
                 </div>
-                <h1 className="text-3xl font-semibold text-slate-900 sm:text-4xl">
+                <h1 className="text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">
                   {isValidType
                     ? `Find the best ${content.title.toLowerCase()}`
                     : "Browse our trusted professionals"}
                 </h1>
-                <p className="mt-3 max-w-2xl text-sm text-slate-600 sm:text-base">
+                <p className="max-w-2xl mt-2 text-xs text-slate-600 sm:mt-3 sm:text-sm sm:text-base">
                   {content.description}
                 </p>
               </div>
 
-              <div className="rounded-2xl bg-white/80 px-4 py-3 text-sm text-slate-700 shadow-sm">
+              <div className="rounded-xl bg-white/80 px-3.5 py-2.5 text-xs text-slate-700 shadow-sm sm:rounded-2xl sm:px-4 sm:py-3 sm:text-sm">
                 <div className="font-semibold text-slate-900">
                   {content.items.length} verified professionals
                 </div>
-                <div className="mt-1">
+                <div className="mt-0.5 sm:mt-1">
                   Handpicked for quality, trust, and fast response.
                 </div>
               </div>
@@ -178,71 +178,71 @@ export default function ListingsPage() {
         </div>
 
         {!isValidType ? (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-600">
+          <div className="p-6 text-xs text-center bg-white border border-dashed rounded-2xl border-slate-300 text-slate-600 sm:p-8 sm:text-sm">
             This page is currently available for the{" "}
             <span className="font-semibold text-slate-900">agent</span> and{" "}
             <span className="font-semibold text-slate-900">vendor</span> views.
           </div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
             {content.items.map((item) => (
               <article
                 key={item.name}
-                className="group overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl sm:rounded-[28px]"
               >
-                <div className={`p-4 ${content.panel}`}>
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="rounded-full bg-white/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-slate-700 shadow-sm">
+                <div className={`p-3.5 ${content.panel} sm:p-4`}>
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="rounded-full bg-white/80 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-700 shadow-sm sm:px-3 sm:py-1 sm:text-[11px]">
                       {item.badge}
                     </div>
-                    <div className="flex items-center gap-1 text-sm font-semibold text-slate-700">
-                      <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                    <div className="flex items-center gap-1 text-xs font-semibold text-slate-700 sm:text-sm">
+                      <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400 sm:h-4 sm:w-4" />
                       {item.rating}
                     </div>
                   </div>
 
-                  <div className="mt-4 flex items-center gap-4">
+                  <div className="flex items-center gap-3 mt-3 sm:mt-4 sm:gap-4">
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="h-16 w-16 rounded-2xl object-cover ring-4 ring-white"
+                      className="object-cover w-12 h-12 rounded-xl ring-4 ring-white sm:h-16 sm:w-16 sm:rounded-2xl"
                     />
                     <div>
-                      <h2 className="text-xl font-semibold text-slate-900">
+                      <h2 className="text-lg font-semibold text-slate-900 sm:text-xl">
                         {item.name}
                       </h2>
-                      <p className="mt-1 text-sm text-slate-600">
+                      <p className="mt-0.5 text-xs text-slate-600 sm:text-sm">
                         {item.specialty}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-6">
-                  <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
-                    <ShieldCheck className="h-4 w-4 text-emerald-500" />
+                <div className="p-4 sm:p-6">
+                  <div className="flex items-center gap-1.5 text-xs font-medium text-slate-700 sm:text-sm">
+                    <ShieldCheck className="h-3.5 w-3.5 text-emerald-500 sm:h-4 sm:w-4" />
                     {item.highlight}
                   </div>
 
-                  <div className="mt-4 space-y-2 text-sm text-slate-600">
+                  <div className="mt-3 space-y-2 text-xs text-slate-600 sm:mt-4 sm:text-sm">
                     <div className="flex items-center gap-2">
-                      <MapPin size={16} className="text-slate-400" />
+                      <MapPin size={14} className="text-slate-400 sm:w-4 sm:h-4" />
                       {item.location}
                     </div>
                     <div className="flex items-start gap-2">
-                      <BadgeCheck size={16} className="mt-0.5 text-slate-400" />
+                      <BadgeCheck size={14} className="mt-0.5 text-slate-400 sm:w-4 sm:h-4" />
                       {item.description}
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between border-t border-slate-100 px-6 py-4">
-                  <div className="text-sm text-slate-500">Ready to connect</div>
+                <div className="flex items-center justify-between border-t border-slate-100 px-4 py-3.5 sm:px-6 sm:py-4">
+                  <div className="text-xs text-slate-500 sm:text-sm">Ready to connect</div>
                   <button
-                    className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-white transition ${content.button}`}
+                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-white transition sm:gap-2 sm:px-4 sm:py-2 sm:text-sm ${content.button}`}
                   >
                     View profile
-                    <ArrowRight size={16} />
+                    <ArrowRight size={14} className="sm:w-4 sm:h-4" />
                   </button>
                 </div>
               </article>

@@ -1,11 +1,16 @@
 import React from "react";
-import fake1 from "@/assets/fake1.png";
-import fake2 from "@/assets/fake2.png";
-import fake3 from "@/assets/fake3.png";
+
+// Using direct image URLs for better performance
+const IMAGE_1 =
+  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80";
+const IMAGE_2 =
+  "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=800&q=80";
+const IMAGE_3 =
+  "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80";
 
 const listings = [
   {
-    image: fake1,
+    image: IMAGE_1,
     isFeatured: true,
     price: "$4,600",
     title: "House on the Hollywood",
@@ -16,7 +21,7 @@ const listings = [
     type: "For Sale",
   },
   {
-    image: fake2,
+    image: IMAGE_2,
     isFeatured: false,
     price: "$5,200",
     title: "Modern Downtown Condo",
@@ -27,7 +32,7 @@ const listings = [
     type: "For Sale",
   },
   {
-    image: fake3,
+    image: IMAGE_3,
     isFeatured: true,
     price: "$3,850",
     title: "Luxury Waterfront Villa",
@@ -38,7 +43,7 @@ const listings = [
     type: "For Sale",
   },
   {
-    image: fake1,
+    image: IMAGE_1,
     isFeatured: false,
     price: "$2,950",
     title: "Cozy Urban Apartment",
@@ -49,7 +54,7 @@ const listings = [
     type: "For Rent",
   },
   {
-    image: fake2,
+    image: IMAGE_2,
     isFeatured: true,
     price: "$6,100",
     title: "Executive Family Home",
@@ -60,7 +65,7 @@ const listings = [
     type: "For Sale",
   },
   {
-    image: fake3,
+    image: IMAGE_3,
     isFeatured: false,
     price: "$3,500",
     title: "Sleek Modern Loft",

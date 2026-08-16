@@ -1,9 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   MapPin,
-  Share2,
-  Heart,
   ShieldCheck,
   FileText,
   Clock,
@@ -14,6 +12,7 @@ import { GiCarDoor, GiCarSeat } from "react-icons/gi";
 import { GrManual } from "react-icons/gr";
 import { Card, CardContent } from "@/components/ui/card";
 import { carListings } from "../data/carData";
+import { Button } from "@/components/ui/button";
 
 const CarDetailPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -76,16 +75,37 @@ const CarDetailPage: React.FC = () => {
       console.error("Unable to toggle fullscreen mode", error);
     }
   };
+ // share & save state
+  const [saved, setSaved] = useState(false);
 
+  const handleShare = async () => {
+    const shareData = {
+      title: car.title,
+      text: car.location ? `Check out this car in ${car.location}: ${car.title}` : `Check out this car: ${car.title}`,
+      url: window.location.href,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData as any);
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(window.location.href);
+        alert("Link copied to clipboard");
+      } else {
+        prompt("Copy this link:", window.location.href);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
-    <div className="container px-4 py-8 mx-auto">
+    <div className="container px-4 py-6 mx-auto sm:px-6 lg:px-8 lg:py-8">
       {/* Listing header: title, dealer/location, rating, tags, actions */}
-      <div className="flex flex-col gap-4 mb-6 lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold md:text-3xl">{car.title}</h1>
-          <div className="flex flex-col gap-2 mt-2 text-sm text-gray-600 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+      <div className="flex flex-col gap-3 mb-5 lg:flex-row lg:items-center lg:justify-between">
+        <div className="min-w-0">
+          <h1 className="text-xl font-bold md:text-2xl lg:text-3xl">{car.title}</h1>
+          <div className="flex flex-col gap-1.5 mt-1.5 text-xs text-gray-600 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 sm:text-sm">
             <div className="flex flex-wrap items-center gap-1.5">
-              <MapPin size={16} className="shrink-0" />
+              <MapPin size={14} className="shrink-0" />
               <span className="break-words">
                 {car.dealer?.name || car.location}
               </span>
@@ -93,10 +113,10 @@ const CarDetailPage: React.FC = () => {
               <span className="text-gray-500">3.1 km from centre</span>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center whitespace-nowrap rounded bg-[#004e27] px-2 py-0.5 text-xs text-white">
+              <span className="inline-flex items-center whitespace-nowrap rounded bg-[#004e27] px-2 py-0.5 text-[10px] text-white sm:text-xs">
                 Free cancellation
               </span>
-              <span className="inline-flex items-center gap-1 text-sm text-yellow-500">
+              <span className="inline-flex items-center gap-1 text-xs text-yellow-500 sm:text-sm">
                 <span>★</span>
                 <span className="text-gray-700">
                   {car.dealer?.rating || "4.0"}
@@ -106,28 +126,76 @@ const CarDetailPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            className="p-2 rounded-md hover:bg-gray-100"
-            aria-label="save"
-            title="Save this listing"
-          >
-            <Heart size={18} />
-          </button>
-          <button
-            className="p-2 rounded-md hover:bg-gray-100"
-            aria-label="share"
-            title="Share this listing"
-          >
-            <Share2 size={18} />
-          </button>
-        </div>
+            <div className="flex flex-wrap items-center justify-start gap-2.5 md:justify-end">
+              <button
+                onClick={handleShare}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 sm:px-3 sm:py-2 sm:text-sm"
+                aria-label="Share property"
+              >
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"
+                    stroke="#0f172a"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M16 6l-4-4-4 4"
+                    stroke="#0f172a"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 2v14"
+                    stroke="#0f172a"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                Share
+              </button>
+
+              <button
+                onClick={() => {
+                  setSaved((s) => !s);
+                }}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 sm:px-3 sm:py-2 sm:text-sm"
+                aria-pressed={saved}
+                aria-label="Save property"
+              >
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19 21l-7-5-7 5V5a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1z"
+                    stroke="#0f172a"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                {saved ? "Saved" : "Save"}
+              </button>
+            </div>
       </div>
 
       {/* Car Image Display - layout: large hero + vertical thumbnails (supports 5 images) */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
         <div className="col-span-1 lg:col-span-4">
-          <div className="w-full h-[55vh] sm:h-[65vh] md:h-[72vh] lg:h-[80vh] bg-gray-100 rounded overflow-hidden flex items-center justify-center group">
+          <div className="w-full h-[40vh] sm:h-[50vh] md:h-[65vh] lg:h-[80vh] bg-gray-100 rounded-[28px] overflow-hidden flex items-center justify-center group">
             <img
               src={gallery[activeIndex]}
               alt={`${car.title} image ${activeIndex + 1}`}
@@ -135,12 +203,12 @@ const CarDetailPage: React.FC = () => {
             />
           </div>
 
-          <div className="grid grid-cols-5 gap-3 mt-3 lg:hidden">
+          <div className="grid grid-cols-5 gap-2 mt-2.5 lg:hidden sm:gap-3">
             {gallery.map((src, idx) => (
               <button
                 key={idx}
                 onClick={() => setActiveIndex(idx)}
-                className={`h-20 rounded overflow-hidden focus:outline-none border-2 ${
+                className={`h-16 rounded-xl overflow-hidden focus:outline-none border-2 sm:h-20 sm:rounded-2xl ${
                   idx === activeIndex ? "border-primary" : "border-transparent"
                 }`}
                 aria-label={`Show image ${idx + 1}`}
@@ -175,27 +243,27 @@ const CarDetailPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-10 grid gap-6 lg:grid-cols-[1.8fr_1fr]">
+      <div className="mt-8 grid gap-6 lg:grid-cols-[1.8fr_1fr]">
         <section className="order-2 space-y-6 lg:order-1">
-          <div className="p-6 bg-white border border-gray-200 shadow-sm rounded-[32px]">
-            <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          <div className="p-5 bg-white border border-gray-200 shadow-sm rounded-[28px] sm:p-6">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div>
-                <h2 className="text-3xl font-bold text-black">Features</h2>
-                <p className="mt-3 text-sm text-gray-500">
+                <h2 className="text-2xl font-bold text-black sm:text-3xl">Features</h2>
+                <p className="mt-2 text-xs text-gray-500 sm:text-sm">
                   {car.year} • {car.mileage} • {car.fuel}
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3">
-                <span className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-full">
-                  <GiCarSeat size={18} />
+              <div className="flex flex-wrap gap-2.5">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 rounded-full sm:px-3 sm:py-2 sm:text-sm">
+                  <GiCarSeat size={16} className="sm:w-[18px] sm:h-[18px]" />
                   {car.specs.Seats ?? "4 Seats"}
                 </span>
-                <span className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-full">
-                  <GrManual size={18} />
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 rounded-full sm:px-3 sm:py-2 sm:text-sm">
+                  <GrManual size={16} className="sm:w-[18px] sm:h-[18px]" />
                   {car.transmission}
                 </span>
-                <span className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-full">
-                  <GiCarDoor size={18} />
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 rounded-full sm:px-3 sm:py-2 sm:text-sm">
+                  <GiCarDoor size={16} className="sm:w-[18px] sm:h-[18px]" />
                   {car.additionalFeatures?.find((feature) =>
                     feature.toLowerCase().includes("door"),
                   ) ?? "4 Doors"}
@@ -484,12 +552,14 @@ const CarDetailPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <Link
-                    to={`/automotive/${listing.id}`}
-                    className="inline-flex items-center justify-center rounded-xl border border-[#004e27] px-4 py-2 text-sm font-semibold text-[#004e27] transition hover:bg-[#004e27]/10"
-                  >
-                    View details
-                  </Link>
+                <Button
+                  className="w-full py-6 text-white bg-[#004e27] hover:bg-[#004e27]"
+                  onClick={() =>
+                    window.location.assign(`/automotive/${car.id}`)
+                  }
+                >
+                  View Details
+                </Button>
                 </CardContent>
               </Card>
             ))}

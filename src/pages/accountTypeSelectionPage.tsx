@@ -9,39 +9,43 @@ export default function AccountTypeSelectionPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45 }}
-        className="w-full max-w-5xl p-6 bg-white border border-gray-200 shadow-xl rounded-3xl sm:p-8 lg:p-10"
+        className="w-full max-w-5xl p-5 bg-white border border-gray-200 shadow-xl rounded-3xl sm:p-8 lg:p-10"
       >
-        <div className="mb-8 text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-teal-600">
+        <div className="mb-6 text-center sm:mb-8">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand sm:mb-3 sm:text-sm sm:tracking-[0.25em]">
             Choose your account
           </p>
+
           <h1 className="text-3xl font-semibold text-gray-900 sm:text-4xl">
             How do you want to join Twinqle?
+
           </h1>
-          <p className="max-w-2xl mx-auto mt-3 text-sm text-gray-600 sm:text-base">
-            Select the option that best matches your needs and we’ll take you to
+          <p className="max-w-2xl mx-auto mt-2 text-xs text-gray-600 sm:mt-3 sm:text-sm sm:text-base">
+            Select the option that best matches your needs and we'll take you to
             the right sign-up form.
           </p>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
           <motion.div
             whileHover={{ y: -4, scale: 1.01 }}
-            className="p-6 border border-gray-200 shadow-sm rounded-2xl bg-slate-50"
+            className="p-5 border border-gray-200 shadow-sm rounded-2xl bg-slate-50 sm:p-6"
           >
-            <div className="flex items-center justify-center w-12 h-12 mb-4 text-teal-600 bg-teal-100 rounded-full">
-              <UserRound size={24} />
+          <div className="flex items-center justify-center w-10 h-10 mb-3 rounded-full text-brand bg-brand-100 sm:w-12 sm:h-12 sm:mb-4">
+              <UserRound size={20} className="sm:w-6 sm:h-6" />
             </div>
+
             <h2 className="text-xl font-semibold text-gray-900">
               Register as a user
+
             </h2>
-            <p className="mt-2 text-sm leading-6 text-gray-600">
+            <p className="mt-2 text-xs leading-5 text-gray-600 sm:text-sm sm:leading-6">
               Perfect for buyers, renters, or anyone looking to explore
               listings, save favorites, and connect with properties.
             </p>
             <Link
               to="/signup"
-              className="inline-flex items-center justify-center px-5 py-3 mt-6 text-sm font-semibold text-white transition-colors bg-teal-500 rounded-lg hover:bg-teal-600"
+              className="inline-flex items-center justify-center px-4 py-2.5 mt-5 text-sm font-semibold text-white transition-colors rounded-lg bg-brand hover:bg-brand-700 sm:mt-6 sm:px-5 sm:py-3"
             >
               Continue as a user
             </Link>
@@ -49,40 +53,34 @@ export default function AccountTypeSelectionPage() {
 
           <motion.div
             whileHover={{ y: -4, scale: 1.01 }}
-            className="p-6 border border-gray-200 shadow-sm rounded-2xl bg-slate-50"
+            className="p-5 border border-gray-200 shadow-sm rounded-2xl bg-slate-50 sm:p-6"
           >
-            <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-amber-100 text-amber-600">
-              <Building2 size={24} />
+            <div className="flex items-center justify-center w-10 h-10 mb-3 rounded-full bg-brand-100 text-brand sm:w-12 sm:h-12 sm:mb-4">
+              <Building2 size={20} className="sm:w-6 sm:h-6" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900">
-              Register as a seller or real-estate agent
+            <h2 className="text-lg font-semibold text-gray-900 sm:text-xl">
+              Register as a Seller or Real-Estate Agent
             </h2>
-            <p className="mt-2 text-sm leading-6 text-gray-600">
+            <p className="mt-2 text-xs leading-5 text-gray-600 sm:text-sm sm:leading-6">
               Ideal for property owners, agents, and service providers who want
               to list properties and manage their business profile.
             </p>
             <Link
               to="/vendor-signup"
-              className="inline-flex items-center justify-center px-5 py-3 mt-6 text-sm font-semibold transition-colors border rounded-lg border-amber-500 text-amber-600 hover:bg-amber-50"
+              className="inline-flex items-center justify-center px-4 py-2.5 mt-5 text-sm font-semibold transition-colors border rounded-lg border-brand text-brand hover:bg-brand-50 sm:mt-6 sm:px-5 sm:py-3"
             >
               Continue as a seller
             </Link>
           </motion.div>
         </div>
 
-        <div className="flex flex-col gap-3 pt-6 mt-8 text-sm text-gray-600 border-t border-gray-200 sm:flex-row sm:items-center sm:justify-between">
-          <Link
-            to="/login"
-            className="inline-flex items-center gap-2 font-medium text-teal-600 hover:text-teal-700"
-          >
-            <ArrowLeft size={16} />
-            Back to login
-          </Link>
+        <div className="flex flex-col pt-5 mt-6 text-base text-gray-600 border-t border-gray-200 sm:mt-8 sm:pt-6 sm:text-lg sm:items-center">
           <Link
             to="/"
-            className="font-medium text-gray-600 hover:text-gray-900"
+            className="font-bold text-gray-600 hover:text-gray-900"
           >
-            Go to homepage
+            <ArrowLeft className="inline-block w-5 h-5 mb-1 mr-2 sm:w-6 sm:h-6" />
+            Go Back To Homepage
           </Link>
         </div>
       </motion.div>

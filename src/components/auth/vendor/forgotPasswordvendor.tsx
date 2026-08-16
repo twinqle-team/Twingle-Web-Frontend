@@ -57,7 +57,7 @@ export default function ForgotPasswordvendor() {
   };
 
   return (
-    <div className="flex min-h-screen overflow-x-hidden p-0">
+    <div className="flex min-h-screen p-0 overflow-x-hidden bg-white">
       <motion.div
         variants={leftVariants}
         initial="hidden"
@@ -71,15 +71,15 @@ export default function ForgotPasswordvendor() {
         variants={rightVariants}
         initial="hidden"
         animate="visible"
-        className="flex min-h-screen w-full flex-col items-center justify-center bg-white px-4 py-8 sm:px-6 md:w-1/2 md:px-8 lg:px-10"
+        className="flex flex-col items-center justify-center w-full min-h-screen px-4 py-8 bg-white sm:px-6 md:w-1/2 md:px-8 lg:px-10"
       >
         <img
           src="src/assets/Container.png"
           alt="Twingle logo"
-          className="mb-4 h-14 w-auto sm:h-16"
+          className="w-auto mb-4 h-14 sm:h-16"
         />
 
-        <div className="flex w-full max-w-[600px] flex-col items-stretch gap-5 px-0 sm:gap-6">
+        <div className="flex w-full max-w-[600px] flex-col items-stretch gap-4 px-0 sm:gap-5">
           <motion.div
             variants={itemVariants}
             className="rounded-[12px] border border-gray-200 bg-slate-50 px-5 py-4 text-center"
@@ -88,7 +88,7 @@ export default function ForgotPasswordvendor() {
               Reset Password
             </h1>
             <p className="mt-2 text-sm text-gray-600">
-              Enter your email address and we’ll send a verification code.
+              Enter your email address and we'll send a verification code.
             </p>
           </motion.div>
 
@@ -97,14 +97,14 @@ export default function ForgotPasswordvendor() {
             onSubmit={handleSubmit}
             className="flex flex-col items-stretch gap-5"
           >
-            <div className="flex h-[50px] w-full items-center gap-3">
-              <Mail className="text-gray-400" />
+            <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+              <Mail className="w-5 h-5 text-gray-400" />
               <input
                 type="email"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-3 text-gray-700 placeholder:text-gray-400 focus:outline-none"
+                className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-2.5 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none sm:px-3"
                 required
               />
             </div>
@@ -114,14 +114,14 @@ export default function ForgotPasswordvendor() {
               disabled={isLoading}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50 sm:py-3.5"
             >
               {isLoading ? (
                 <>
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity }}
-                    className="h-5 w-5 rounded-full border-2 border-white border-t-transparent"
+                    className="w-5 h-5 border-2 border-white rounded-full border-t-transparent"
                   />
                   Sending code...
                 </>
@@ -139,7 +139,7 @@ export default function ForgotPasswordvendor() {
               to="/vendor-login"
               className="inline-flex items-center gap-2 text-sm font-medium text-[#004e27] transition-colors hover:text-[#004e27]/80"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="w-4 h-4" />
               Back to login
             </Link>
           </motion.div>

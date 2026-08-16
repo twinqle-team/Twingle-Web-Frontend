@@ -7,7 +7,9 @@ import {
   FaLinkedin,
   FaTwitter,
 } from "react-icons/fa";
-import playStoreImg from "../../../assets/download (1).png";
+
+// Using direct image URL for better performance
+const PLAY_STORE_IMG = "/src/assets/download (1).png";
 
 const Footer: React.FC = () => {
   const popularSearchLinks = [
@@ -96,7 +98,7 @@ const Footer: React.FC = () => {
                 >
                   <div className="flex items-center justify-center overflow-hidden rounded-md w-9 h-9 bg-white/8">
                     <img
-                      src={playStoreImg}
+                      src={PLAY_STORE_IMG}
                       alt="Google Play"
                       className="object-contain h-7"
                     />

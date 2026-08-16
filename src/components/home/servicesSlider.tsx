@@ -199,7 +199,7 @@ const AutoScrollRow: React.FC<{ items: typeof services }> = ({ items }) => {
   return (
     <div
       ref={rowRef}
-      className="flex gap-5 sm:gap-6 cursor-grab hide-scrollbar"
+      className="flex gap-4 cursor-grab hide-scrollbar sm:gap-6"
       style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}
     >
       {/* render items twice for seamless scroll */}
@@ -208,15 +208,15 @@ const AutoScrollRow: React.FC<{ items: typeof services }> = ({ items }) => {
         return (
           <div
             key={`${service.title}-${index}`}
-            className="min-w-[18rem] flex-shrink-0 flex-col rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm"
+            className="min-w-[16rem] flex-shrink-0 flex-col rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm sm:min-w-[18rem] sm:p-6"
           >
-            <div className="flex items-center justify-center h-14 w-14 rounded-3xl bg-[#004e27] text-white">
-              <Icon className="h-7 w-7" />
+            <div className="flex items-center justify-center h-12 w-12 rounded-3xl bg-[#004e27] text-white sm:h-14 sm:w-14">
+              <Icon className="w-6 h-6 sm:h-7 sm:w-7" />
             </div>
-            <h3 className="mt-6 text-xl font-semibold text-slate-950">
+            <h3 className="mt-4 text-lg font-semibold text-slate-950 sm:mt-6 sm:text-xl">
               {service.title}
             </h3>
-            <p className="mt-3 text-sm leading-7 text-slate-600">
+            <p className="mt-2 text-sm leading-6 text-slate-600 sm:mt-3 sm:text-sm sm:leading-7">
               {service.description}
             </p>
           </div>

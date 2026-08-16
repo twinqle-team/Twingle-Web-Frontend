@@ -1,9 +1,11 @@
 import React from "react";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-import heroBg from "../../assets/hero-bg.png";
-import profileA from "../../assets/login1.png";
-import profileB from "../../assets/login2.png";
+
+// Using direct image URLs for better performance
+const HERO_BG = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80";
+const AGENT_IMAGE_1 = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80";
+const AGENT_IMAGE_2 = "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80";
 
 const Seller: React.FC = () => {
   return (
@@ -48,14 +50,14 @@ const Seller: React.FC = () => {
             <div className="relative">
               <div className="relative flex items-center justify-center w-full p-8 rounded-2xl bg-[#004e27]">
                 <img
-                  src={heroBg}
+                  src={HERO_BG}
                   alt="hero background"
                   className="w-full rounded-lg opacity-90"
                 />
 
                 <div className="absolute w-48 p-4 bg-white shadow-lg right-10 top-8 rounded-xl">
                   <img
-                    src={profileA}
+                    src={AGENT_IMAGE_1}
                     alt="Kristin"
                     className="w-full rounded-md"
                   />
@@ -65,7 +67,7 @@ const Seller: React.FC = () => {
 
                 <div className="absolute w-40 p-4 transform translate-x-6 bg-white shadow-md right-2 bottom-6 rounded-xl">
                   <img
-                    src={profileB}
+                    src={AGENT_IMAGE_2}
                     alt="Kristin"
                     className="w-full rounded-md"
                   />
@@ -118,14 +120,14 @@ const Seller: React.FC = () => {
             <div className="relative">
               <div className="relative flex items-center justify-center w-full p-8 rounded-2xl bg-[#004e27]">
                 <img
-                  src={heroBg}
+                  src={HERO_BG}
                   alt="car vendors background"
                   className="w-full rounded-lg opacity-90"
                 />
 
                 <div className="absolute w-48 p-4 bg-white shadow-lg right-10 top-8 rounded-xl">
                   <img
-                    src={profileA}
+                    src={AGENT_IMAGE_1}
                     alt="Vendor A"
                     className="w-full rounded-md"
                   />
@@ -135,7 +137,7 @@ const Seller: React.FC = () => {
 
                 <div className="absolute w-40 p-4 transform translate-x-6 bg-white shadow-md right-2 bottom-6 rounded-xl">
                   <img
-                    src={profileB}
+                    src={AGENT_IMAGE_2}
                     alt="Vendor B"
                     className="w-full rounded-md"
                   />

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { MapPin, Sliders } from "lucide-react";
-import heroBg from "../../assets/image.png";
 import { Button } from "@/components/ui/button";
+
+// Using direct image URL for better performance
+const HERO_BG = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80";
 
 const Hero: React.FC = () => {
   const [address, setAddress] = useState("");
@@ -26,7 +28,7 @@ const Hero: React.FC = () => {
     <div className="relative w-full min-h-[80vh] flex items-center justify-center overflow-hidden">
       {/* Full Background Image */}
       <img
-        src={heroBg}
+        src={HERO_BG}
         alt="Hero background"
         className="absolute inset-0 object-cover w-full h-full"
       />

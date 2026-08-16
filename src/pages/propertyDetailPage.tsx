@@ -114,28 +114,28 @@ const PropertyDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="container max-w-[1440px] px-4 py-10 mx-auto">
-      <div className="space-y-10">
+    <div className="container max-w-[1440px] px-4 py-6 mx-auto sm:px-6 lg:px-8 lg:py-10">
+      <div className="space-y-8 lg:space-y-10">
         <div className="space-y-3">
-          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+          <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
             <div className="min-w-0">
-              <h1 className="text-3xl font-semibold text-slate-950 sm:text-4xl">
+              <h1 className="text-2xl font-semibold text-slate-950 sm:text-3xl lg:text-4xl">
                 {property.title}
               </h1>
-              <p className="mt-2 text-sm text-gray-600 sm:text-base">
+              <p className="mt-1.5 text-xs text-gray-600 sm:text-sm">
                 {property.address}
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center justify-start gap-3 md:justify-end">
+            <div className="flex flex-wrap items-center justify-start gap-2.5 md:justify-end">
               <button
                 onClick={handleShare}
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 sm:px-3 sm:py-2 sm:text-sm"
                 aria-label="Share property"
               >
                 <svg
-                  width="14"
-                  height="14"
+                  width="12"
+                  height="12"
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -169,13 +169,13 @@ const PropertyDetailPage: React.FC = () => {
                 onClick={() => {
                   setSaved((s) => !s);
                 }}
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 sm:px-3 sm:py-2 sm:text-sm"
                 aria-pressed={saved}
                 aria-label="Save property"
               >
                 <svg
-                  width="14"
-                  height="14"
+                  width="12"
+                  height="12"
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -196,7 +196,7 @@ const PropertyDetailPage: React.FC = () => {
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
           <div className="col-span-1 lg:col-span-4">
-            <div className="w-full h-[36vh] sm:h-[50vh] md:h-[70vh] lg:h-[80vh] bg-gray-100 rounded-[28px] overflow-hidden flex items-center justify-center group">
+            <div className="w-full h-[40vh] sm:h-[50vh] md:h-[65vh] lg:h-[80vh] bg-gray-100 rounded-[28px] overflow-hidden flex items-center justify-center group">
               <img
                 src={gallery[activeImage]}
                 alt={property.title}
@@ -207,7 +207,7 @@ const PropertyDetailPage: React.FC = () => {
                 <div className="absolute -translate-x-1/2 left-1/2 bottom-4">
                   <button
                     onClick={() => openImageModal(0)}
-                    className="px-4 py-2 text-sm font-semibold rounded-full shadow-md bg-white/90"
+                    className="px-3 py-1.5 text-xs font-semibold rounded-full shadow-md bg-white/90 sm:px-4 sm:py-2 sm:text-sm"
                   >
                     View {gallery.length} photos
                   </button>
@@ -215,12 +215,12 @@ const PropertyDetailPage: React.FC = () => {
               )}
             </div>
 
-            <div className="grid grid-cols-5 gap-3 mt-3 lg:hidden">
+            <div className="grid grid-cols-5 gap-2 mt-2.5 lg:hidden sm:gap-3">
               {gallery.map((item, index) => (
                 <button
                   key={index}
                   onClick={() => setActiveImage(index)}
-                  className={`h-20 rounded-3xl overflow-hidden focus:outline-none border-2 ${
+                  className={`h-14 rounded-xl overflow-hidden focus:outline-none border-2 sm:h-20 sm:rounded-2xl ${
                     index === activeImage
                       ? "border-[#004e27]"
                       : "border-transparent"
@@ -237,12 +237,12 @@ const PropertyDetailPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex-col hidden col-span-1 gap-3 lg:flex">
+          <div className="flex-col hidden col-span-1 gap-2.5 lg:flex">
             {gallery.map((item, index) => (
               <button
                 key={index}
                 onClick={() => setActiveImage(index)}
-                className={`block w-full h-28 rounded-3xl overflow-hidden focus:outline-none border-2 ${
+                className={`block w-full h-24 rounded-2xl overflow-hidden focus:outline-none border-2 sm:h-28 ${
                   index === activeImage
                     ? "border-[#004e27]"
                     : "border-transparent"
@@ -259,20 +259,21 @@ const PropertyDetailPage: React.FC = () => {
           </div>
         </div>
 
-        <section className="grid gap-8 lg:grid-cols-[2fr_1fr] md:grid-cols-[1.5fr_1fr]">
+        <section className="grid gap-6 lg:grid-cols-[2fr_1fr] md:grid-cols-[1.5fr_1fr]">
           <div className="order-2 space-y-6 lg:order-1">
-            <div className="rounded-[28px] p-6 shadow-sm">
-              <h1 className="text-xl font-semibold text-black">Details</h1>
+            <div className="rounded-[28px] p-5 shadow-sm sm:p-6">
+              <h1 className="text-lg font-semibold text-black sm:text-xl">Details</h1>
 
-              <div className="flex flex-wrap items-center gap-6 mt-4">
-                <div className="flex items-center gap-3 p-3 bg-white rounded-lg border min-w-[140px] ">
-                  <div className="p-2 bg-gray-100 rounded-md">
+              <div className="flex flex-wrap items-center gap-3 mt-3 sm:gap-4 sm:mt-4">
+                <div className="flex items-center gap-2.5 p-2.5 bg-white rounded-lg border min-w-[120px] sm:min-w-[140px] sm:p-3">
+                  <div className="p-1.5 bg-gray-100 rounded-md sm:p-2">
                     <svg
-                      width="20"
-                      height="20"
+                      width="18"
+                      height="18"
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
+                      className="sm:w-5 sm:h-5"
                     >
                       <path
                         d="M3 11L12 3l9 8v8a1 1 0 0 1-1 1h-3v-6H7v6H4a1 1 0 0 1-1-1v-8z"
@@ -284,8 +285,8 @@ const PropertyDetailPage: React.FC = () => {
                     </svg>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-500">Bedroom</div>
-                    <div className="text-sm font-semibold text-slate-900">
+                    <div className="text-[10px] text-gray-500 sm:text-xs">Bedroom</div>
+                    <div className="text-xs font-semibold text-slate-900 sm:text-sm">
                       {property.beds}
                     </div>
                   </div>
