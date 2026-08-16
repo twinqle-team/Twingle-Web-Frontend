@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 // import { useDarkMode } from "../Context/DarkModeContext";
 import { QueryClient, QueryClientProvider} from "@tanstack/react-query"
@@ -9,6 +9,7 @@ import Header from "@/components/static/admin/Header";
 
 const AdminLayout: React.FC = () => {
 //   const { darkMode } = useDarkMode(); // Use context instead of local state
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
 
   const queryClient = new QueryClient()
@@ -19,7 +20,10 @@ const AdminLayout: React.FC = () => {
      <div>
       <div className="flex h-screen">
         {/* Sidebar */}
-        <SiderBar darkMode={false} />
+        <SiderBar darkMode={false}
+         isOpen={isSidebarOpen} 
+         onClose={() => setIsSidebarOpen(false)}
+         />
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col">

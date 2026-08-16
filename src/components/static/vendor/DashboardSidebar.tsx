@@ -14,6 +14,8 @@ import { useSelector } from "react-redux";
 // import { get_single_vendor } from "@/utils/vendorApi";
 interface DashboardSidebarProps {
   darkMode: boolean;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 const DashboardSidebar: React.FC<DashboardSidebarProps> = ({  }) => {

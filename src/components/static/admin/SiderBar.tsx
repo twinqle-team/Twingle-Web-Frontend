@@ -19,6 +19,8 @@ import { Link } from "react-router-dom";
 // import { get_single_vendor } from "@/utils/vendorApi";
 interface SideBarProps {
   darkMode: boolean;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 const SideBar: React.FC<SideBarProps> = ({ darkMode }) => {
