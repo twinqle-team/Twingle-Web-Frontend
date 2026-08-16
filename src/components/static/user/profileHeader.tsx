@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Search, Bell, HelpCircle, X } from "lucide-react";
+import { ArrowLeft, Bell, HelpCircle, X, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface Notification {
   id: number;
@@ -15,15 +15,13 @@ interface Notification {
 interface ProfileHeaderProps {
   name?: string;
   avatarUrl?: string;
-  onSearch?: (query: string) => void;
 }
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   name = "Alexander Thorne",
   avatarUrl = "https://api.dicebear.com/7.x/avataaars/svg?seed=Alexander",
-  onSearch,
 }) => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
@@ -67,6 +65,15 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     },
   };
 
+  const handleBack = () => {
+    navigate("/");
+  };
+
+  const handleLogout = () => {
+    // Add logout logic here (clear tokens, redirect to login, etc.)
+    navigate("/login");
+  };
+
   const dropdownVariants = {
     hidden: { opacity: 0, y: -10, scale: 0.95 },
     visible: {
@@ -81,11 +88,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       scale: 0.95,
       transition: { duration: 0.15 },
     },
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSearch?.(searchQuery);
   };
 
   const handleNotificationClick = (id: number) => {
@@ -122,43 +124,29 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       animate="visible"
       className="sticky top-0 z-40 bg-white border-b border-gray-100 shadow-sm"
     >
-      <div className="px-6 py-4">
-        <div className="flex items-center justify-between gap-6">
-
-          {/* Logo Image */}
-          <Link to="/">
-            <img
-              src="src/assets/Container.png"
-              alt="Twingle Logo"
-              className="w-auto h-10 sm:h-12 md:h-14 lg:h-16"
-            />
-          </Link>
-
-
-          {/* Search Bar */}
-          <form onSubmit={handleSearch} className="flex-1 max-w-md">
-            <div className="relative flex items-center px-4 py-3 bg-gray-100 rounded-lg">
-              <Search size={20} className="flex-shrink-0 mr-3 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search your dashboard..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 text-base text-gray-700 placeholder-gray-500 bg-transparent outline-none"
-              />
-            </div>
-          </form>
+      <div className="px-4 sm:px-6 py-3 sm:py-4">
+        <div className="flex items-center justify-between gap-4">
+          {/* Back Button */}
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleBack}
+            className="flex-shrink-0 p-2 transition-colors rounded-lg hover:bg-gray-100"
+            title="Go back"
+          >
+            <ArrowLeft size={20} className="text-gray-700" />
+          </motion.button>
 
           {/* Right Side Actions */}
-          <div className="flex items-center gap-4">
-            {/* Help Icon */}
+          <div className="flex items-center gap-2 sm:gap-4">
+            {/* Help Icon - Hidden on small mobile */}
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              className="p-2 transition-colors rounded-lg hover:bg-gray-100"
+              className="hidden sm:block p-2 transition-colors rounded-lg hover:bg-gray-100"
               title="Help & Support"
             >
-              <HelpCircle size={22} className="text-gray-600" />
+              <HelpCircle size={20} className="text-gray-600" />
             </motion.button>
 
             {/* Notification Bell */}
@@ -167,11 +155,11 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowNotifications(!showNotifications)}
-                className="relative p-2 transition-colors rounded-lg hover:bg-gray-100"
+                className="relative p-1.5 sm:p-2 transition-colors rounded-lg hover:bg-gray-100"
               >
-                <Bell size={22} className="text-gray-600" />
+                <Bell size={18} className="sm:text-[22px] text-gray-600" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                  <span className="absolute top-0 right-0 flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 text-[10px] sm:text-xs font-bold text-white bg-red-500 rounded-full">
                     {unreadCount}
                   </span>
                 )}
@@ -185,7 +173,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className="absolute right-0 mt-2 bg-white border border-gray-100 rounded-lg shadow-xl w-96"
+                    className="absolute right-0 mt-2 bg-white border border-gray-100 rounded-lg shadow-xl w-[calc(100vw-2rem)] max-w-sm sm:max-w-md md:max-w-lg"
                   >
                     <div className="p-4 border-b border-gray-100">
                       <div className="flex items-center justify-between">
@@ -265,15 +253,17 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
-                className="flex items-center gap-3 px-3 py-2 pl-4 transition-colors border-l border-gray-200 rounded-lg hover:bg-gray-50"
+                className="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 pl-3 sm:pl-4 transition-colors border-l border-gray-200 rounded-lg hover:bg-gray-50"
               >
-                <div className="text-right">
-                  <p className="text-lg font-semibold text-gray-900">{name}</p>
+                <div className="hidden sm:block text-right">
+                  <p className="text-sm sm:text-lg font-semibold text-gray-900">
+                    {name}
+                  </p>
                 </div>
                 <img
                   src={avatarUrl}
                   alt={name}
-                  className="w-12 h-12 rounded-full border-2 border-[#33a078] object-cover"
+                  className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full border-2 border-[#33a078] object-cover"
                 />
               </motion.button>
 
@@ -285,12 +275,25 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className="absolute right-0 w-48 mt-2 bg-white border border-gray-100 rounded-lg shadow-xl"
+                    className="absolute right-0 w-56 mt-2 bg-white border border-gray-100 rounded-lg shadow-xl overflow-hidden"
                   >
-                    <div className="p-4">
+                    <div className="p-4 border-b border-gray-100">
                       <p className="text-sm font-semibold text-gray-900">
                         {name}
                       </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        View your profile
+                      </p>
+                    </div>
+                    <div className="p-2">
+                      <motion.button
+                        whileHover={{ backgroundColor: "#f9fafb" }}
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-3 py-2 text-red-600 rounded-lg transition-colors"
+                      >
+                        <LogOut size={18} />
+                        <span className="text-sm font-medium">Logout</span>
+                      </motion.button>
                     </div>
                   </motion.div>
                 )}

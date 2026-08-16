@@ -43,7 +43,7 @@ const Hero: React.FC = () => {
           <h1 className="mb-6 text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
             Find your perfect
             <br />
-            <span className="text-emerald-400">investment properties</span>
+            <span className="text-gold-400">investment properties</span>
           </h1>
 
           {/* Subtitle */}
@@ -153,7 +153,7 @@ const Hero: React.FC = () => {
               <div className="flex w-full gap-3 sm:w-auto">
                 <Button
                   onClick={handleSearch}
-                  className="flex-1 px-8 py-6 font-semibold text-white transition-colors bg-[#004e27] rounded-lg sm:flex-none hover:bg-[#004e27]"
+                  className="flex-1 px-8 py-6 font-semibold text-white transition-colors bg-[#004e27] rounded-lg sm:flex-none hover:bg-gold-500 hover:text-slate-900"
                 >
                   Search Property
                 </Button>

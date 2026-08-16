@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   MapPin,
   ShieldCheck,
@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 const CarDetailPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const carId = Number(id);
+  const navigate = useNavigate()
 
   const car = useMemo(
     () => carListings.find((listing) => listing.id === carId) || carListings[0],
@@ -285,7 +286,7 @@ const CarDetailPage: React.FC = () => {
                     key={feature}
                     className="flex items-center gap-3 p-4 border border-gray-200 rounded-3xl bg-gray-50"
                   >
-                    <Check size={16} className="text-green-600" />
+                    <Check size={16} className="text-gold-500" />
                     <p className="text-sm font-medium text-gray-700">
                       {feature}
                     </p>
@@ -409,10 +410,12 @@ const CarDetailPage: React.FC = () => {
               </p>
             </div>
 
-            <button className="mb-3 w-full rounded-2xl bg-[#004e27] px-4 py-6 text-lg font-semibold text-white transition hover:bg-[#004e27]">
-              Start Escrow
+            <button className="mb-3 w-full rounded-2xl bg-[#004e27] px-4 py-6 text-lg font-semibold text-white transition hover:bg-gold-500 hover:text-slate-900"
+            onClick={() => navigate("/checkout")}
+            >
+              Order Now
             </button>
-            <button className="mb-3 w-full rounded-2xl bg-[#004e27] text-lg font-semibold  px-4 py-6 text-white transition hover:bg-[#004e27]">
+            <button className="mb-3 w-full rounded-2xl bg-[#004e27] text-lg font-semibold  px-4 py-6 text-white transition hover:bg-gold-500 hover:text-slate-900">
               Request Private Viewing
             </button>
             <button className="w-full px-4 py-6 mb-6 text-lg font-semibold text-gray-900 transition bg-white border border-gray-200 rounded-2xl hover:bg-gray-50">
@@ -515,7 +518,7 @@ const CarDetailPage: React.FC = () => {
                     className="object-cover w-full h-full"
                   />
                   {listing.featured && (
-                    <span className="absolute px-3 py-1 text-xs font-semibold tracking-wide text-white uppercase rounded-full left-4 top-4 bg-[#004e27]">
+                    <span className="absolute px-3 py-1 text-xs font-semibold tracking-wide text-slate-900 uppercase rounded-full left-4 top-4 bg-gold-500">
                       Featured
                     </span>
                   )}
@@ -553,7 +556,7 @@ const CarDetailPage: React.FC = () => {
                   </div>
 
                 <Button
-                  className="w-full py-6 text-white bg-[#004e27] hover:bg-[#004e27]"
+                  className="w-full py-6 text-white bg-[#004e27] hover:bg-gold-500 hover:text-slate-900"
                   onClick={() =>
                     window.location.assign(`/automotive/${car.id}`)
                   }

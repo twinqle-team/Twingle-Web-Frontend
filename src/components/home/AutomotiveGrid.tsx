@@ -1,15 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "../ui/card";
 import { Fuel, Gauge } from "lucide-react";
 import { Button } from "../ui/button";
 
 // Using direct image URLs for better performance
-const VEHICLE_IMAGE_1 = "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&q=80";
-const VEHICLE_IMAGE_2 = "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80";
-const VEHICLE_IMAGE_3 = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80";
-const VENDOR_AVATAR_1 = "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80";
-const VENDOR_AVATAR_2 = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80";
+const VEHICLE_IMAGE_1 =
+  "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&q=80";
+const VEHICLE_IMAGE_2 =
+  "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80";
+const VEHICLE_IMAGE_3 =
+  "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80";
+const VENDOR_AVATAR_1 =
+  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80";
+const VENDOR_AVATAR_2 =
+  "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80";
 
 const vehicles = [
   {
@@ -124,6 +129,8 @@ const AutomotiveGrid: React.FC = () => {
   const truncateCraft = (craft: string) => {
     return craft.length > 25 ? craft.slice(0, 25) + "..." : craft;
   };
+
+  const navigate = useNavigate();
   return (
     <section className="flex flex-col max-w-full px-6 py-12 mx-auto sm:px-8 lg:px-12">
       <div className="flex flex-col gap-4 mt-10 mb-10 sm:flex-row sm:items-end sm:justify-between">
@@ -160,63 +167,63 @@ const AutomotiveGrid: React.FC = () => {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {vehicles.map((car) => (
           <Card
-                      key={car.title}
-                      className="overflow-hidden transition duration-300 bg-white border border-gray-200 shadow-sm rounded-2xl hover:shadow-lg"
-                    >
-                      <div className="relative overflow-hidden bg-gray-200 h-72">
-                        <img
-                          src={car.image}
-                          alt={car.title}
-                          className="object-cover w-full h-full"
-                        />
-                        {car.isFeatured && (
-                          <span className="absolute px-3 py-1 text-xs font-semibold tracking-wide text-white uppercase rounded-full left-4 top-4 bg-[#004e27]">
-                            Featured
-                          </span>
-                        )}
-                        <div className="absolute px-3 py-1 text-sm font-semibold bg-white rounded-full shadow-sm right-4 top-4 text-slate-900">
-                          {car.price}
-                        </div>
-                      </div>
-        
-                      <CardContent className="p-5 space-y-4">
-                        <div>
-                          <h3 className="text-lg font-semibold text-slate-950">
-                            {car.title}
-                          </h3>
-                          <p className="mt-1 text-sm text-gray-600">"Dubai"</p>
-                        </div>
-        
-                        <div className="flex flex-wrap gap-2 text-sm text-gray-600">
-                          <span className="px-3 py-1 bg-gray-100 rounded-full">
-                            {car.year}
-                          </span>
-                          <span className="px-3 py-1 bg-gray-100 rounded-full">
-                           "Automatic"
-                          </span>
-                        </div>
-        
-                        <div className="flex items-center justify-between pt-3 text-sm text-gray-600 border-t border-gray-100">
-                          <div className="flex items-center gap-2">
-                            <Gauge size={16} className="text-emerald-600" />
-                            <span>{car.mileage}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Fuel size={16} className="text-emerald-600" />
-                            <span>"Petrol"</span>
-                          </div>
-                        </div>
-        
-                        <Button
-                          className="w-full py-6 text-white bg-[#004e27] hover:bg-[#004e27]"
-                          onClick={() =>
-                            window.location.assign(`/automotive/${car.title}`)
-                          }
-                        >
-                          View Details
-                        </Button>
-                      </CardContent>
-                    </Card>
+            key={car.title}
+            className="overflow-hidden transition duration-300 bg-white border border-gray-200 shadow-sm rounded-2xl hover:shadow-lg"
+          >
+            <div className="relative overflow-hidden bg-gray-200 h-72">
+              <img
+                src={car.image}
+                alt={car.title}
+                className="object-cover w-full h-full"
+              />
+              {car.isFeatured && (
+                <span className="absolute px-3 py-1 text-xs font-semibold tracking-wide text-white uppercase rounded-full left-4 top-4 bg-[#004e27]">
+                  Featured
+                </span>
+              )}
+              <div className="absolute px-3 py-1 text-sm font-semibold bg-white rounded-full shadow-sm right-4 top-4 text-slate-900">
+                {car.price}
+              </div>
+            </div>
+
+            <CardContent className="p-5 space-y-4">
+              <div>
+                <h3 className="text-lg font-semibold text-slate-950">
+                  {car.title}
+                </h3>
+                <p className="mt-1 text-sm text-gray-600">"Dubai"</p>
+              </div>
+
+              <div className="flex flex-wrap gap-2 text-sm text-gray-600">
+                <span className="px-3 py-1 bg-gray-100 rounded-full">
+                  {car.year}
+                </span>
+                <span className="px-3 py-1 bg-gray-100 rounded-full">
+                  "Automatic"
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between pt-3 text-sm text-gray-600 border-t border-gray-100">
+                <div className="flex items-center gap-2">
+                  <Gauge size={16} className="text-emerald-600" />
+                  <span>{car.mileage}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Fuel size={16} className="text-emerald-600" />
+                  <span>"Petrol"</span>
+                </div>
+              </div>
+
+              <Button
+                className="w-full py-6 text-white bg-[#004e27] hover:bg-[#004e27]"
+                onClick={() =>
+                  window.location.assign(`/automotive/${car.title}`)
+                }
+              >
+                View Details
+              </Button>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
@@ -287,7 +294,12 @@ const AutomotiveGrid: React.FC = () => {
                 <p className="mb-3 text-xs text-gray-500">{vendor.location}</p>
                 {/* Action Button */}
 
-                <button className="w-full px-4 py-2 font-medium text-white transition-colors bg-[#004e27] hover:bg-emerald-800 rounded-lg ">
+                <button
+                  className="w-full px-4 py-2 font-medium text-white transition-colors bg-[#004e27] hover:bg-emerald-800 rounded-lg "
+                  onClick={() => {
+                    navigate(`/vendor/vendor/${vendor.id}`);
+                  }}
+                >
                   Visit Store
                 </button>
               </div>

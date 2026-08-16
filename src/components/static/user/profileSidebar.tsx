@@ -1,22 +1,12 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  Home,
-  Star,
-  CheckCircle,
-  Settings,
-  LogOut,
-  MessageSquare,
-  Calendar,
-} from "lucide-react";
+import { UserPen , Star, Logs, LogOut, MessageSquare } from "lucide-react";
 
 const navItems = [
-  { to: "/profile", label: "Overview", Icon: Home },
-  { to: "/profile/saved", label: "Saved Properties", Icon: Star },
-  { to: "/profile/visits", label: "My Visits", Icon: Calendar },
+  { to: "/profile", label: "Profile", Icon: UserPen  },
+  { to: "/profile/orders", label: "Orders", Icon: Logs },
+  { to: "/profile/saved", label: "Saved", Icon: Star },
   { to: "/profile/messages", label: "Messages", Icon: MessageSquare },
-  { to: "/profile/verification", label: "Verification", Icon: CheckCircle },
-  { to: "/profile/settings", label: "Settings", Icon: Settings },
 ];
 
 const ProfileSidebar: React.FC = () => {

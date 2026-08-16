@@ -411,7 +411,7 @@ const PropertyDetailPage: React.FC = () => {
                       <span className="flex-1 h-2 rounded bg-[#004e27]" />
                       <span className="flex-1 h-2 rounded bg-[#004e27]" />
                       <span className="flex-1 h-2 rounded bg-[#004e27]/70" />
-                      <span className="flex-1 h-2 rounded bg-amber-300" />
+                      <span className="flex-1 h-2 rounded bg-gold-400" />
                       <span className="flex-1 h-2 bg-gray-200 rounded" />
                     </div>
                   </div>
@@ -634,7 +634,7 @@ const PropertyDetailPage: React.FC = () => {
                     <div className="flex items-center justify-between gap-3">
                       <Link
                         to={`/property/${listing.id}`}
-                        className="flex-1 rounded-2xl bg-[#004e27] px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-[#004e27]"
+                        className="flex-1 rounded-2xl bg-[#004e27] px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-gold-500 hover:text-slate-900"
                       >
                         View Details
                       </Link>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Using direct image URLs for better performance
 const PROPERTY_IMAGE_1 = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80";
@@ -114,6 +114,7 @@ const topAgents = [
 ];
 
 const PropertiesGrid: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <section className="flex flex-col max-w-full px-6 py-12 mx-auto sm:px-8 lg:px-12">
       <div className="flex flex-col gap-4 mt-10 mb-10 sm:flex-row sm:items-end sm:justify-between">
@@ -265,7 +266,10 @@ const PropertiesGrid: React.FC = () => {
                 <p className="mb-3 text-xs text-gray-500">{agent.location}</p>
                 {/* Action Button */}
 
-                <button className="w-full px-4 py-2 font-medium text-white transition-colors bg-[#004e27] hover:bg-emerald-800 rounded-lg ">
+                <button className="w-full px-4 py-2 font-medium text-white transition-colors bg-[#004e27] hover:bg-emerald-800 rounded-lg "  onClick={() => {
+                    navigate(`/vendor/agent/${agent.id}`);
+                  }}
+                >
                   Visit Store
                 </button>
               </div>

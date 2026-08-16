@@ -145,7 +145,7 @@ export default function SignupPage() {
         <h1 className="mb-2 text-2xl font-bold">
           Welcome to <span className="text-[#004e27]">Twingle!</span>
         </h1>
-        <p className="mb-4 text-sm text-gray-600 sm:text-base">
+        <p className="mb-4 text-sm text-center text-gray-600 sm:text-base">
           We're excited to have you onboard—start buying with us today!
         </p>
 

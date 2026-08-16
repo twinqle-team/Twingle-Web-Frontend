@@ -3,8 +3,8 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx}",
+    "./src/components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -39,6 +39,19 @@ export default {
           700: "#388e3c",
           800: "#2e7d32",
           900: "#1b5e20",
+        },
+        gold: {
+          DEFAULT: "#edc500",
+          50: "#fff7d9",
+          100: "#fff0b3",
+          200: "#ffe58c",
+          300: "#ffdb57",
+          400: "#ffcf27",
+          500: "#edc500",
+          600: "#d4aa00",
+          700: "#a27f00",
+          800: "#755d00",
+          900: "#543f00",
         },
       },
       borderRadius: {

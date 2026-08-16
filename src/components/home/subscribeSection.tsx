@@ -22,11 +22,11 @@ const SubscribeSection: React.FC = () => {
             id="subscribe-email"
             type="email"
             placeholder="Your executive email"
-            className="w-full max-w-xl px-4 py-3.5 text-sm transition bg-white border shadow-sm outline-none rounded-2xl border-slate-300 text-slate-900 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 sm:text-base"
+            className="w-full max-w-xl px-4 py-3.5 text-sm transition bg-white border shadow-sm outline-none rounded-2xl border-slate-300 text-slate-900 focus:border-gold-500 focus:ring-4 focus:ring-gold-100 sm:text-base"
           />
           <button
             type="submit"
-            className="w-full inline-flex items-center justify-center px-8 text-sm font-semibold text-white transition h-12 rounded-2xl bg-[#004e27] hover:bg-[#004e27] focus:outline-none focus:ring-4 focus:ring-[#004e27]/20 sm:w-auto sm:text-base"
+            className="w-full inline-flex items-center justify-center px-8 text-sm font-semibold text-white transition h-12 rounded-2xl bg-[#004e27] hover:bg-gold-500 hover:text-slate-900 focus:outline-none focus:ring-4 focus:ring-[#004e27]/20 sm:w-auto sm:text-base"
           >
             Subscribe
           </button>

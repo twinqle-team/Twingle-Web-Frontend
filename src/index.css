@@ -2,8 +2,7 @@
 @import "@fontsource-variable/geist";
 
 :root {
-  font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
+  font-family: "Poppins", sans-serif;
   font-style: normal;
   letter-spacing: 0.18px;
   color-scheme: light dark;

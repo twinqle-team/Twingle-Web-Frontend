@@ -20,7 +20,7 @@ export default function AccountTypeSelectionPage() {
             How do you want to join Twinqle?
 
           </h1>
-          <p className="max-w-2xl mx-auto mt-2 text-xs text-gray-600 sm:mt-3 sm:text-sm sm:text-base">
+          <p className="max-w-2xl mx-auto mt-2 text-xs text-gray-600 sm:mt-3 sm:text-base">
             Select the option that best matches your needs and we'll take you to
             the right sign-up form.
           </p>
