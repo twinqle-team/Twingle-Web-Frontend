@@ -2,21 +2,27 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ShieldCheck, AlertCircle } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { z } from "zod";
 import SimpleSlider from "../../../lib/Sliding";
 import {
   verifyOtpSchema,
   type VerifyOtpFormData,
 } from "../../../lib/validationSchemas";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { resendOtp, verifyOtp } from "../../../redux/slices/userSlice";
 
 const OTP_LENGTH = 6;
 
 export default function VerifyOtpPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { status } = useAppSelector((state) => state.user);
   const email = (location.state as { email?: string } | null)?.email ?? "";
   const [otp, setOtp] = useState<string[]>(Array(OTP_LENGTH).fill(""));
   const [isLoading, setIsLoading] = useState(false);
+  const [resending, setResending] = useState(false);
   const [error, setError] = useState<string>("");
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
@@ -71,7 +77,7 @@ export default function VerifyOtpPage() {
     inputRefs.current[lastFilledIndex]?.focus();
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
@@ -79,18 +85,81 @@ export default function VerifyOtpPage() {
       const otpString = otp.join("");
       const formData: VerifyOtpFormData = { otp: otpString };
 
-      // Validate OTP
       verifyOtpSchema.parse(formData);
 
+      if (!email) {
+        setError("Email is required to verify your OTP.");
+        return;
+      }
+
       setIsLoading(true);
-      setTimeout(() => {
-        setIsLoading(false);
+      const resultAction = await dispatch(
+        verifyOtp({
+          identifier: email,
+          code: otpString,
+        }),
+      );
+
+      if (verifyOtp.fulfilled.match(resultAction)) {
+        toast.success(
+          resultAction.payload.message || "OTP verified successfully",
+        );
         navigate("/login");
-      }, 1200);
+        return;
+      }
+
+      const message =
+        typeof resultAction.payload === "string"
+          ? resultAction.payload
+          : "OTP verification failed";
+      setError(message);
+      toast.error(message);
     } catch (err: any) {
       if (err instanceof z.ZodError) {
         setError(err.issues[0]?.message || "Invalid OTP");
+        return;
       }
+
+      const message =
+        err instanceof Error ? err.message : "OTP verification failed";
+      setError(message);
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (!email) {
+      toast.error("Email is required to resend OTP.");
+      return;
+    }
+
+    setResending(true);
+    try {
+      const resultAction = await dispatch(
+        resendOtp({
+          identifier: email,
+          purpose: "email_verify",
+        }),
+      );
+
+      if (resendOtp.fulfilled.match(resultAction)) {
+        toast.success(resultAction.payload.message || "OTP sent successfully");
+        return;
+      }
+
+      const message =
+        typeof resultAction.payload === "string"
+          ? resultAction.payload
+          : "Failed to resend OTP";
+      toast.error(message);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to resend OTP";
+      toast.error(message);
+    } finally {
+      setResending(false);
     }
   };
 
@@ -200,9 +269,11 @@ export default function VerifyOtpPage() {
               </div>
             )}
 
-                    <motion.button
+            <motion.button
               type="submit"
-              disabled={isLoading || otp.some((digit) => !digit)}
+              disabled={
+                isLoading || status === "loading" || otp.some((digit) => !digit)
+              }
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50 sm:py-3.5"
@@ -220,13 +291,20 @@ export default function VerifyOtpPage() {
                 "Verify code"
               )}
             </motion.button>
-           
           </motion.form>
 
           <motion.div
             variants={itemVariants}
             className="flex w-full max-w-[600px] flex-col items-center gap-4 border-t border-gray-200 pt-4"
           >
+            <button
+              type="button"
+              onClick={handleResendOtp}
+              disabled={resending || status === "loading"}
+              className="inline-flex items-center gap-2 text-sm font-medium text-[#004e27] transition-colors hover:text-[#004e27]/80 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {resending ? "Resending..." : "Resend OTP"}
+            </button>
             <Link
               to="/forgot-password"
               className="inline-flex items-center gap-2 text-sm font-medium text-[#004e27] transition-colors hover:text-[#004e27]/80"

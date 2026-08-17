@@ -14,6 +14,7 @@ import {
   X,
   Download,
   Copy,
+  Trash2,
   Image as ImageIcon,
   FileText,
   ArrowLeft,
@@ -50,6 +51,7 @@ type Message = {
   files?: Attachment[];
   read?: boolean;
   replyTo?: ReplyTo | null;
+  deleted?: boolean;
 };
 
 type Conversation = {
@@ -60,6 +62,7 @@ type Conversation = {
   time: string;
   unread: number;
   online: boolean;
+  updatedAt: number;
   messages: Message[];
 };
 
@@ -72,6 +75,7 @@ const initialConversations: Conversation[] = [
     time: "10:42 AM",
     unread: 2,
     online: true,
+    updatedAt: Date.now() - 1000 * 60 * 12,
     messages: [
       {
         id: 1,
@@ -101,6 +105,7 @@ const initialConversations: Conversation[] = [
     time: "09:15 AM",
     unread: 0,
     online: false,
+    updatedAt: Date.now() - 1000 * 60 * 60 * 3,
     messages: [
       {
         id: 1,
@@ -130,6 +135,7 @@ const initialConversations: Conversation[] = [
     time: "Yesterday",
     unread: 1,
     online: true,
+    updatedAt: Date.now() - 1000 * 60 * 60 * 24,
     messages: [
       {
         id: 1,
@@ -153,6 +159,7 @@ const initialConversations: Conversation[] = [
     time: "Sun",
     unread: 0,
     online: false,
+    updatedAt: Date.now() - 1000 * 60 * 60 * 48,
     messages: [
       {
         id: 1,
@@ -194,6 +201,12 @@ const MessagesPage: React.FC = () => {
 
   const activeConversation =
     conversations.find((c) => c.id === activeId) ?? null;
+  const orderedConversations = [...conversations].sort((a, b) => {
+    if (a.unread !== b.unread) {
+      return Number(b.unread > 0) - Number(a.unread > 0);
+    }
+    return (b.updatedAt ?? 0) - (a.updatedAt ?? 0);
+  });
   const replyTarget =
     activeConversation?.messages.find(
       (message) => message.id === replyToMessageId,
@@ -330,7 +343,12 @@ const MessagesPage: React.FC = () => {
     setConversations((prev) =>
       prev.map((c) =>
         c.id === activeConversation.id
-          ? { ...c, lastMessage: text, messages: [...c.messages, newMessage] }
+          ? {
+              ...c,
+              lastMessage: text,
+              updatedAt: Date.now(),
+              messages: [...c.messages, newMessage],
+            }
           : c,
       ),
     );
@@ -385,6 +403,7 @@ const MessagesPage: React.FC = () => {
           ? {
               ...c,
               lastMessage: `📎 ${fileText}`,
+              updatedAt: Date.now(),
               messages: [...c.messages, newMessage],
             }
           : c,
@@ -409,8 +428,48 @@ const MessagesPage: React.FC = () => {
     inputRef?.click();
   };
 
+  const deleteMessage = (messageId: number) => {
+    if (!activeConversation) return;
+
+    setConversations((prev) =>
+      prev.map((conversation) => {
+        if (conversation.id !== activeConversation.id) return conversation;
+
+        const updatedMessages = conversation.messages.map((message) =>
+          message.id === messageId && message.fromMe
+            ? {
+                ...message,
+                deleted: true,
+                text: "This message was deleted",
+                file: null,
+                files: [],
+                status: "sent" as const,
+              }
+            : message,
+        );
+
+        const lastMessage = updatedMessages.at(-1);
+
+        return {
+          ...conversation,
+          lastMessage: lastMessage?.deleted
+            ? "This message was deleted"
+            : conversation.lastMessage,
+          updatedAt: Date.now(),
+          messages: updatedMessages,
+        };
+      }),
+    );
+  };
+
   const copyMessageText = async (message: Message) => {
-    if (!message.text.trim() || message.file || message.files?.length) return;
+    if (
+      message.deleted ||
+      !message.text.trim() ||
+      message.file ||
+      message.files?.length
+    )
+      return;
 
     try {
       if (navigator?.clipboard) {
@@ -620,32 +679,46 @@ const MessagesPage: React.FC = () => {
                           >
                             <Reply size={14} />
                           </button>
-                          {!attachments.length && message.text.trim() && (
+                          {!message.deleted &&
+                            !attachments.length &&
+                            message.text.trim() && (
+                              <button
+                                type="button"
+                                onClick={() => copyMessageText(message)}
+                                className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 hover:text-[#004e27]"
+                                aria-label="Copy message text"
+                              >
+                                {copiedMessageId === message.id ? (
+                                  <Check size={14} />
+                                ) : (
+                                  <Copy size={14} />
+                                )}
+                              </button>
+                            )}
+                          {message.fromMe &&
+                            !message.deleted &&
+                            !attachments.length && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setEditingMessageId(message.id);
+                                  setReplyToMessageId(null);
+                                  setDraft(message.text);
+                                }}
+                                className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 hover:text-[#004e27]"
+                                aria-label="Edit this message"
+                              >
+                                <Pencil size={14} />
+                              </button>
+                            )}
+                          {message.fromMe && !message.deleted && (
                             <button
                               type="button"
-                              onClick={() => copyMessageText(message)}
-                              className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 hover:text-[#004e27]"
-                              aria-label="Copy message text"
+                              onClick={() => deleteMessage(message.id)}
+                              className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 hover:text-red-600"
+                              aria-label="Delete message"
                             >
-                              {copiedMessageId === message.id ? (
-                                <Check size={14} />
-                              ) : (
-                                <Copy size={14} />
-                              )}
-                            </button>
-                          )}
-                          {message.fromMe && !attachments.length && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setEditingMessageId(message.id);
-                                setReplyToMessageId(null);
-                                setDraft(message.text);
-                              }}
-                              className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 hover:text-[#004e27]"
-                              aria-label="Edit this message"
-                            >
-                              <Pencil size={14} />
+                              <Trash2 size={14} />
                             </button>
                           )}
                         </div>
@@ -690,7 +763,7 @@ const MessagesPage: React.FC = () => {
                             </button>
                           )}
 
-                          {attachments.length > 0 && (
+                          {!message.deleted && attachments.length > 0 && (
                             <div className="space-y-2">
                               {attachments.length === 1 ? (
                                 <div className="space-y-2">
@@ -878,8 +951,15 @@ const MessagesPage: React.FC = () => {
                             </div>
                           )}
 
-                          {isTextMessage && message.text && (
-                            <p className="mt-2 break-words">{message.text}</p>
+                          {message.deleted ? (
+                            <p className="mt-2 break-words italic text-gray-400">
+                              This message was deleted
+                            </p>
+                          ) : (
+                            isTextMessage &&
+                            message.text && (
+                              <p className="mt-2 break-words">{message.text}</p>
+                            )
                           )}
 
                           <span

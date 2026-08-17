@@ -13,8 +13,8 @@ const ProfileLayout: React.FC = () => {
       {/* Main content area with sidebar */}
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar - Hidden on mobile, visible on lg and up */}
-        <aside className="flex-shrink-0 hidden overflow-y-auto bg-white border-r border-gray-200 lg:block lg:w-64 xl:w-72">
-          <div className="h-full p-4 lg:p-6">
+        <aside className="flex-shrink-0 hidden overflow-y-auto bg-white border-r border-gray-200 lg:block lg:w-60">
+          <div className="h-full p-4 lg:p-4">
             <ProfileSidebar />
           </div>
         </aside>

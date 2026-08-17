@@ -1,17 +1,24 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, User, AlertCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { z } from "zod";
 import {
   signupSchema,
   type SignupFormData,
 } from "../../../lib/validationSchemas";
 import Sliding from "../../../lib/Sliding";
+import { useAppDispatch } from "../../../redux/hooks";
+import { registerUser } from "../../../redux/slices/userSlice";
 
 // Google Icon Component
 const GoogleIcon = () => (
-  <svg className="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <svg
+    className="w-5 h-5"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <path
       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.03 2.53-2.16 3.31v2.77h3.49c2.04-1.88 3.24-4.64 3.24-7.89z"
       fill="#4285F4"
@@ -32,6 +39,9 @@ const GoogleIcon = () => (
 );
 
 export default function SignupPage() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -76,8 +86,34 @@ export default function SignupPage() {
       signupSchema.parse(dataToValidate);
 
       setIsLoading(true);
-      // API call would go here
-      setTimeout(() => setIsLoading(false), 2000);
+
+      const resultAction = await dispatch(
+        registerUser({
+          name: `${formData.firstName.trim()} ${formData.lastName.trim()}`
+            .replace(/\s+/g, " ")
+            .trim(),
+          email: formData.email.trim(),
+          password: formData.password,
+          role: "buyer",
+        }),
+      );
+
+      if (registerUser.fulfilled.match(resultAction)) {
+        toast.success(
+          resultAction.payload.message || "Account created successfully",
+        );
+        navigate("/verify-otp", {
+          state: { email: formData.email.trim() },
+        });
+        return;
+      }
+
+      const message =
+        typeof resultAction.payload === "string"
+          ? resultAction.payload
+          : "Failed to create account";
+
+      toast.error(message);
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Record<string, string> = {};
@@ -86,7 +122,14 @@ export default function SignupPage() {
           newErrors[path] = err.message;
         });
         setErrors(newErrors);
+        return;
       }
+
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create account",
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -119,7 +162,6 @@ export default function SignupPage() {
 
   return (
     <div className="flex w-full min-h-screen p-0 overflow-x-hidden bg-white">
-
       {/* Left Side - Sliding Images */}
       <motion.div
         variants={leftVariants}

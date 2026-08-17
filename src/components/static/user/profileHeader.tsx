@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { ArrowLeft, Bell, HelpCircle, X, LogOut } from "lucide-react";
+import { ArrowLeft, Bell, X, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -122,7 +122,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       variants={headerVariants}
       initial="hidden"
       animate="visible"
-      className="sticky top-0 z-40 bg-white border-b border-gray-100 shadow-sm"
+      className="sticky top-0 z-40 bg-white border-b border-gray-100 shadow-sm h-[10vh]"
     >
       <div className="px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center justify-between gap-4">
@@ -140,14 +140,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           {/* Right Side Actions */}
           <div className="flex items-center gap-2 sm:gap-4">
             {/* Help Icon - Hidden on small mobile */}
-            <motion.button
+            {/* <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              className="hidden sm:block p-2 transition-colors rounded-lg hover:bg-gray-100"
+              className="hidden sm:block p-2 transition-colors rounded-lg hover:bg-gray-100 mb-2"
               title="Help & Support"
             >
               <HelpCircle size={20} className="text-gray-600" />
-            </motion.button>
+            </motion.button> */}
 
             {/* Notification Bell */}
             <div ref={notificationRef} className="relative">
@@ -173,7 +173,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className="absolute right-0 mt-2 bg-white border border-gray-100 rounded-lg shadow-xl w-[calc(100vw-2rem)] max-w-sm sm:max-w-md md:max-w-lg"
+                    className="absolute right-0 sm:right-0 left-0 sm:left-auto mt-2 bg-white border border-gray-100 rounded-lg shadow-xl w-[calc(100vw-2rem)] sm:w-80 md:w-96 lg:max-w-md"
                   >
                     <div className="p-4 border-b border-gray-100">
                       <div className="flex items-center justify-between">
@@ -190,7 +190,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                       </div>
                     </div>
 
-                    <div className="overflow-y-auto max-h-96">
+                    <div className="overflow-y-auto max-h-[50vh] sm:max-h-96">
                       {notifications.length > 0 ? (
                         notifications.map((notification) => (
                           <motion.div
