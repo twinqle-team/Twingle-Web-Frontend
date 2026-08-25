@@ -39,7 +39,7 @@ const FacilitySelector: FC<FacilitySelectorProps> = ({
       {/* Predefined Facilities */}
       <div className="mb-6">
         <p className="text-sm font-semibold text-gray-900 mb-4">Popular Facilities</p>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {FACILITIES.map((facility) => (
             <motion.button
               key={facility.id}
@@ -52,11 +52,11 @@ const FacilitySelector: FC<FacilitySelectorProps> = ({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               type="button"
-              className={`px-4 py-2.5 rounded-full font-medium transition-all duration-200 border-2 flex items-center justify-center gap-2
+              className={`flex min-h-11 items-center justify-center gap-2 rounded-lg border-2 px-3 py-2.5 text-center font-medium transition-all duration-200 sm:rounded-full sm:px-4
                 ${
                   selectedFacilities[facility.id as keyof typeof selectedFacilities]
-                    ? 'bg-blue-500 text-white border-blue-500 shadow-lg'
-                    : 'bg-white text-gray-700 border-gray-200 hover:border-blue-300'
+                    ? 'border-[#012E19] bg-[#012E19] text-white shadow-lg'
+                    : 'border-[#dce8e0] bg-white text-[#012E19] hover:border-[#F2B60A]'
                 }`}
             >
               <motion.div
@@ -100,13 +100,13 @@ const FacilitySelector: FC<FacilitySelectorProps> = ({
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0, opacity: 0 }}
-                className="inline-flex items-center gap-2 px-3 py-1.5 bg-purple-50 border border-purple-200 rounded-full text-sm font-medium text-purple-700"
+                className="inline-flex items-center gap-2 rounded-full border border-[#f3d37a] bg-[#fff8df] px-3 py-1.5 text-sm font-medium text-[#8a6400]"
               >
                 {facility}
                 <button
                   onClick={() => onCustomFacilityRemove(facility)}
                   type="button"
-                  className="ml-1 hover:bg-purple-200 rounded-full p-0.5 transition-colors"
+                  className="ml-1 rounded-full p-0.5 transition-colors hover:bg-[#f3d37a]"
                   aria-label="Remove facility"
                 >
                   <X size={14} />
@@ -125,7 +125,7 @@ const FacilitySelector: FC<FacilitySelectorProps> = ({
               exit={{ opacity: 0 }}
               onClick={() => setShowAddForm(true)}
               type="button"
-              className="flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:text-blue-600 hover:border-blue-300 font-medium transition-colors"
+              className="flex items-center gap-2 rounded-lg border-2 border-dashed border-[#b8cfc1] px-4 py-2.5 font-medium text-[#60756a] transition-colors hover:border-[#F2B60A] hover:text-[#012E19]"
             >
               <Plus size={18} />
               Add Custom Facility
@@ -136,7 +136,7 @@ const FacilitySelector: FC<FacilitySelectorProps> = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               onSubmit={handleAddFacility}
-              className="flex gap-2"
+              className="flex flex-col gap-2 sm:flex-row"
             >
               <input
                 type="text"
@@ -144,13 +144,13 @@ const FacilitySelector: FC<FacilitySelectorProps> = ({
                 value={newFacility}
                 onChange={(e) => setNewFacility(e.target.value)}
                 autoFocus
-                className="flex-1 px-4 py-2.5 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 font-medium"
+                className="min-w-0 flex-1 rounded-lg border border-[#b8cfc1] px-4 py-2.5 font-medium outline-none focus:border-[#F2B60A] focus:ring-2 focus:ring-[#F2B60A]/20"
               />
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 type="submit"
-                className="px-4 py-2.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium transition-colors"
+                className="rounded-lg bg-[#012E19] px-4 py-2.5 font-medium text-white transition-colors hover:bg-[#074b2d]"
               >
                 Add
               </motion.button>
@@ -162,7 +162,7 @@ const FacilitySelector: FC<FacilitySelectorProps> = ({
                   setNewFacility('');
                 }}
                 type="button"
-                className="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium transition-colors"
+                className="rounded-lg bg-[#eef4f0] px-4 py-2.5 font-medium text-[#012E19] transition-colors hover:bg-[#e1ece5]"
               >
                 Cancel
               </motion.button>

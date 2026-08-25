@@ -142,21 +142,21 @@ export default function Property() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-[#f7faf8] text-[#012E19]">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100"
+        className="top-0 z-40 border-b border-[#dce8e0] bg-white/90 backdrop-blur-md"
       >
-        <div className="max-w-6xl mx-auto px-4 py-4 md:py-6">
+        <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 md:py-6 lg:px-8">
           
 
           <div className="mb-4">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-[#012E19] sm:text-3xl md:text-4xl">
               Add New Property
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="mt-1 max-w-2xl text-sm text-[#60756a] sm:text-base">
               Fill in the property information below to list your property.
             </p>
           </div>
@@ -164,11 +164,11 @@ export default function Property() {
       </motion.div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 py-8 md:py-12 pb-32">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <div className="mx-auto max-w-6xl px-4 py-6 pb-32 sm:px-6 sm:py-8 md:py-10 lg:px-8 lg:py-12">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6 lg:space-y-8">
           {/* Property Details */}
           <SectionCard title="Property Details">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2">
               <Controller
                 name="title"
                 control={control}
@@ -236,7 +236,7 @@ export default function Property() {
                 )}
               />
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-5 min-[420px]:grid-cols-3 sm:gap-4 md:col-span-2 sm:flex sm:flex-col">
                 <Controller
                   name="bedrooms"
                   control={control}
@@ -390,9 +390,9 @@ export default function Property() {
 
           {/* Media Upload */}
           <SectionCard title="Property Media">
-            <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-4">Upload Images</h4>
+                <h4 className="mb-4 font-semibold text-[#012E19]">Upload Images</h4>
                 <ImageUploader
                   onImagesChange={setUploadedImages}
                   minImages={2}
@@ -401,8 +401,8 @@ export default function Property() {
                 />
               </div>
 
-              <div className="pt-6 border-t border-gray-200">
-                <h4 className="font-semibold text-gray-900 mb-4">Upload Videos</h4>
+              <div className="border-t border-[#dce8e0] pt-6">
+                <h4 className="mb-4 font-semibold text-[#012E19]">Upload Videos</h4>
                 <VideoUploader
                   onVideosChange={setUploadedVideos}
                   minVideos={2}
@@ -449,7 +449,7 @@ export default function Property() {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3"
+              className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4"
             >
               <AlertCircle className="text-red-500 flex-shrink-0 mt-0.5" size={20} />
               <div>
@@ -473,9 +473,9 @@ export default function Property() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className=" bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-lg"
+        className="bottom-0 z-30 border-t border-[#dce8e0] bg-white/95 shadow-lg backdrop-blur-md"
       >
-        <div className="max-w-6xl mx-auto px-4 py-4 md:py-6 flex items-center justify-end gap-4">
+        <div className="mx-auto flex max-w-6xl flex-col-reverse gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-end sm:gap-4 sm:px-6 sm:py-4 md:py-5 lg:px-8">
           {/* <Link
             to="/properties"
             className="px-6 py-3 border-2 border-gray-200 text-gray-900 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
@@ -486,7 +486,7 @@ export default function Property() {
 
           <button
             type="button"
-            className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+            className="w-full rounded-lg bg-[#eef4f0] px-6 py-3 font-semibold text-[#012E19] transition-colors hover:bg-[#e1ece5] sm:w-auto"
           >
             Save as Draft
           </button>
@@ -496,7 +496,7 @@ export default function Property() {
             whileTap={{ scale: 0.98 }}
             onClick={handleSubmit(onSubmit)}
             disabled={isSubmitting}
-            className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition-shadow disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#012E19] px-8 py-3 font-semibold text-white transition-shadow hover:bg-[#074b2d] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             {isSubmitting && (
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

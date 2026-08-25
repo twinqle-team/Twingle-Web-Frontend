@@ -24,7 +24,7 @@ export function ActionBar({
       initial={{ y: 40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.2 }}
-      className="sticky bottom-4 z-30 mt-8"
+      className="bottom-4 z-30 mt-8"
     >
       <div className="mx-auto flex flex-col-reverse items-stretch gap-2 rounded-2xl border border-border/60 bg-white/80 p-3 shadow-[0_12px_40px_-12px_rgba(15,23,42,0.18)] backdrop-blur-xl sm:flex-row sm:items-center sm:justify-end sm:gap-3">
         <Button

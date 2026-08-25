@@ -1,153 +1,180 @@
-import  { useState } from "react";
-import { motion } from "framer-motion";
-import {CreditCard, CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import React, { useState } from 'react';
+import { 
+  Users, UserPlus, DollarSign, Home, Car, 
+  Filter, Eye,  
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const Payment = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [filter, setFilter] = useState("All status");
+interface Customer {
+  id: string;
+  name: string;
+  avatar: string;
+  email: string;
+  phone: string;
+  location: string;
+  category: 'Property' | 'Vehicle';
+  purchaseType: 'Purchase' | 'Rental';
+  item: string;
+  totalSpent: string;
+  orders: number;
+  lastPurchase: string;
+  status: 'Active' | 'VIP' | 'Inactive';
+  rating: number;
+}
 
-  const rowsPerPage = 5;
-  const totalInvoices = 30_000;
-  const paidInvoices = 1_893;
-  const unpaidInvoices = 18_900;
-  const overdueInvoices = 1_809;
+const mockCustomers: Customer[] = [ /* ... same mock data as before ... */ ];
 
-  const invoices = Array.from({ length: 102 }, (_, i) => ({
-    id: i + 1,
-    customerName: `Customer ${i + 1}`,
-    email: `customer${i + 1}@gmail.com`,
-    date: "20 Nov 2024",
-    amount: "$40,000",
-    status: i % 2 === 0 ? "Paid" : i % 3 === 0 ? "Overdue" : "Unpaid",
-  }));
+const StatCard = ({ icon: Icon, label, value, trend }: any) => (
+  <motion.div whileHover={{ y: -3 }} className="bg-white border border-gray-200 rounded-3xl p-6">
+    <div className="flex justify-between items-start">
+      <div className="p-3 bg-gray-50 rounded-2xl text-green-600">
+        <Icon className="w-6 h-6" />
+      </div>
+      {trend && <span className="text-emerald-600 text-sm font-medium">↑{trend}%</span>}
+    </div>
+    <p className="text-3xl font-semibold mt-6 text-gray-900">{value}</p>
+    <p className="text-gray-500 text-sm mt-1">{label}</p>
+  </motion.div>
+);
 
-  const filteredInvoices = filter === "All status" ? invoices : invoices.filter((invoice) => invoice.status === filter);
+const Payment: React.FC = () => {
+  const [customers] = useState(mockCustomers);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const totalPages = Math.ceil(filteredInvoices.length / rowsPerPage);
-  const paginatedInvoices = filteredInvoices.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
+  const filteredCustomers = customers.filter(c => 
+    c.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    c.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  const handleNext = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
-  const handlePrev = () => currentPage > 1 && setCurrentPage(currentPage - 1);
+  const openProfile = (customer: Customer) => {
+    setSelectedCustomer(customer);
+    setDrawerOpen(true);
+  };
 
   return (
-    <main className="p-5">
-      {/* Cards Section */}
-      <div className="grid grid-cols-4 gap-4 mb-5">
-        {[
-          { title: "Total Invoices", value: `$${totalInvoices.toLocaleString()}`, icon: CreditCard, color: "text-blue-500" },
-          { title: "Paid", value: `$${paidInvoices.toLocaleString()}`, icon: CheckCircle, color: "text-green-500" },
-          { title: "Unpaid", value: `$${unpaidInvoices.toLocaleString()}`, icon: XCircle, color: "text-red-500" },
-          { title: "Overdue", value: `$${overdueInvoices.toLocaleString()}`, icon: AlertCircle, color: "text-yellow-500" },
-        ].map((card, index) => (
-          <motion.div
-            key={index}
-            className={`bg-white p-5 rounded-lg shadow flex items-center justify-between ${card.color}`}
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div>
-              <h3 className="text-sm text-gray-500">{card.title}</h3>
-              <p className="text-2xl font-bold text-gray-800">{card.value}</p>
-            </div>
-            <card.icon className="w-8 h-8" />
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Filter and Search Section */}
-      <div className="flex justify-between items-center mb-4">
-        <div className="space-x-2">
-          {["All status", "Paid", "Unpaid", "Overdue"].map((status) => (
-            <button
-              key={status}
-              onClick={() => {
-                setFilter(status);
-                setCurrentPage(1);
-              }}
-              className={`px-4 py-2 rounded ${
-                filter === status ? "bg-orange-500 text-white" : "bg-gray-200"
-              }`}
-            >
-              {status}
-            </button>
-          ))}
-        </div>
-
+    <div className="p-6 lg:p-8">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-10">
         <div>
-          <input
-            type="text"
-            placeholder="Search Product..."
-            className="border px-3 py-2 rounded-lg w-64 outline-orange-500"
-          />
+          <h1 className="text-3xl font-semibold text-gray-900">Payments</h1>
+          <p className="text-gray-600">Manage your real estate and automobile Payments.</p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="relative w-72">
+            <input
+              type="text"
+              placeholder="Search payments..."
+              className="w-full pl-11 py-3 border border-gray-200 rounded-2xl focus:border-green-500 outline-none"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <Users className="absolute left-4 top-4 text-gray-400" />
+          </div>
+
+          <button className="px-6 py-3 border border-gray-200 rounded-2xl hover:bg-gray-50 flex items-center gap-2">
+            <Filter className="w-4 h-4" /> Filter
+          </button>
+
+         
         </div>
       </div>
 
-      {/* Table Section */}
-      <div className="bg-white p-5 rounded-lg shadow">
-        <table className="w-full text-left">
-          <thead>
-            <tr className="border-b">
-              <th className="py-2">Invoice ID</th>
-              <th>Customer Name</th>
-              <th>Email</th>
-              <th>Date</th>
-              <th>Amount</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedInvoices.map((invoice) => (
-              <motion.tr
-                key={invoice.id}
-                className="border-b hover:bg-gray-100"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <td className="py-2">{invoice.id}</td>
-                <td>{invoice.customerName}</td>
-                <td>{invoice.email}</td>
-                <td>{invoice.date}</td>
-                <td>{invoice.amount}</td>
-                <td>
-                  <span
-                    className={`px-3 py-1 rounded-lg text-white ${
-                      invoice.status === "Paid"
-                        ? "bg-green-500"
-                        : invoice.status === "Unpaid"
-                        ? "bg-red-500"
-                        : "bg-yellow-500"
-                    }`}
-                  >
-                    {invoice.status}
-                  </span>
-                </td>
-              </motion.tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
+        <StatCard icon={Users} label="Total Customers" value="487" trend="18" />
+        <StatCard icon={UserPlus} label="New This Month" value="64" trend="32" />
+        <StatCard icon={DollarSign} label="Revenue Generated" value="₦1.84B" />
+        <StatCard icon={Home} label="Properties" value="219" />
+        <StatCard icon={Car} label="Vehicles" value="156" />
+      </div>
 
-        <div className="flex justify-between items-center mt-4">
-          <button
-            onClick={handlePrev}
-            disabled={currentPage === 1}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-          >
-           Prev
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={handleNext}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-          >
-            Next 
-          </button>
+      {/* Table */}
+      <div className="bg-white border border-gray-200 rounded-3xl overflow-hidden">
+        <div className="px-8 py-5 border-b bg-gray-50 flex justify-between items-center">
+          <h2 className="font-semibold">All Customers ({filteredCustomers.length})</h2>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="text-xs uppercase text-gray-500 bg-gray-50 border-b">
+                <th className="px-8 py-5 text-left">Customer</th>
+                <th className="px-6 py-5 text-left">Email</th>
+                <th className="px-6 py-5 text-left">Phone</th>
+                <th className="px-6 py-5 text-left">Location</th>
+                <th className="px-6 py-5 text-left">Category</th>
+                <th className="px-6 py-5 text-left">Item</th>
+                <th className="px-6 py-5 text-right">Spent</th>
+                <th className="px-6 py-5 text-center">Status</th>
+                <th className="px-8 py-5 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCustomers.map((customer) => (
+                <tr key={customer.id} className="border-b hover:bg-gray-50">
+                  <td className="px-8 py-5">
+                    <div className="flex items-center gap-4">
+                      <img src={customer.avatar} className="w-10 h-10 rounded-2xl" alt="" />
+                      <div>
+                        <div className="font-medium">{customer.name}</div>
+                        <div className="text-xs text-gray-500">{customer.id}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-5 text-sm text-gray-600">{customer.email}</td>
+                  <td className="px-6 py-5 text-sm">{customer.phone}</td>
+                  <td className="px-6 py-5 text-sm text-gray-600">{customer.location}</td>
+                  <td className="px-6 py-5">
+                    <span className="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-700">
+                      {customer.category}
+                    </span>
+                  </td>
+                  <td className="px-6 py-5 text-sm font-medium">{customer.item}</td>
+                  <td className="px-6 py-5 text-right font-semibold">{customer.totalSpent}</td>
+                  <td className="px-6 py-5 text-center">
+                    <span className={`px-4 py-1 text-xs rounded-full ${customer.status === 'VIP' ? 'bg-purple-100 text-purple-700' : 'bg-green-100 text-green-700'}`}>
+                      {customer.status}
+                    </span>
+                  </td>
+                  <td className="px-8 py-5 text-right">
+                    <button
+                      onClick={() => openProfile(customer)}
+                      className="px-5 py-2 border rounded-2xl hover:bg-gray-50 text-green-700 flex items-center gap-2 text-sm"
+                    >
+                      <Eye className="w-4 h-4" /> View
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
-    </main>
+
+      {/* Drawer - High z-index */}
+      <AnimatePresence>
+        {drawerOpen && selectedCustomer && (
+          <>
+            <div className="fixed inset-0 bg-black/60 z-[9999]" onClick={() => setDrawerOpen(false)} />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl z-[10000] overflow-auto"
+            >
+              {/* Drawer content same as before */}
+              <div className="p-8">
+                <button onClick={() => setDrawerOpen(false)} className="mb-8 text-gray-400">← Close</button>
+                {/* ... rest of drawer content ... */}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 

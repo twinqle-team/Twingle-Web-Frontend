@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
-import { Home, ReceiptText, Settings, ChevronDown } from "lucide-react";
+import { Home, ReceiptText, Settings, ChevronDown, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { MdRealEstateAgent, MdVerifiedUser } from "react-icons/md";
 import { FaPersonCircleCheck } from "react-icons/fa6";
@@ -18,7 +18,7 @@ interface DashboardSidebarProps {
   onClose?: () => void;
 }
 
-const DashboardSidebar: React.FC<DashboardSidebarProps> = ({  }) => {
+const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen = false, onClose }) => {
 
 
   interface RootState {
@@ -49,15 +49,16 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({  }) => {
   //   navigate("/login-vendor");
   // };
   return (
-    <aside className="w-64 p-5 h-screen flex flex-col justify-between overflow-y-auto bg-[#F5F8FA] text-gray-900">
+    <aside className={`fixed inset-y-0 left-0 z-40 flex h-screen w-72 shrink-0 flex-col justify-between overflow-y-auto bg-[#F5F8FA] p-5 text-gray-900 shadow-xl transition-transform duration-300 md:static md:z-auto md:w-64 md:translate-x-0 md:shadow-none ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
       <div>
 
-        <div className="mb-5 text-2xl font-bold text-[#1E8863]">
+        <div className="mb-5 flex items-center justify-between text-2xl font-bold text-[#012E19]">
           {/* <Link to="/">
 
             <img src={Logo} alt="Twingle" className=" w-20 h-20" />
           </Link> */}
            <span>TWINQLE</span>
+           <button onClick={onClose} aria-label="Close menu" className="rounded p-2 text-[#012E19] hover:bg-[#e5eee8] md:hidden"><X className="h-5 w-5" /></button>
         </div>
         <nav>
           <NavItem title="Dashboard" to="/app" Icon={Home} />

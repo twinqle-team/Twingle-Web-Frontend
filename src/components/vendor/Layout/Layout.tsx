@@ -11,7 +11,7 @@ const VendorLayout: React.FC = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex h-screen">
+      <div className="flex h-screen min-w-0 overflow-hidden">
         {/* Sidebar */}
         <DashboardSidebar darkMode={false}
         isOpen={isSidebarOpen} 
@@ -19,12 +19,12 @@ const VendorLayout: React.FC = () => {
          />
 
         {/* Main Content */}
-        <div className="flex flex-col flex-1">
+        <div className="flex min-w-0 flex-1 flex-col">
           {/* Header */}
           <VendorHeader onToggleSidebar={() => setIsSidebarOpen((v) => !v)} />
 
           {/* Scrollable Outlet */}
-          <main className="flex-1 p-4 overflow-y-auto">
+          <main className="min-w-0 flex-1 overflow-y-auto p-2 sm:p-4">
             <Outlet />
           </main>
         </div>
