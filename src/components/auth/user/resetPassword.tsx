@@ -1,66 +1,95 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, ArrowLeft, AlertCircle } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, Lock, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import SimpleSlider from "../../../lib/Sliding";
-import {
-  forgotPasswordSchema,
-  type ForgotPasswordFormData,
-} from "../../../lib/validationSchemas";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { forgotPassword } from "../../../redux/slices/userSlice";
+import { resetPassword } from "../../../redux/slices/userSlice";
 import Logo from "@/assets/Container.png";
 
-const LOGIN_EMAIL_STORAGE_KEY = "twingle_login_email";
+const resetPasswordSchema = z.object({
+  code: z.string().min(6, "Code must be 6 digits"),
+  newPassword: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number"),
+});
 
-export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
+
+export default function ResetPasswordPage() {
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { status } = useAppSelector((state) => state.user);
+  const identifier = (location.state as { identifier?: string } | null)?.identifier ?? "";
+  
+  const [formData, setFormData] = useState({
+    code: "",
+    newPassword: "",
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  useEffect(() => {
-    const savedEmail = window.localStorage.getItem(LOGIN_EMAIL_STORAGE_KEY);
-    if (savedEmail) {
-      setEmail(savedEmail);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
     }
-  }, []);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
 
     try {
-      const formData: ForgotPasswordFormData = { email };
+      const dataToValidate: ResetPasswordFormData = {
+        code: formData.code,
+        newPassword: formData.newPassword,
+      };
 
       // Validate form data
-      forgotPasswordSchema.parse(formData);
+      resetPasswordSchema.parse(dataToValidate);
+
+      if (!identifier) {
+        toast.error("Identifier is required to reset password");
+        navigate("/forgot-password");
+        return;
+      }
 
       setIsLoading(true);
-      window.localStorage.removeItem(LOGIN_EMAIL_STORAGE_KEY);
 
       const resultAction = await dispatch(
-        forgotPassword({
-          identifier: email.trim(),
+        resetPassword({
+          identifier: identifier,
+          code: formData.code,
+          newPassword: formData.newPassword,
         }),
       );
 
-      if (forgotPassword.fulfilled.match(resultAction)) {
+      if (resetPassword.fulfilled.match(resultAction)) {
         toast.success(
-          resultAction.payload.message || "Reset code sent successfully",
+          resultAction.payload.message || "Password reset successful",
         );
-        navigate("/reset-password", { state: { identifier: email.trim() } });
+        navigate("/login");
         return;
       }
 
       const message =
         typeof resultAction.payload === "string"
           ? resultAction.payload
-          : "Failed to send reset code";
+          : "Failed to reset password";
       toast.error(message);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -70,7 +99,12 @@ export default function ForgotPasswordPage() {
           newErrors[path] = err.message;
         });
         setErrors(newErrors);
+        return;
       }
+
+      toast.error(
+        error instanceof Error ? error.message : "Failed to reset password",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -135,7 +169,10 @@ export default function ForgotPasswordPage() {
               Reset Password
             </h1>
             <p className="mt-2 text-sm text-gray-600">
-              Enter your email address and we'll send a verification code.
+              Enter the 6-digit code sent to{" "}
+              <span className="font-medium text-gray-700">
+                {identifier || "your email"}
+              </span>
             </p>
           </motion.div>
 
@@ -144,39 +181,71 @@ export default function ForgotPasswordPage() {
             onSubmit={handleSubmit}
             className="flex flex-col items-stretch gap-5"
           >
+            {/* Code Input */}
             <div>
               <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
-                <Mail className="w-5 h-5 text-gray-400 sm:w-5 sm:h-5" />
+                <Lock className="w-5 h-5 text-gray-400" />
                 <input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (errors.email) {
-                      setErrors((prev) => {
-                        const newErrors = { ...prev };
-                        delete newErrors.email;
-                        return newErrors;
-                      });
-                    }
-                  }}
+                  type="number"
+                  name="code"
+                  placeholder="Enter 6-digit code"
+                  value={formData.code}
+                  onChange={handleChange}
+                  maxLength={6}
                   className={`h-full w-full rounded-[5px] border bg-transparent px-2.5 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none sm:px-3 ${
-                    errors.email ? "border-red-500" : "border-gray-400"
+                    errors.code ? "border-red-500" : "border-gray-400"
                   }`}
                 />
               </div>
-              {errors.email && (
+              {errors.code && (
                 <div className="flex items-center gap-2 mt-2 text-sm text-red-500">
                   <AlertCircle size={16} />
-                  {errors.email}
+                  {errors.code}
+                </div>
+              )}
+            </div>
+
+            {/* New Password Input */}
+            <div>
+              <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
+                <Lock className="w-5 h-5 text-gray-400" />
+                <div
+                  className={`flex h-full w-full items-center gap-3 rounded-[5px] border px-2.5 sm:px-3 ${
+                    errors.newPassword ? "border-red-500" : "border-gray-400"
+                  }`}
+                >
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="newPassword"
+                    placeholder="New password"
+                    value={formData.newPassword}
+                    onChange={handleChange}
+                    className="w-full h-full text-sm text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
+                  />
+                  {showPassword ? (
+                    <EyeOff
+                      className="w-4 h-4 text-gray-400 cursor-pointer"
+                      onClick={() => setShowPassword(false)}
+                    />
+                  ) : (
+                    <Eye
+                      className="w-4 h-4 text-gray-400 cursor-pointer"
+                      onClick={() => setShowPassword(true)}
+                    />
+                  )}
+                </div>
+              </div>
+              {errors.newPassword && (
+                <div className="flex items-center gap-2 mt-2 text-sm text-red-500">
+                  <AlertCircle size={16} />
+                  {errors.newPassword}
                 </div>
               )}
             </div>
 
             <motion.button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || status === "loading"}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#004e27] py-3 font-semibold text-white transition-colors hover:bg-[#004e27]/90 disabled:cursor-not-allowed disabled:opacity-50 sm:py-3.5"
@@ -188,10 +257,10 @@ export default function ForgotPasswordPage() {
                     transition={{ duration: 1, repeat: Infinity }}
                     className="w-5 h-5 border-2 border-white rounded-full border-t-transparent"
                   />
-                  Sending code...
+                  Resetting...
                 </>
               ) : (
-                "Send verification code"
+                "Reset Password"
               )}
             </motion.button>
           </motion.form>
@@ -201,11 +270,11 @@ export default function ForgotPasswordPage() {
             className="flex w-full max-w-[600px] flex-col items-center gap-4 border-t border-gray-200 pt-4"
           >
             <Link
-              to="/login"
+              to="/forgot-password"
               className="inline-flex items-center gap-2 text-sm font-medium text-[#004e27] transition-colors hover:text-[#004e27]/80"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back to login
+              Back to forgot password
             </Link>
           </motion.div>
         </div>

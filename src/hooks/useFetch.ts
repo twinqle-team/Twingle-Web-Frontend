@@ -1,10 +1,10 @@
 import useSWR, { SWRConfiguration } from "swr";
 import {
-  fetcher,
   swrConfig,
   swrConfigRealTime,
   swrConfigStatic,
 } from "@/lib/swrConfig";
+import { getUserProfile, UserProfile } from "@/utils/user/userProfile";
 
 interface UseFetchOptions extends SWRConfiguration {
   mode?: "default" | "realtime" | "static";
@@ -16,7 +16,7 @@ interface UseFetchOptions extends SWRConfiguration {
  * @param options - SWR configuration options with mode support
  * @returns SWR response object with data, error, isLoading, and mutate
  */
-export function useFetch<T>(url: string | null, options?: UseFetchOptions) {
+export function useFetch<T>(url: string | null, fetcherFn?: () => Promise<T>, options?: UseFetchOptions) {
   const { mode = "default", ...customConfig } = options || {};
 
   let config: SWRConfiguration;
@@ -34,8 +34,8 @@ export function useFetch<T>(url: string | null, options?: UseFetchOptions) {
   const mergedConfig = { ...config, ...customConfig };
 
   const { data, error, isLoading, mutate } = useSWR<T>(
-    url,
-    fetcher,
+    url ?? null,
+    fetcherFn ?? null,
     mergedConfig,
   );
 
@@ -49,11 +49,30 @@ export function useFetch<T>(url: string | null, options?: UseFetchOptions) {
 }
 
 /**
+ * Hook for fetching user profile using axios with auth
+ * Token is automatically attached from Redux store
+ */
+export function useUserProfile() {
+  const { data, error, isLoading, mutate } = useFetch<UserProfile>(
+    "user-profile",
+    getUserProfile,
+    { mode: "static" }
+  );
+
+  return {
+    userProfile: data,
+    isLoading,
+    error,
+    mutate,
+  };
+}
+
+/**
  * Hook for POST requests with automatic revalidation
  * @param url - The API endpoint URL
  */
 export function useMutate(url: string | null) {
-  const { mutate } = useSWR(url, fetcher, swrConfig);
+  const { mutate } = useSWR(url, null, swrConfig);
 
   const handleMutate = async (body: unknown) => {
     try {

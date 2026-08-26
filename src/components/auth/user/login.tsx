@@ -1,8 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, User, Lock } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Eye, EyeOff, User, Lock, AlertCircle } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import {
+  loginSchema,
+  type LoginFormData,
+} from "../../../lib/validationSchemas";
 import Sliding from "../../../lib/Sliding";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { loginUser, googleSignIn } from "../../../redux/slices/userSlice";
+import { z } from "zod";
 
 // Google Icon Component
 const GoogleIcon = () => (
@@ -31,13 +39,110 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { status } = useAppSelector((state) => state.user);
+
+  // Load saved email on component mount
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("twingle_remember_email");
+    if (savedEmail) {
+      setEmail(savedEmail);
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    // API call would go here
-    setTimeout(() => setIsLoading(false), 2000);
+    setErrors({});
+
+    try {
+      const formData: LoginFormData = { email, password };
+      loginSchema.parse(formData);
+
+      setIsLoading(true);
+
+      const resultAction = await dispatch(
+        loginUser({
+          identifier: email.trim(),
+          password,
+        }),
+      );
+
+      if (loginUser.fulfilled.match(resultAction)) {
+        // Handle Remember Me functionality
+        if (rememberMe) {
+          localStorage.setItem("twingle_remember_email", email.trim());
+        } else {
+          localStorage.removeItem("twingle_remember_email");
+        }
+
+        toast.success(
+          resultAction.payload.message || "Login successful",
+        );
+        navigate("/profile");
+        return;
+      }
+
+      const message =
+        typeof resultAction.payload === "string"
+          ? resultAction.payload
+          : "Login failed";
+      toast.error(message);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors: Record<string, string> = {};
+        error.issues.forEach((err) => {
+          const path = err.path.join(".");
+          newErrors[path] = err.message;
+        });
+        setErrors(newErrors);
+        return;
+      }
+
+      toast.error(error instanceof Error ? error.message : "Login failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setIsGoogleLoading(true);
+
+    try {
+      const idToken = import.meta.env.VITE_GOOGLE_ID_TOKEN || "";
+
+      if (!idToken) {
+        toast.error("Google ID token not configured");
+        setIsGoogleLoading(false);
+        return;
+      }
+
+      const resultAction = await dispatch(googleSignIn({ idToken }));
+
+      if (googleSignIn.fulfilled.match(resultAction)) {
+        toast.success(
+          resultAction.payload.message || "Google sign-in successful",
+        );
+        navigate("/profile");
+        return;
+      }
+
+      const message =
+        typeof resultAction.payload === "string"
+          ? resultAction.payload
+          : "Google sign-in failed";
+      toast.error(message);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Google sign-in failed",
+      );
+    } finally {
+      setIsGoogleLoading(false);
+    }
   };
 
   const rightVariants = {
@@ -98,20 +203,50 @@ export default function LoginPage() {
             <User className="w-5 h-5 text-gray-400 sm:w-5 sm:h-5" />
             <input
               type="email"
+              name="email"
               placeholder="Email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="h-full w-full rounded-[5px] border border-gray-400 bg-transparent px-2.5 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none sm:px-3"
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (errors.email) {
+                  setErrors((prev) => {
+                    const newErrors = { ...prev };
+                    delete newErrors.email;
+                    return newErrors;
+                  });
+                }
+              }}
+              className={`h-full w-full rounded-[5px] border bg-transparent px-2.5 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none sm:px-3 ${
+                errors.email ? "border-red-500" : "border-gray-400"
+              }`}
             />
           </div>
+          {errors.email && (
+            <div className="flex items-center gap-2 text-sm text-red-500">
+              <AlertCircle size={16} />
+              {errors.email}
+            </div>
+          )}
           <div className="flex h-[48px] w-full items-center gap-2.5 sm:h-[50px] sm:gap-3">
             <Lock className="w-5 h-5 text-gray-400 sm:w-5 sm:h-5" />
-            <div className="flex h-full w-full items-center gap-3 border border-gray-400 rounded-[5px] px-2.5 sm:px-3">
+            <div className={`flex h-full w-full items-center gap-3 border rounded-[5px] px-2.5 sm:px-3 ${
+              errors.password ? "border-red-500" : "border-gray-400"
+            }`}>
               <input
                 type={showPassword ? "text" : "password"}
+                name="password"
                 placeholder="Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (errors.password) {
+                    setErrors((prev) => {
+                      const newErrors = { ...prev };
+                      delete newErrors.password;
+                      return newErrors;
+                    });
+                  }
+                }}
                 className="w-full h-full text-sm text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
               />
               {showPassword ? (
@@ -127,6 +262,12 @@ export default function LoginPage() {
               )}
             </div>
           </div>
+          {errors.password && (
+            <div className="flex items-center gap-2 text-sm text-red-500">
+              <AlertCircle size={16} />
+              {errors.password}
+            </div>
+          )}
 
           {/* Remember Me & Forgot Password */}
           <motion.div
@@ -154,12 +295,27 @@ export default function LoginPage() {
           <motion.button
             variants={itemVariants}
             type="button"
+            onClick={handleGoogleSignIn}
+            disabled={isGoogleLoading || status === "loading"}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="flex items-center justify-center w-full gap-3 py-2.5 font-semibold text-gray-700 transition-colors bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 sm:py-3"
+            className="flex items-center justify-center w-full gap-3 py-2.5 font-semibold text-gray-700 transition-colors bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 sm:py-3"
           >
-            <GoogleIcon />
-            Sign in with Google
+            {isGoogleLoading ? (
+              <>
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                  className="w-5 h-5 border-2 border-gray-600 rounded-full border-t-transparent"
+                />
+                Signing in with Google...
+              </>
+            ) : (
+              <>
+                <GoogleIcon />
+                Sign in with Google
+              </>
+            )}
           </motion.button>
 
           {/* Submit Button */}

@@ -4,11 +4,15 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import {
+  forgotPasswordAPI,
+  googleSignInAPI,
+  loginAPI,
+  logoutAPI,
   registerUserAPI,
+  resetPasswordAPI,
   sendOtpAPI,
-  type RegisterUserPayload,
-  type SendOtpPayload,
-  type VerifyOtpPayload,
+  updateAvatarAPI,
+  updateProfileAPI,
   verifyOtpAPI,
 } from "../../utils/user/userAuth";
 
@@ -23,8 +27,11 @@ export interface UserState {
     name?: string;
     email?: string;
     role?: UserRole;
+    phone?: string;
+    avatarUrl?: string;
   } | null;
   token?: string | null;
+  refreshToken?: string | null;
 }
 
 const initialState: UserState = {
@@ -33,89 +40,176 @@ const initialState: UserState = {
   error: null,
   user: null,
   token: null,
+  refreshToken: null,
 };
 
-const normalizeUser = (
-  payload: any,
-  fallbackName?: string,
-  fallbackEmail?: string,
-  fallbackRole?: UserRole,
-) => ({
-  id: payload?.id ?? payload?._id ?? payload?.user?.id ?? payload?.user?._id,
-  name: payload?.name ?? payload?.user?.name ?? fallbackName,
-  email: payload?.email ?? payload?.user?.email ?? fallbackEmail,
-  role: (payload?.role ??
-    payload?.user?.role ??
-    fallbackRole ??
-    "buyer") as UserRole,
+const normalizeUser = (data: any) => ({
+  id: data?.id || data?._id,
+  name: data?.name,
+  email: data?.email,
+  role: (data?.role || "buyer") as UserRole,
+  phone: data?.phone,
+  avatarUrl: data?.avatar?.url,
 });
 
-export const registerUser = createAsyncThunk<
-  {
-    user: NonNullable<UserState["user"]>;
-    token: string | null;
-    message: string;
-  },
-  RegisterUserPayload,
-  { rejectValue: string }
->("user/registerUser", async (payload, { rejectWithValue }) => {
-  try {
-    const response = await registerUserAPI(payload);
-    const responseData = response?.data ?? response;
-    const normalizedUser = normalizeUser(
-      responseData,
-      payload.name,
-      payload.email,
-      payload.role,
-    );
+// Helper function to create async thunks with user authentication
+const createAuthThunk = <_T, P>(
+  name: string,
+  apiCall: (payload: P) => Promise<any>,
+  defaultSuccessMessage: string,
+  defaultErrorMessage: string,
+  includeUserData: boolean = false
+) =>
+  createAsyncThunk<
+    {
+      user?: NonNullable<UserState["user"]>;
+      token?: string | null;
+      refreshToken?: string | null;
+      message: string;
+    },
+    P,
+    { rejectValue: string }
+  >(`user/${name}`, async (payload, { rejectWithValue }) => {
+    try {
+      const response = await apiCall(payload);
+      const data = response?.data ?? response;
 
-    return {
-      user: normalizedUser,
-      token:
-        responseData?.token ??
-        responseData?.data?.token ??
-        responseData?.accessToken ??
-        null,
-      message: responseData?.message ?? "Account created successfully",
-    };
-  } catch (error: any) {
-    return rejectWithValue(error?.message ?? "Failed to create account");
-  }
-});
+      const result: any = {
+        message: data?.message ?? defaultSuccessMessage,
+      };
 
-export const verifyOtp = createAsyncThunk<
-  { message: string },
-  VerifyOtpPayload,
-  { rejectValue: string }
->("user/verifyOtp", async (payload, { rejectWithValue }) => {
-  try {
-    const response = await verifyOtpAPI(payload);
-    const responseData = response?.data ?? response;
+      if (includeUserData) {
+        result.user = normalizeUser(data?.user || data);
+        result.token = data?.tokens?.accessToken ?? data?.token ?? data?.data?.token ?? null;
+        result.refreshToken = data?.tokens?.refreshToken ?? data?.data?.refreshToken ?? null;
+      }
 
-    return {
-      message: responseData?.message ?? "OTP verified successfully",
-    };
-  } catch (error: any) {
-    return rejectWithValue(error?.message ?? "OTP verification failed");
-  }
-});
+      return result;
+    } catch (error: any) {
+      return rejectWithValue(error?.message ?? defaultErrorMessage);
+    }
+  });
 
-export const resendOtp = createAsyncThunk<
-  { message: string },
-  SendOtpPayload,
-  { rejectValue: string }
->("user/resendOtp", async (payload, { rejectWithValue }) => {
-  try {
-    const response = await sendOtpAPI(payload);
-    const responseData = response?.data ?? response;
+// Helper function to create message-only async thunks
+const createMessageThunk = <P>(
+  name: string,
+  apiCall: (payload: P) => Promise<any>,
+  defaultSuccessMessage: string,
+  defaultErrorMessage: string
+) =>
+  createAsyncThunk<{ message: string }, P, { rejectValue: string }>(
+    `user/${name}`,
+    async (payload, { rejectWithValue }) => {
+      try {
+        const response = await apiCall(payload);
+        return { message: response?.message ?? defaultSuccessMessage };
+      } catch (error: any) {
+        return rejectWithValue(error?.message ?? defaultErrorMessage);
+      }
+    }
+  );
 
-    return {
-      message: responseData?.message ?? "OTP sent successfully",
-    };
-  } catch (error: any) {
-    return rejectWithValue(error?.message ?? "Failed to send OTP");
-  }
-});
+// Create thunks using helper functions
+export const registerUser = createAuthThunk(
+  "registerUser",
+  registerUserAPI,
+  "Account created successfully",
+  "Failed to create account",
+  true
+);
+
+export const loginUser = createAuthThunk(
+  "loginUser",
+  loginAPI,
+  "Login successful",
+  "Login failed",
+  true
+);
+
+export const googleSignIn = createAuthThunk(
+  "googleSignIn",
+  googleSignInAPI,
+  "Google sign-in successful",
+  "Google sign-in failed",
+  true
+);
+
+export const updateProfile = createAuthThunk(
+  "updateProfile",
+  updateProfileAPI,
+  "Profile updated successfully",
+  "Failed to update profile",
+  true
+);
+
+export const updateAvatar = createAuthThunk(
+  "updateAvatar",
+  updateAvatarAPI,
+  "Avatar updated successfully",
+  "Failed to update avatar",
+  true
+);
+
+export const verifyOtp = createMessageThunk(
+  "verifyOtp",
+  verifyOtpAPI,
+  "OTP verified successfully",
+  "OTP verification failed"
+);
+
+export const resendOtp = createMessageThunk(
+  "resendOtp",
+  sendOtpAPI,
+  "OTP sent successfully",
+  "Failed to send OTP"
+);
+
+export const forgotPassword = createMessageThunk(
+  "forgotPassword",
+  forgotPasswordAPI,
+  "Reset code sent successfully",
+  "Failed to send reset code"
+);
+
+export const resetPassword = createMessageThunk(
+  "resetPassword",
+  resetPasswordAPI,
+  "Password reset successful",
+  "Failed to reset password"
+);
+
+export const logoutUser = createMessageThunk(
+  "logoutUser",
+  logoutAPI,
+  "Logout successful",
+  "Logout failed"
+);
+
+// Helper to add common case patterns
+const addAsyncCases = (
+  builder: any,
+  thunk: any,
+  options: {
+    onFulfilled?: (state: UserState, action: any) => void;
+    onRejected?: (state: UserState, action: any) => void;
+  } = {}
+) => {
+  builder
+    .addCase(thunk.pending, (state: UserState) => {
+      state.status = "loading";
+      state.error = null;
+    })
+    .addCase(thunk.fulfilled, (state: UserState, action: any) => {
+      state.status = "succeeded";
+      state.error = null;
+      if (options.onFulfilled) options.onFulfilled(state, action);
+    })
+    .addCase(thunk.rejected, (state: UserState, action: any) => {
+      state.status = "failed";
+      state.error = action.payload ?? "Operation failed";
+      if (options.onRejected) options.onRejected(state, action);
+    });
+};
 
 const userSlice = createSlice({
   name: "user",
@@ -129,60 +223,60 @@ const userSlice = createSlice({
     setAuthToken: (state, action: PayloadAction<string | null>) => {
       state.token = action.payload;
     },
-    logoutUser: (state) => {
+    logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
       state.token = null;
+      state.refreshToken = null;
       state.status = "idle";
       state.error = null;
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(registerUser.pending, (state) => {
-        state.status = "loading";
-        state.error = null;
+    // Authentication thunks (set user, token, refreshToken)
+    const authThunks = [registerUser, loginUser, googleSignIn];
+    authThunks.forEach((thunk) =>
+      addAsyncCases(builder, thunk, {
+        onFulfilled: (state, action) => {
+          state.isAuthenticated = true;
+          state.user = action.payload.user;
+          state.token = action.payload.token;
+          state.refreshToken = action.payload.refreshToken;
+        },
+        onRejected: (state) => {
+          state.isAuthenticated = false;
+          state.user = null;
+          state.token = null;
+          state.refreshToken = null;
+        },
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.isAuthenticated = true;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-        state.error = null;
-      })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.status = "failed";
+    );
+
+    // Logout thunk
+    addAsyncCases(builder, logoutUser, {
+      onFulfilled: (state) => {
         state.isAuthenticated = false;
         state.user = null;
         state.token = null;
-        state.error = action.payload ?? "Failed to create account";
+        state.refreshToken = null;
+      },
+    });
+
+    // Profile update thunks (update user only)
+    const profileThunks = [updateProfile, updateAvatar];
+    profileThunks.forEach((thunk) =>
+      addAsyncCases(builder, thunk, {
+        onFulfilled: (state, action) => {
+          state.user = action.payload.user;
+        },
       })
-      .addCase(verifyOtp.pending, (state) => {
-        state.status = "loading";
-        state.error = null;
-      })
-      .addCase(verifyOtp.fulfilled, (state) => {
-        state.status = "succeeded";
-        state.error = null;
-      })
-      .addCase(verifyOtp.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload ?? "OTP verification failed";
-      })
-      .addCase(resendOtp.pending, (state) => {
-        state.status = "loading";
-        state.error = null;
-      })
-      .addCase(resendOtp.fulfilled, (state) => {
-        state.status = "succeeded";
-        state.error = null;
-      })
-      .addCase(resendOtp.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload ?? "Failed to send OTP";
-      });
+    );
+
+    // Message-only thunks (no state changes)
+    const messageThunks = [verifyOtp, resendOtp, forgotPassword, resetPassword];
+    messageThunks.forEach((thunk) => addAsyncCases(builder, thunk));
   },
 });
 
-export const { setUser, setAuthToken, logoutUser } = userSlice.actions;
+export const { setUser, setAuthToken, logout } = userSlice.actions;
 export default userSlice.reducer;

@@ -7,6 +7,7 @@ import LoginPage from "@/components/auth/user/login";
 import SignupPage from "@/components/auth/user/signup";
 import ForgotPasswordPage from "@/components/auth/user/forgotPassword";
 import VerifyOtpPage from "@/components/auth/user/verifyOtp";
+import ResetPasswordPage from "@/components/auth/user/resetPassword";
 
 import Signupvendor from "@/components/auth/vendor/Signupvendor";
 import ForgotPasswordvendor from "@/components/auth/vendor/forgotPasswordvendor";
@@ -29,6 +30,7 @@ import VehicleForm from "@/components/vendor/Product/Auto/vehicle/VehicleForm";
 
 
 import ProfileLayout from "@/components/layout/profileLayout";
+import ProtectedRoute from "@/components/auth/protectedRoute";
 // import ProfileDashboard from "@/components/userProfile/profileDashboard";
 import Verifyvendor from "@/components/auth/vendor/Verifyvendor";
 import Verify from "@/components/auth/vendor/Verify";
@@ -101,6 +103,14 @@ const routes: RouteObject[] = [
     ),
   },
   {
+    path: "/reset-password",
+    element: (
+      <Suspense fallback={<Spinner />}>
+        <ResetPasswordPage />
+      </Suspense>
+    ),
+  },
+  {
     path: "/verify",
     element: <Verify />,
   },
@@ -110,7 +120,11 @@ const routes: RouteObject[] = [
   },
   {
     path: "/profile",
-    element: <ProfileLayout />,
+    element: (
+      <ProtectedRoute>
+        <ProfileLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,

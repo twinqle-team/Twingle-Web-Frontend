@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { ArrowLeft, Bell, X, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { logoutUser, logout } from "../../../redux/slices/userSlice";
 
 interface Notification {
   id: number;
@@ -14,18 +17,23 @@ interface Notification {
 
 interface ProfileHeaderProps {
   name?: string;
-  avatarUrl?: string;
 }
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({
-  name = "Alexander Thorne",
-  avatarUrl = "https://api.dicebear.com/7.x/avataaars/svg?seed=Alexander",
+  name
 }) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { refreshToken, user } = useAppSelector((state) => state.user);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
+  const avatarUrl = user?.avatarUrl
+
+  // Use user data from Redux store if available, otherwise use props
+  const displayName = user?.name || name || "User";
+  const userInitial = displayName.charAt(0).toUpperCase();
 
   const [notifications, setNotifications] = useState<Notification[]>([
     {
@@ -69,9 +77,37 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     navigate("/");
   };
 
-  const handleLogout = () => {
-    // Add logout logic here (clear tokens, redirect to login, etc.)
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      if (refreshToken) {
+        const resultAction = await dispatch(
+          logoutUser({ refreshToken }),
+        );
+
+        if (logoutUser.fulfilled.match(resultAction)) {
+          toast.success(
+            resultAction.payload.message || "Logout successful",
+          );
+          dispatch(logout());
+          navigate("/login");
+          return;
+        }
+
+        const message =
+          typeof resultAction.payload === "string"
+            ? resultAction.payload
+            : "Logout failed";
+        toast.error(message);
+      } else {
+        // No refresh token, just clear local state
+        dispatch(logout());
+        navigate("/login");
+      }
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Logout failed",
+      );
+    }
   };
 
   const dropdownVariants = {
@@ -124,21 +160,21 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       animate="visible"
       className="sticky top-0 z-40 bg-white border-b border-gray-100 shadow-sm h-[10vh]"
     >
-      <div className="px-4 sm:px-6 py-3 sm:py-4">
-        <div className="flex items-center justify-between gap-4">
+      <div className="px-4 sm:px-6 py-3 sm:py-4 h-full">
+        <div className="flex items-center justify-between gap-4 h-full max-w-7xl mx-auto">
           {/* Back Button */}
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleBack}
-            className="flex-shrink-0 p-2 transition-colors rounded-lg hover:bg-gray-100"
+            className="flex-shrink-0 p-2 transition-colors rounded-lg hover:bg-gray-100 flex items-center justify-center"
             title="Go back"
           >
             <ArrowLeft size={20} className="text-gray-700" />
           </motion.button>
 
           {/* Right Side Actions */}
-          <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 flex-1 justify-end">
             {/* Help Icon - Hidden on small mobile */}
             {/* <motion.button
               whileHover={{ scale: 1.1 }}
@@ -252,24 +288,35 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             <div ref={profileRef} className="relative">
               <motion.button
                 whileHover={{ scale: 1.02 }}
-                onClick={() => setShowProfileMenu(!showProfileMenu)}
+                onClick={() => {
+                  // Only show dropdown on mobile screens (when sidebar is hidden)
+                  if (window.innerWidth < 768) {
+                    setShowProfileMenu(!showProfileMenu);
+                  }
+                }}
                 className="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 pl-3 sm:pl-4 transition-colors border-l border-gray-200 rounded-lg hover:bg-gray-50"
               >
                 <div className="hidden sm:block text-right">
                   <p className="text-sm sm:text-lg font-semibold text-gray-900">
-                    {name}
+                    {displayName}
                   </p>
                 </div>
-                <img
-                  src={avatarUrl}
-                  alt={name}
-                  className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full border-2 border-[#33a078] object-cover"
-                />
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt={displayName}
+                    className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full border-2 border-[#33a078] object-cover"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full border-2 border-[#33a078] bg-[#33a078] text-white font-semibold text-sm sm:text-base lg:text-lg">
+                    {userInitial}
+                  </div>
+                )}
               </motion.button>
 
-              {/* Profile Menu Dropdown */}
+              {/* Profile Menu Dropdown - Only show on mobile */}
               <AnimatePresence>
-                {showProfileMenu && (
+                {showProfileMenu && window.innerWidth < 768 && (
                   <motion.div
                     variants={dropdownVariants}
                     initial="hidden"
@@ -279,7 +326,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                   >
                     <div className="p-4 border-b border-gray-100">
                       <p className="text-sm font-semibold text-gray-900">
-                        {name}
+                        {displayName}
                       </p>
                       <p className="text-xs text-gray-500 mt-1">
                         View your profile
