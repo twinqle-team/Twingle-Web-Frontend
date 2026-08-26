@@ -17,7 +17,7 @@ import VendorLayout from "@/components/vendor/Layout/Layout";
 import Dashboard from "@/components/vendor/Main/Dashboard";
 
 import PropertyList from "@/components/vendor/Product/Property/Property-list/PropertyList";
-import AutomotiveList from "@/components/vendor/Product/Auto/vehiclelist/AutomotiveList";
+// import AutomotiveList from "@/components/vendor/Product/Auto/vehiclelist/AutomotiveList";
 import Review from "@/components/vendor/Review/Review";
 import Profile from "@/components/vendor/Setting/Profile";
 import Payment from "@/components/vendor/Payment/Payment";
@@ -267,7 +267,7 @@ const routes: RouteObject[] = [
       { index: true, element: <Suspense fallback={<Spinner />}><Dashboard /></Suspense> },
       { path: "new-property", element: <Suspense fallback={<Spinner />}><Property /></Suspense> },
       { path: "My-Properties", element: <Suspense fallback={<Spinner />}><PropertyList /></Suspense> },
-      { path: "My-Automotives", element: <Suspense fallback={<Spinner />}><AutomotiveList /></Suspense> },
+      // { path: "My-Automotives", element: <Suspense fallback={<Spinner />}><AutomotiveList /></Suspense> },
       { path: "new-automotive", element: <Suspense fallback={<Spinner />}><VehicleForm /></Suspense> },
       { path: "reviews", element: <Suspense fallback={<Spinner />}><Review /></Suspense> },
       { path: "settings", element: <Suspense fallback={<Spinner />}><Profile /></Suspense> },
