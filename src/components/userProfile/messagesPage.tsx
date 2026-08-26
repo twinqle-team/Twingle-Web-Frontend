@@ -201,12 +201,6 @@ const MessagesPage: React.FC = () => {
 
   const activeConversation =
     conversations.find((c) => c.id === activeId) ?? null;
-  const orderedConversations = [...conversations].sort((a, b) => {
-    if (a.unread !== b.unread) {
-      return Number(b.unread > 0) - Number(a.unread > 0);
-    }
-    return (b.updatedAt ?? 0) - (a.updatedAt ?? 0);
-  });
   const replyTarget =
     activeConversation?.messages.find(
       (message) => message.id === replyToMessageId,

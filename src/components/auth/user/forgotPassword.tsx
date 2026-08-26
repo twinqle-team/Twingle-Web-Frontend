@@ -9,7 +9,7 @@ import {
   forgotPasswordSchema,
   type ForgotPasswordFormData,
 } from "../../../lib/validationSchemas";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { useAppDispatch } from "../../../redux/hooks";
 import { forgotPassword } from "../../../redux/slices/userSlice";
 import Logo from "@/assets/Container.png";
 
@@ -21,7 +21,6 @@ export default function ForgotPasswordPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { status } = useAppSelector((state) => state.user);
 
   useEffect(() => {
     const savedEmail = window.localStorage.getItem(LOGIN_EMAIL_STORAGE_KEY);
