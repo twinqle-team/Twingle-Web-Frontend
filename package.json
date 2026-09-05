@@ -24,6 +24,7 @@
     "country-list": "^2.4.1",
     "emoji-picker-react": "^4.19.1",
     "framer-motion": "^12.42.2",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^1.21.0",
     "radix-ui": "^1.6.0",
     "react": "^19.2.6",

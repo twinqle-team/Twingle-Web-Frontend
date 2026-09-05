@@ -10,6 +10,7 @@ const AGENT_IMAGE_2 = "https://images.unsplash.com/photo-1438761681033-6461ffad8
 
 const properties = [
   {
+    id: 1,
     image: PROPERTY_IMAGE_1,
     isFeatured: true,
     price: "$4,600",
@@ -21,6 +22,7 @@ const properties = [
     type: "For Sale",
   },
   {
+    id: 2,
     image: PROPERTY_IMAGE_2,
     isFeatured: false,
     price: "$5,200",
@@ -32,6 +34,7 @@ const properties = [
     type: "For Sale",
   },
   {
+    id: 3,
     image: PROPERTY_IMAGE_3,
     isFeatured: true,
     price: "$3,850",
@@ -43,6 +46,7 @@ const properties = [
     type: "For Sale",
   },
   {
+    id: 4,
     image: PROPERTY_IMAGE_1,
     isFeatured: true,
     price: "$4,600",
@@ -54,6 +58,7 @@ const properties = [
     type: "For Sale",
   },
   {
+    id: 5,
     image: PROPERTY_IMAGE_2,
     isFeatured: false,
     price: "$5,200",
@@ -65,6 +70,7 @@ const properties = [
     type: "For Sale",
   },
   {
+    id: 6,
     image: PROPERTY_IMAGE_3,
     isFeatured: true,
     price: "$3,850",
@@ -151,7 +157,7 @@ const PropertiesGrid: React.FC = () => {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {properties.map((item) => (
           <article
-            key={item.title}
+            key={item.id}
             className="overflow-hidden transition duration-300 bg-white border border-gray-200 shadow-sm rounded-2xl group hover:shadow-lg"
           >
             <div className="relative overflow-hidden bg-gray-200 h-72">

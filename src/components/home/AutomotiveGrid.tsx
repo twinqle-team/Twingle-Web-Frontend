@@ -18,6 +18,7 @@ const VENDOR_AVATAR_2 =
 
 const vehicles = [
   {
+    id: 1,
     image: VEHICLE_IMAGE_1,
     isFeatured: true,
     price: "$45,000",
@@ -29,6 +30,7 @@ const vehicles = [
     type: "For Sale",
   },
   {
+    id: 2,
     image: VEHICLE_IMAGE_2,
     isFeatured: false,
     price: "$32,500",
@@ -40,6 +42,7 @@ const vehicles = [
     type: "For Sale",
   },
   {
+    id: 3,
     image: VEHICLE_IMAGE_3,
     isFeatured: true,
     price: "$28,900",
@@ -51,6 +54,7 @@ const vehicles = [
     type: "For Sale",
   },
   {
+    id: 4,
     image: VEHICLE_IMAGE_1,
     isFeatured: true,
     price: "$45,000",
@@ -62,6 +66,7 @@ const vehicles = [
     type: "For Sale",
   },
   {
+    id: 5,
     image: VEHICLE_IMAGE_2,
     isFeatured: false,
     price: "$32,500",
@@ -73,6 +78,7 @@ const vehicles = [
     type: "For Sale",
   },
   {
+    id: 6,
     image: VEHICLE_IMAGE_3,
     isFeatured: true,
     price: "$28,900",
@@ -167,7 +173,7 @@ const AutomotiveGrid: React.FC = () => {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {vehicles.map((car) => (
           <Card
-            key={car.title}
+            key={car.id}
             className="overflow-hidden transition duration-300 bg-white border border-gray-200 shadow-sm rounded-2xl hover:shadow-lg"
           >
             <div className="relative overflow-hidden bg-gray-200 h-72">

@@ -53,6 +53,27 @@ export type UpdateAvatarPayload = {
   file: File;
 };
 
+export type RefreshTokenPayload = {
+  refreshToken: string;
+};
+
+const getErrorMessage = (error: any, defaultMessage: string) =>
+  error?.response?.data?.message ||
+  error?.response?.data?.error ||
+  error?.message ||
+  defaultMessage;
+
+// Refresh token API
+export const refreshTokenAPI = async (payload: RefreshTokenPayload) => {
+  try {
+    const response = await api.post("/token/refresh", payload);
+    console.log(response.data) 
+    return response.data;
+  } catch (error: any) {
+    throw new Error(getErrorMessage(error, "Failed to refresh token"));
+  }
+};
+
 export const api = axios.create({
   baseURL: API_BASE_URL,
 });
@@ -84,11 +105,6 @@ usersApi.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-const getErrorMessage = (error: any, defaultMessage: string) =>
-  error?.response?.data?.message ||
-  error?.response?.data?.error ||
-  error?.message ||
-  defaultMessage;
 
 export const registerUserAPI = async (userData: RegisterUserPayload) => {
   try {

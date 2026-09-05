@@ -1,76 +1,104 @@
-import React, { useEffect, useRef } from "react";
-import { toast } from "react-toastify";
+import React, { useEffect, useState, useRef } from "react";
+import { WifiOff, RefreshCw } from "lucide-react";
 
 interface NetworkErrorProps {
   children?: React.ReactNode;
   onRetry?: () => void;
 }
 
-const REMINDER_INTERVAL_MS = 30 * 60 * 1000;
-
 const NetworkError: React.FC<NetworkErrorProps> = ({ children, onRetry }) => {
-  const toastIdRef = useRef<string | number | null>(null);
+  const [isOffline, setIsOffline] = useState(false);
+  const checkIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const checkInternetConnection = async () => {
+    try {
+      // Try to fetch a reliable endpoint with a timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      
+      await fetch('https://www.google.com/favicon.ico', {
+        method: 'HEAD',
+        mode: 'no-cors',
+        signal: controller.signal,
+      });
+      
+      clearTimeout(timeoutId);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
 
   useEffect(() => {
-    const dismissToast = () => {
-      if (toastIdRef.current && toast.isActive(toastIdRef.current)) {
-        toast.dismiss(toastIdRef.current);
+    let isMounted = true;
+
+    const checkNetwork = async () => {
+      const isOnline = await checkInternetConnection();
+      if (isMounted) {
+        setIsOffline(!isOnline);
       }
-      toastIdRef.current = null;
     };
 
-    const showOfflineToast = () => {
-      dismissToast();
-      toastIdRef.current = toast.error(
-        <div className="space-y-1">
-          <p className="font-semibold">No internet connection</p>
-          <p className="text-sm text-black">
-            Please check your connection. We’ll remind you again shortly.
-          </p>
-        </div>,
-        {
-          autoClose: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          toastId: `network-offline-${Date.now()}`,
-          onClick: () => {
-            onRetry?.();
-            window.location.reload();
-          },
-        },
-      );
-    };
+    // Initial check
+    checkNetwork();
 
+    // Check every 5 seconds
+    checkIntervalRef.current = setInterval(checkNetwork, 5000);
+
+    // Also listen to browser online/offline events
     const handleOnline = () => {
-      dismissToast();
+      checkNetwork();
     };
 
     const handleOffline = () => {
-      if (!navigator.onLine) {
-        showOfflineToast();
-      }
+      checkNetwork();
     };
-
-    const reminderInterval = window.setInterval(() => {
-      if (!navigator.onLine) {
-        showOfflineToast();
-      }
-    }, REMINDER_INTERVAL_MS);
 
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
-    if (!navigator.onLine) {
-      showOfflineToast();
-    }
-
     return () => {
+      isMounted = false;
+      if (checkIntervalRef.current) {
+        clearInterval(checkIntervalRef.current);
+      }
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-      window.clearInterval(reminderInterval);
-      dismissToast();
     };
-  }, [onRetry]);
+  }, []);
+
+  const handleRetry = () => {
+    onRetry?.();
+    window.location.reload();
+  };
+
+  if (isOffline) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
+        <div className="flex flex-col items-center max-w-md px-6 text-center">
+          <div className="mb-6 p-6 bg-gray-100 rounded-full">
+            <WifiOff className="w-16 h-16 text-gray-500" />
+          </div>
+          
+          <h1 className="mb-3 text-2xl font-bold text-gray-900">
+            No Internet Connection
+          </h1>
+          
+          <p className="mb-8 text-gray-600">
+            Please check your internet connection and try again. You need to be online to use this application.
+          </p>
+          
+          <button
+            onClick={handleRetry}
+            className="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+          >
+            <RefreshCw className="w-5 h-5" />
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return <>{children}</>;
 };
