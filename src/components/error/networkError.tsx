@@ -8,7 +8,7 @@ interface NetworkErrorProps {
 
 const NetworkError: React.FC<NetworkErrorProps> = ({ children, onRetry }) => {
   const [isOffline, setIsOffline] = useState(false);
-  const checkIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const checkIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const checkInternetConnection = async () => {
     try {
