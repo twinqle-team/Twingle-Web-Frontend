@@ -10,17 +10,21 @@ import { queryClient } from "@/lib/queryClient";
 import ErrorBoundary from "@/components/error/errorBoundary";
 import NetworkError from "@/components/error/networkError";
 import { useAppDispatch } from "@/redux/hooks";
-import { logout } from "@/redux/slices/userSlice";
+import { logout, setAuthTokens } from "@/redux/slices/userSlice";
 import { refreshTokenAPI } from "@/utils/user/userAuth";
 
 function App() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    console.log("App mounted - starting token check");
     const checkAndRefreshToken = async () => {
       // Get tokens directly from localStorage to avoid re-renders
       const persistRoot = localStorage.getItem("persist:root");
-      if (!persistRoot) return;
+      if (!persistRoot) {
+        console.log("No persist:root found in localStorage");
+        return;
+      }
 
       let token = null;
       let refreshToken = null;
@@ -35,7 +39,9 @@ function App() {
         return;
       }
 
-      if (!token) return;
+      if (!token) {
+        return;
+      }
 
       try {
         const decoded: any = jwtDecode(token);
@@ -58,25 +64,13 @@ function App() {
               window.location.href = "/login";
               return;
             }
-
             // Refresh token is valid, call refresh endpoint
             const response = await refreshTokenAPI({ refreshToken });
             const newAccessToken = response.data.tokens.accessToken;
             const newRefreshToken = response.data.tokens.refreshToken;
 
             // Update Redux state with new tokens
-            if (persistRoot) {
-              try {
-                const parsed = JSON.parse(persistRoot);
-                const userSlice = parsed.user ? JSON.parse(parsed.user) : {};
-                userSlice.token = newAccessToken;
-                userSlice.refreshToken = newRefreshToken;
-                parsed.user = JSON.stringify(userSlice);
-                localStorage.setItem("persist:root", JSON.stringify(parsed));
-              } catch (e) {
-                console.error("Failed to update tokens in storage:", e);
-              }
-            }
+            dispatch(setAuthTokens({ token: newAccessToken, refreshToken: newRefreshToken }));
           } catch (error) {
             // Refresh failed, logout user
             dispatch(logout());
@@ -84,6 +78,7 @@ function App() {
           }
         }
       } catch (error) {
+        console.error("Token decode failed:", error);
         // Token is invalid, logout user
         dispatch(logout());
         window.location.href = "/login";

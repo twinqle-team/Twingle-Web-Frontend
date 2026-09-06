@@ -54,7 +54,7 @@ const ProfilePage: React.FC = () => {
       setFullName(userProfile.name || "");
       setEmail(userProfile.email || "");
       setPhone(userProfile.phone || "");
-      setAvatarUrl(userProfile.avatar.url || null);
+      setAvatarUrl(userProfile.avatar?.url || null);
     }
   }, [userProfile]);
 

@@ -26,7 +26,7 @@ export default function ResetPasswordPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { status } = useAppSelector((state) => state.user);
-  const identifier = (location.state as { identifier?: string } | null)?.identifier ?? "";
+  const identifier = location?.state ? (location.state as { identifier?: string }).identifier ?? "" : "";
   
   const [formData, setFormData] = useState({
     code: "",

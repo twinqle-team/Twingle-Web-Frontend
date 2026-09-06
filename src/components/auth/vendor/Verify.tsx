@@ -10,7 +10,7 @@ const OTP_LENGTH = 6;
 export default function Verify() {
   const location = useLocation();
 //   const navigate = useNavigate();
-  const email = (location.state as { email?: string } | null)?.email ?? "";
+  const email = location?.state ? (location.state as { email?: string }).email ?? "" : "";
   const [otp, setOtp] = useState<string[]>(Array(OTP_LENGTH).fill(""));
   const [isLoading, setIsLoading] = useState(false);
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);

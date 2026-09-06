@@ -64,7 +64,7 @@ export default function Signupvendor() {
   };
 
   return (
-    <div className="flex min-h-screen p-0 overflow-x-hidden bg-white">
+    <div className="flex h-screen p-0 overflow-x-hidden bg-white">
       <motion.div
         variants={leftVariants}
         initial="hidden"
@@ -78,7 +78,7 @@ export default function Signupvendor() {
         variants={rightVariants}
         initial="hidden"
         animate="visible"
-        className="flex flex-col items-center justify-center w-full min-h-screen px-4 py-8 bg-white sm:px-6 md:w-1/2 md:px-8 lg:px-10"
+        className="flex flex-col items-center w-full h-screen px-4 py-8 bg-white sm:px-6 md:w-1/2 md:px-8 lg:px-10 overflow-y-auto"
       >
         {/* <img
           src="src/assets/Container.png"

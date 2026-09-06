@@ -180,7 +180,7 @@ const Header: React.FC = () => {
             className="items-center justify-center flex-1 hidden gap-4 md:flex lg:gap-6 xl:gap-10"
           >
             {navItems.map((item) => {
-              const isActive = location.pathname === item.path;
+              const isActive = location?.pathname === item.path;
               return (
                 <Link
                   key={item.path}
@@ -370,7 +370,7 @@ const Header: React.FC = () => {
           >
             <nav className="flex flex-col gap-3 px-4">
               {navItems.map((item) => {
-                const isActive = location.pathname === item.path;
+                const isActive = location?.pathname === item.path;
                 return (
                   <Link
                     key={item.path}

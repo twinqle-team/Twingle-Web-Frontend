@@ -223,6 +223,10 @@ const userSlice = createSlice({
     setAuthToken: (state, action: PayloadAction<string | null>) => {
       state.token = action.payload;
     },
+    setAuthTokens: (state, action: PayloadAction<{ token: string; refreshToken: string }>) => {
+      state.token = action.payload.token;
+      state.refreshToken = action.payload.refreshToken;
+    },
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
@@ -278,5 +282,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUser, setAuthToken, logout } = userSlice.actions;
+export const { setUser, setAuthToken, setAuthTokens, logout } = userSlice.actions;
 export default userSlice.reducer;
