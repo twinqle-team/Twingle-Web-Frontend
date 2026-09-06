@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Search, User, Menu, X, Sparkles } from "lucide-react";
+import { Search, Menu, X, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAppSelector } from "@/redux/hooks";
 import LOGO_URL from "@/assets/Container.png"; // Using direct URL for logo for better performance
@@ -328,13 +328,20 @@ const Header: React.FC = () => {
             {isLoggedIn ? (
               <Link
                 to="/profile"
-                className="hidden p-4 ml-4 transition-colors bg-blue-500 rounded-full hover:bg-gray-800 sm:block"
+                className="hidden ml-4 transition-colors sm:block"
                 aria-label="User Profile"
               >
-                <User
-                  size={20}
-                  className="text-gray-300 hover:text-[#33a078]"
-                />
+                {user?.avatarUrl ? (
+                  <img
+                    src={user.avatarUrl}
+                    alt="User Avatar"
+                    className="w-10 h-10 rounded-full object-cover border-2 border-[#33a078]"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#004e27] text-white font-semibold text-lg">
+                    {user?.name?.charAt(0).toUpperCase() || "U"}
+                  </div>
+                )}
               </Link>
             ) : (
               <Link
@@ -394,7 +401,17 @@ const Header: React.FC = () => {
                   onClick={() => setIsMenuOpen(false)}
                   className="flex items-center gap-2 px-3 py-2 font-medium text-black transition-colors rounded-lg hover:text-[#33a078] hover:bg-gray-100"
                 >
-                  <User size={18} />
+                  {user?.avatarUrl ? (
+                    <img
+                      src={user.avatarUrl}
+                      alt="User Avatar"
+                      className="w-8 h-8 rounded-full object-cover border-2 border-[#33a078]"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#004e27] text-white font-semibold text-sm">
+                      {user?.name?.charAt(0).toUpperCase() || "U"}
+                    </div>
+                  )}
                   Profile
                 </Link>
               ) : (
