@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Edit3, Camera, Trash2, Loader2, ChevronDown } from "lucide-react";
 import { useUserProfile } from "../../hooks/useFetch";
-import { useAppDispatch } from "../../redux/hooks";
-import { updateProfile, updateAvatar } from "../../redux/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { updateProfile, updateAvatar, setUser } from "../../redux/slices/userSlice";
 import { toast, ToastContainer } from "react-toastify";
 import { startPhoneVerification, confirmPhoneVerification } from "../../utils/user/userProfile";
 import { countries, getEmojiFlag, TCountryCode } from "countries-list";
@@ -21,13 +21,17 @@ const COUNTRY_CODES = Object.entries(countries)
   .sort((a: { code: string; name: string; flag: string; isoCode: string }, b: { code: string; name: string; flag: string; isoCode: string }) => a.name.localeCompare(b.name));
 
 const ProfilePage: React.FC = () => {
-  const { userProfile, isLoading } = useUserProfile();
+  const { userProfile: swrProfile, isLoading: swrLoading } = useUserProfile();
   const dispatch = useAppDispatch();
+  const reduxUser = useAppSelector((state) => state.user.user);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
-  const [fullName, setFullName] = useState(userProfile?.name || "");
-  const [email, setEmail] = useState(userProfile?.email || "");
-  const [phone, setPhone] = useState(userProfile?.phone || "");
+  // Use Redux data as primary source (instant), fallback to SWR
+  const primaryUser = reduxUser || swrProfile;
+  
+  const [fullName, setFullName] = useState(primaryUser?.name || "");
+  const [email, setEmail] = useState(primaryUser?.email || "");
+  const [phone, setPhone] = useState(primaryUser?.phone || "");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [showPasswords, setShowPasswords] = useState(false);
@@ -43,20 +47,40 @@ const ProfilePage: React.FC = () => {
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [isSendingCode, setIsSendingCode] = useState(false);
   const [isVerifyingCode, setIsVerifyingCode] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(userProfile?.avatar?.url || null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(primaryUser?.avatarUrl || null);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   const [_tempAvatarUrl, setTempAvatarUrl] = useState<string | null>(null);
 
-  // Update form fields when userProfile data changes
+  // Initialize from Redux (instant), sync with SWR in background
   useEffect(() => {
-    if (userProfile) {
-      setFullName(userProfile.name || "");
-      setEmail(userProfile.email || "");
-      setPhone(userProfile.phone || "");
-      setAvatarUrl(userProfile.avatar?.url || null);
+    if (reduxUser) {
+      setFullName(reduxUser.name || "");
+      setEmail(reduxUser.email || "");
+      setPhone(reduxUser.phone || "");
+      setAvatarUrl(reduxUser.avatarUrl || null);
     }
-  }, [userProfile]);
+  }, [reduxUser]);
+
+  // Sync SWR data to Redux in background (keeps Redux fresh)
+  useEffect(() => {
+    if (swrProfile && !swrLoading) {
+      // Only update Redux if SWR has different/newer data
+      if (!reduxUser || 
+          swrProfile.name !== reduxUser.name ||
+          swrProfile.email !== reduxUser.email ||
+          swrProfile.phone !== reduxUser.phone ||
+          swrProfile.avatar?.url !== reduxUser.avatarUrl) {
+        dispatch(setUser({
+          id: swrProfile.id,
+          name: swrProfile.name,
+          email: swrProfile.email,
+          phone: swrProfile.phone,
+          avatarUrl: swrProfile.avatar?.url,
+        }));
+      }
+    }
+  }, [swrProfile, swrLoading, reduxUser, dispatch]);
 
   const handleEditClick = (fieldName: string, currentValue: string) => {
     if (fieldName === "phoneNumber") {
@@ -107,16 +131,20 @@ const ProfilePage: React.FC = () => {
     try {
       await confirmPhoneVerification(inputCode);
       const fullPhoneNumber = `${selectedCountry.code} ${tempPhoneNumber}`;
+      
+      // Optimistic update: update UI and Redux immediately
       setPhone(fullPhoneNumber);
-      
-      // Update phone number in Redux store
-      await dispatch(updateProfile({ phone: fullPhoneNumber })).unwrap();
-      
       setShowPhoneVerificationModal(false);
       setEditingField(null);
       setVerificationStep("phone");
       setInputCode("");
       toast.success("Phone number verified and updated successfully!");
+      
+      // Update Redux optimistically
+      dispatch(setUser({ ...reduxUser, phone: fullPhoneNumber }));
+      
+      // Call API in background
+      dispatch(updateProfile({ phone: fullPhoneNumber }));
     } catch (error: any) {
       toast.error(error.message || "Invalid verification code");
     } finally {
@@ -150,23 +178,26 @@ const ProfilePage: React.FC = () => {
       reader.onloadend = () => {
         const previewUrl = reader.result as string;
         setTempAvatarUrl(previewUrl);
-        setAvatarUrl(previewUrl);
+        setAvatarUrl(previewUrl); // Optimistic: show new avatar immediately
       };
       reader.readAsDataURL(file);
       
-      try {
-        // Upload file to server
-        await dispatch(updateAvatar({ file })).unwrap();
-        toast.success('Avatar uploaded successfully');
-        setTempAvatarUrl(null);
-      } catch (error: any) {
-        // Revert to original avatar on failure
-        setAvatarUrl(userProfile?.avatarUrl || null);
-        setTempAvatarUrl(null);
-        toast.error(error || 'Failed to upload avatar');
-      } finally {
-        setIsUploadingAvatar(false);
-      }
+      // Upload file in background
+      dispatch(updateAvatar({ file }))
+        .unwrap()
+        .then(() => {
+          toast.success('Avatar uploaded successfully');
+          setTempAvatarUrl(null);
+        })
+        .catch((error) => {
+          // Revert to original avatar on failure
+          setAvatarUrl(reduxUser?.avatarUrl || null);
+          setTempAvatarUrl(null);
+          toast.error(error || 'Failed to upload avatar');
+        })
+        .finally(() => {
+          setIsUploadingAvatar(false);
+        });
     }
   };
 
@@ -274,15 +305,15 @@ const ProfilePage: React.FC = () => {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               onBlur={() => handleBlur("fullName", fullName)}
-              disabled={editingField !== "fullName" || isLoading}
+              disabled={editingField !== "fullName" || swrLoading}
               className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-[#004e27] focus:ring-2 focus:ring-[#004e27]/20 transition-all bg-white disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-500"
             />
-            {isLoading && (
+            {swrLoading && (
               <div className="absolute right-10 -translate-y-1/2 top-1/2">
                 <div className="w-4 h-4 border-2 border-gray-300 border-t-[#004e27] rounded-full animate-spin"></div>
               </div>
             )}
-            {!isLoading && (
+            {!swrLoading && (
               <button 
                 className="absolute p-1 -translate-y-1/2 rounded right-3 top-1/2 hover:bg-gray-100"
                 onClick={() => handleEditClick("fullName", fullName)}
@@ -304,15 +335,15 @@ const ProfilePage: React.FC = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onBlur={() => handleBlur("email", email)}
-              disabled={editingField !== "email" || isLoading}
+              disabled={editingField !== "email" || swrLoading}
               className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-[#004e27] focus:ring-2 focus:ring-[#004e27]/20 transition-all bg-white disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-500"
             />
-            {isLoading && (
+            {swrLoading && (
               <div className="absolute right-10 -translate-y-1/2 top-1/2">
                 <div className="w-4 h-4 border-2 border-gray-300 border-t-[#004e27] rounded-full animate-spin"></div>
               </div>
             )}
-            {!isLoading && (
+            {!swrLoading && (
               <button 
                 className="absolute p-1 -translate-y-1/2 rounded right-3 top-1/2 hover:bg-gray-100"
                 onClick={() => handleEditClick("email", email)}
@@ -335,15 +366,15 @@ const ProfilePage: React.FC = () => {
               onChange={(e) => setPhone(e.target.value)}
               onBlur={() => handleBlur("phoneNumber", phone)}
               placeholder="Enter phone number"
-              disabled={editingField !== "phoneNumber" || isLoading}
+              disabled={editingField !== "phoneNumber" || swrLoading}
               className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-[#004e27] focus:ring-2 focus:ring-[#004e27]/20 transition-all bg-white disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-500"
             />
-            {isLoading && (
+            {swrLoading && (
               <div className="absolute right-10 -translate-y-1/2 top-1/2">
                 <div className="w-4 h-4 border-2 border-gray-300 border-t-[#004e27] rounded-full animate-spin"></div>
               </div>
             )}
-            {!isLoading && (
+            {!swrLoading && (
               <button 
                 className="absolute p-1 -translate-y-1/2 rounded right-3 top-1/2 hover:bg-gray-100"
                 onClick={() => handleEditClick("phoneNumber", phone)}
@@ -360,29 +391,49 @@ const ProfilePage: React.FC = () => {
           whileTap={{ scale: 0.98 }}
           onClick={async () => {
             setIsUpdatingProfile(true);
-            try {
-              // Build payload with only non-empty fields
-              const payload: any = {};
-              if (fullName && fullName !== userProfile?.name) {
-                payload.name = fullName;
-              }
-              if (email && email !== userProfile?.email) {
-                payload.email = email;
-              }
-              // Only dispatch if there are changes
-              if (Object.keys(payload).length > 0) {
-                await dispatch(updateProfile(payload)).unwrap();
-                toast.success('Profile updated successfully');
-                setEditingField(null); // Disable all fields after successful update
-              } else {
-                toast.info('No changes to update');
-              }
-            } catch (error: any) {
-              toast.error(error || 'Failed to update profile');
-              // Revert to original values on failure
-              setFullName(userProfile?.name || "");
-              setEmail(userProfile?.email || "");
-            } finally {
+            
+            // Build payload with only non-empty fields
+            const payload: any = {};
+            const originalName = primaryUser?.name || "";
+            const originalEmail = primaryUser?.email || "";
+            
+            if (fullName && fullName !== originalName) {
+              payload.name = fullName;
+            }
+            if (email && email !== originalEmail) {
+              payload.email = email;
+            }
+            
+            if (Object.keys(payload).length > 0) {
+              // Optimistic: update UI and Redux immediately
+              const updatedUser = {
+                ...reduxUser,
+                name: payload.name || reduxUser?.name,
+                email: payload.email || reduxUser?.email,
+              };
+              
+              dispatch(setUser(updatedUser));
+              toast.success('Profile updated successfully');
+              setEditingField(null);
+              
+              // Call API in background
+              dispatch(updateProfile(payload))
+                .unwrap()
+                .catch((error) => {
+                  // Revert on failure
+                  setFullName(originalName);
+                  setEmail(originalEmail);
+                  if (reduxUser) {
+                    dispatch(setUser(reduxUser));
+                  }
+                  setEditingField("fullName");
+                  toast.error(error || 'Failed to update profile');
+                })
+                .finally(() => {
+                  setIsUpdatingProfile(false);
+                });
+            } else {
+              toast.info('No changes to update');
               setIsUpdatingProfile(false);
             }
           }}
@@ -402,7 +453,7 @@ const ProfilePage: React.FC = () => {
 
       {/* Change Password */}
       <motion.div
-// ... (rest of the code remains the same)
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
         className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8"

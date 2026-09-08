@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { ArrowLeft, Bell, X, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { logoutUser, logout } from "../../../redux/slices/userSlice";
 
@@ -77,36 +77,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     navigate("/");
   };
 
-  const handleLogout = async () => {
-    try {
-      if (refreshToken) {
-        const resultAction = await dispatch(
-          logoutUser({ refreshToken }),
-        );
+  const handleLogout = () => {
+    // Optimistic logout: clear state and redirect immediately
+    dispatch(logout());
+    navigate("/login");
 
-        if (logoutUser.fulfilled.match(resultAction)) {
-          toast.success(
-            resultAction.payload.message || "Logout successful",
-          );
-          dispatch(logout());
-          navigate("/login");
-          return;
-        }
-
-        const message =
-          typeof resultAction.payload === "string"
-            ? resultAction.payload
-            : "Logout failed";
-        toast.error(message);
-      } else {
-        // No refresh token, just clear local state
-        dispatch(logout());
-        navigate("/login");
-      }
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Logout failed",
-      );
+    // Call API in background (fire and forget)
+    if (refreshToken) {
+      dispatch(logoutUser({ refreshToken }));
     }
   };
 

@@ -5,6 +5,7 @@ import {
   swrConfigStatic,
 } from "@/lib/swrConfig";
 import { getUserProfile, UserProfile } from "@/utils/user/userProfile";
+import store from "@/redux/store";
 
 interface UseFetchOptions extends SWRConfiguration {
   mode?: "default" | "realtime" | "static";
@@ -53,10 +54,14 @@ export function useFetch<T>(url: string | null, fetcherFn?: () => Promise<T>, op
  * Token is automatically attached from Redux store
  */
 export function useUserProfile() {
+  // Use token as cache key to ensure different users get fresh data
+  const token = store.getState().user.token;
+  const cacheKey = token ? `user-profile-${token.slice(-10)}` : null;
+
   const { data, error, isLoading, mutate } = useFetch<UserProfile>(
-    "user-profile",
+    cacheKey,
     getUserProfile,
-    { mode: "static" }
+    { mode: "default" } // Changed from "static" to enable revalidation
   );
 
   return {

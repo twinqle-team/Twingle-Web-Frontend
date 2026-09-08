@@ -83,7 +83,7 @@ export default function LoginPage() {
         toast.success(
           resultAction.payload.message || "Login successful",
         );
-        navigate("/profile");
+        navigate("/");
         return;
       }
 

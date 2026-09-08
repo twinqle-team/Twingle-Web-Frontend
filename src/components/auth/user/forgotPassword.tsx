@@ -42,25 +42,12 @@ export default function ForgotPasswordPage() {
       setIsLoading(true);
       window.localStorage.removeItem(LOGIN_EMAIL_STORAGE_KEY);
 
-      const resultAction = await dispatch(
-        forgotPassword({
-          identifier: email.trim(),
-        }),
-      );
+      // Optimistic: redirect immediately
+      navigate("/reset-password", { state: { identifier: email.trim() } });
+      toast.success("Reset code sent successfully");
 
-      if (forgotPassword.fulfilled.match(resultAction)) {
-        toast.success(
-          resultAction.payload.message || "Reset code sent successfully",
-        );
-        navigate("/reset-password", { state: { identifier: email.trim() } });
-        return;
-      }
-
-      const message =
-        typeof resultAction.payload === "string"
-          ? resultAction.payload
-          : "Failed to send reset code";
-      toast.error(message);
+      // Call API in background
+      dispatch(forgotPassword({ identifier: email.trim() }));
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Record<string, string> = {};
@@ -70,7 +57,6 @@ export default function ForgotPasswordPage() {
         });
         setErrors(newErrors);
       }
-    } finally {
       setIsLoading(false);
     }
   };
