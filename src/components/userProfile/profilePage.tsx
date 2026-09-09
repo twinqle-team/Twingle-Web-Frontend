@@ -21,13 +21,16 @@ const COUNTRY_CODES = Object.entries(countries)
   .sort((a: { code: string; name: string; flag: string; isoCode: string }, b: { code: string; name: string; flag: string; isoCode: string }) => a.name.localeCompare(b.name));
 
 const ProfilePage: React.FC = () => {
-  const { userProfile: swrProfile, isLoading: swrLoading } = useUserProfile();
+  const { userProfile: swrProfile, isLoading: swrLoading, mutate } = useUserProfile();
   const dispatch = useAppDispatch();
   const reduxUser = useAppSelector((state) => state.user.user);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Use Redux data as primary source (instant), fallback to SWR
   const primaryUser = reduxUser || swrProfile;
+  
+  // Only show loading when there's no data at all
+  const showLoading = swrLoading && !primaryUser;
   
   const [fullName, setFullName] = useState(primaryUser?.name || "");
   const [email, setEmail] = useState(primaryUser?.email || "");
@@ -51,20 +54,32 @@ const ProfilePage: React.FC = () => {
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   const [_tempAvatarUrl, setTempAvatarUrl] = useState<string | null>(null);
+  const [isOptimisticUpdate, setIsOptimisticUpdate] = useState(false);
+  const lastUpdateTimeRef = useRef<number>(0);
 
   // Initialize from Redux (instant), sync with SWR in background
   useEffect(() => {
     if (reduxUser) {
-      setFullName(reduxUser.name || "");
-      setEmail(reduxUser.email || "");
-      setPhone(reduxUser.phone || "");
-      setAvatarUrl(reduxUser.avatarUrl || null);
+      // Only sync if not in the middle of an optimistic update and not in grace period
+      const timeSinceUpdate = Date.now() - lastUpdateTimeRef.current;
+      const shouldSkipSync = isOptimisticUpdate || timeSinceUpdate < 2000; // Skip for 2 seconds after update
+      
+      if (!shouldSkipSync) {
+        setFullName(reduxUser.name || "");
+        setEmail(reduxUser.email || "");
+        setPhone(reduxUser.phone || "");
+        setAvatarUrl(reduxUser.avatarUrl || null);
+      }
     }
-  }, [reduxUser]);
+  }, [reduxUser, isOptimisticUpdate]);
 
   // Sync SWR data to Redux in background (keeps Redux fresh)
   useEffect(() => {
-    if (swrProfile && !swrLoading) {
+    // Skip sync during optimistic updates and if we recently updated (to prevent stale data overwriting)
+    const timeSinceUpdate = Date.now() - lastUpdateTimeRef.current;
+    const shouldSkipSync = isOptimisticUpdate || timeSinceUpdate < 2000; // Skip for 2 seconds after update
+    
+    if (swrProfile && !swrLoading && !shouldSkipSync) {
       // Only update Redux if SWR has different/newer data
       if (!reduxUser || 
           swrProfile.name !== reduxUser.name ||
@@ -80,7 +95,7 @@ const ProfilePage: React.FC = () => {
         }));
       }
     }
-  }, [swrProfile, swrLoading, reduxUser, dispatch]);
+  }, [swrProfile, swrLoading, reduxUser, dispatch, isOptimisticUpdate]);
 
   const handleEditClick = (fieldName: string, currentValue: string) => {
     if (fieldName === "phoneNumber") {
@@ -93,14 +108,14 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  const handleBlur = (fieldName: string, currentValue: string) => {
-    const originalValue = originalValues[fieldName];
-    // Only disable if the value hasn't changed
-    if (currentValue === originalValue) {
-      setEditingField(null);
-    }
-    // If value changed, keep the field enabled so user can save
-  };
+  // const handleBlur = (fieldName: string, currentValue: string) => {
+  //   const originalValue = originalValues[fieldName];
+  //   // Only disable if the value hasn't changed
+  //   if (currentValue === originalValue) {
+  //     setEditingField(null);
+  //   }
+  //   // If value changed, keep the field enabled so user can save via global button
+  // };
 
   const handlePhoneVerification = async () => {
     if (!tempPhoneNumber || tempPhoneNumber.length < 9) {
@@ -173,6 +188,8 @@ const ProfilePage: React.FC = () => {
       }
       
       setIsUploadingAvatar(true);
+      setIsOptimisticUpdate(true);
+      lastUpdateTimeRef.current = Date.now();
       // Create preview URL
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -185,9 +202,15 @@ const ProfilePage: React.FC = () => {
       // Upload file in background
       dispatch(updateAvatar({ file }))
         .unwrap()
-        .then(() => {
+        .then((response) => {
           toast.success('Avatar uploaded successfully');
           setTempAvatarUrl(null);
+          // Redux is already updated by the slice, sync local state
+          if (response?.user?.avatarUrl) {
+            setAvatarUrl(response.user.avatarUrl);
+            // Mutate SWR cache with fresh data to prevent stale reversion
+            mutate(response.user, false);
+          }
         })
         .catch((error) => {
           // Revert to original avatar on failure
@@ -197,6 +220,7 @@ const ProfilePage: React.FC = () => {
         })
         .finally(() => {
           setIsUploadingAvatar(false);
+          setIsOptimisticUpdate(false);
         });
     }
   };
@@ -304,16 +328,15 @@ const ProfilePage: React.FC = () => {
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              onBlur={() => handleBlur("fullName", fullName)}
-              disabled={editingField !== "fullName" || swrLoading}
+              disabled={editingField !== "fullName" || showLoading}
               className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-[#004e27] focus:ring-2 focus:ring-[#004e27]/20 transition-all bg-white disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-500"
             />
-            {swrLoading && (
+            {showLoading && (
               <div className="absolute right-10 -translate-y-1/2 top-1/2">
                 <div className="w-4 h-4 border-2 border-gray-300 border-t-[#004e27] rounded-full animate-spin"></div>
               </div>
             )}
-            {!swrLoading && (
+            {!showLoading && editingField !== "fullName" && (
               <button 
                 className="absolute p-1 -translate-y-1/2 rounded right-3 top-1/2 hover:bg-gray-100"
                 onClick={() => handleEditClick("fullName", fullName)}
@@ -334,16 +357,15 @@ const ProfilePage: React.FC = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              onBlur={() => handleBlur("email", email)}
-              disabled={editingField !== "email" || swrLoading}
+              disabled={editingField !== "email" || showLoading}
               className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-[#004e27] focus:ring-2 focus:ring-[#004e27]/20 transition-all bg-white disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-500"
             />
-            {swrLoading && (
+            {showLoading && (
               <div className="absolute right-10 -translate-y-1/2 top-1/2">
                 <div className="w-4 h-4 border-2 border-gray-300 border-t-[#004e27] rounded-full animate-spin"></div>
               </div>
             )}
-            {!swrLoading && (
+            {!showLoading && editingField !== "email" && (
               <button 
                 className="absolute p-1 -translate-y-1/2 rounded right-3 top-1/2 hover:bg-gray-100"
                 onClick={() => handleEditClick("email", email)}
@@ -364,17 +386,16 @@ const ProfilePage: React.FC = () => {
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              onBlur={() => handleBlur("phoneNumber", phone)}
               placeholder="Enter phone number"
-              disabled={editingField !== "phoneNumber" || swrLoading}
+              disabled={showLoading}
               className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-[#004e27] focus:ring-2 focus:ring-[#004e27]/20 transition-all bg-white disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-500"
             />
-            {swrLoading && (
+            {showLoading && (
               <div className="absolute right-10 -translate-y-1/2 top-1/2">
                 <div className="w-4 h-4 border-2 border-gray-300 border-t-[#004e27] rounded-full animate-spin"></div>
               </div>
             )}
-            {!swrLoading && (
+            {!showLoading && (
               <button 
                 className="absolute p-1 -translate-y-1/2 rounded right-3 top-1/2 hover:bg-gray-100"
                 onClick={() => handleEditClick("phoneNumber", phone)}
@@ -405,6 +426,10 @@ const ProfilePage: React.FC = () => {
             }
             
             if (Object.keys(payload).length > 0) {
+              // Set optimistic flag to prevent SWR from reverting
+              setIsOptimisticUpdate(true);
+              lastUpdateTimeRef.current = Date.now();
+              
               // Optimistic: update UI and Redux immediately
               const updatedUser = {
                 ...reduxUser,
@@ -413,12 +438,24 @@ const ProfilePage: React.FC = () => {
               };
               
               dispatch(setUser(updatedUser));
+              // Also update local state to reflect changes immediately
+              if (payload.name) setFullName(payload.name);
+              if (payload.email) setEmail(payload.email);
               toast.success('Profile updated successfully');
               setEditingField(null);
               
-              // Call API in background
+              // Call API in background - Redux slice will update state automatically on success
               dispatch(updateProfile(payload))
                 .unwrap()
+                .then((response) => {
+                  // Sync local state with API response to ensure consistency
+                  if (response?.user?.name) setFullName(response.user.name);
+                  if (response?.user?.email) setEmail(response.user.email);
+                  // Mutate SWR cache with fresh data to prevent stale reversion
+                  if (response?.user) {
+                    mutate(response.user, false);
+                  }
+                })
                 .catch((error) => {
                   // Revert on failure
                   setFullName(originalName);
@@ -431,6 +468,7 @@ const ProfilePage: React.FC = () => {
                 })
                 .finally(() => {
                   setIsUpdatingProfile(false);
+                  setIsOptimisticUpdate(false);
                 });
             } else {
               toast.info('No changes to update');
