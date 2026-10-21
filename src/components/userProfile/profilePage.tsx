@@ -6,19 +6,38 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { updateProfile, updateAvatar, setUser } from "../../redux/slices/userSlice";
 import { toast, ToastContainer } from "react-toastify";
 import { startPhoneVerification, confirmPhoneVerification } from "../../utils/user/userProfile";
-import { countries, getEmojiFlag, TCountryCode } from "countries-list";
 import "react-toastify/dist/ReactToastify.css";
 
-// Format countries with phone codes and flags from countries-list
-const COUNTRY_CODES = Object.entries(countries)
-  .map(([isoCode, countryData]: [string, any]) => ({
-    code: countryData.phone && countryData.phone.length > 0 ? `+${countryData.phone[0]}` : "",
-    name: countryData.name,
-    flag: getEmojiFlag(isoCode as TCountryCode),
-    isoCode: isoCode,
-  }))
-  .filter((country: { code: string; name: string; flag: string; isoCode: string }) => country.code !== "")
-  .sort((a: { code: string; name: string; flag: string; isoCode: string }, b: { code: string; name: string; flag: string; isoCode: string }) => a.name.localeCompare(b.name));
+// Local country data avoids a runtime/type dependency on countries-list.
+const COUNTRY_CODES = [
+  { isoCode: "AU", code: "+61", name: "Australia" },
+  { isoCode: "BR", code: "+55", name: "Brazil" },
+  { isoCode: "CA", code: "+1", name: "Canada" },
+  { isoCode: "CN", code: "+86", name: "China" },
+  { isoCode: "FR", code: "+33", name: "France" },
+  { isoCode: "DE", code: "+49", name: "Germany" },
+  { isoCode: "GH", code: "+233", name: "Ghana" },
+  { isoCode: "IN", code: "+91", name: "India" },
+  { isoCode: "IE", code: "+353", name: "Ireland" },
+  { isoCode: "IT", code: "+39", name: "Italy" },
+  { isoCode: "JP", code: "+81", name: "Japan" },
+  { isoCode: "KE", code: "+254", name: "Kenya" },
+  { isoCode: "MX", code: "+52", name: "Mexico" },
+  { isoCode: "NG", code: "+234", name: "Nigeria" },
+  { isoCode: "NZ", code: "+64", name: "New Zealand" },
+  { isoCode: "PK", code: "+92", name: "Pakistan" },
+  { isoCode: "PH", code: "+63", name: "Philippines" },
+  { isoCode: "SA", code: "+966", name: "Saudi Arabia" },
+  { isoCode: "SG", code: "+65", name: "Singapore" },
+  { isoCode: "ZA", code: "+27", name: "South Africa" },
+  { isoCode: "ES", code: "+34", name: "Spain" },
+  { isoCode: "AE", code: "+971", name: "United Arab Emirates" },
+  { isoCode: "GB", code: "+44", name: "United Kingdom" },
+  { isoCode: "US", code: "+1", name: "United States" },
+].map((country) => ({
+  ...country,
+  flag: String.fromCodePoint(...country.isoCode.split("").map((char) => char.charCodeAt(0) + 127397)),
+})).sort((a, b) => a.name.localeCompare(b.name));
 
 const ProfilePage: React.FC = () => {
   const { userProfile: swrProfile, isLoading: swrLoading, mutate } = useUserProfile();

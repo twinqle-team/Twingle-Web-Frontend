@@ -4,7 +4,6 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { jwtDecode } from "jwt-decode";
 import { router } from "@/router/mainRouter";
 import { queryClient } from "@/lib/queryClient";
 import ErrorBoundary from "@/components/error/errorBoundary";
@@ -12,6 +11,16 @@ import NetworkError from "@/components/error/networkError";
 import { useAppDispatch } from "@/redux/hooks";
 import { logout, setAuthTokens } from "@/redux/slices/userSlice";
 import { refreshTokenAPI } from "@/utils/user/userAuth";
+
+function decodeJwt(token: string): { exp?: number } {
+  const payload = token.split(".")[1];
+  if (!payload) throw new Error("Invalid JWT");
+
+  const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+  const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, "=");
+  const bytes = Uint8Array.from(atob(padded), (character) => character.charCodeAt(0));
+  return JSON.parse(new TextDecoder().decode(bytes));
+}
 
 function App() {
   const dispatch = useAppDispatch();
@@ -44,11 +53,11 @@ function App() {
       }
 
       try {
-        const decoded: any = jwtDecode(token);
+        const decoded = decodeJwt(token);
         const currentTime = Date.now() / 1000;
 
         // Check if access token is expired
-        if (decoded.exp < currentTime) {
+        if (typeof decoded.exp !== "number" || decoded.exp < currentTime) {
           // Check if refresh token is also expired
           if (!refreshToken) {
             dispatch(logout());
@@ -57,9 +66,9 @@ function App() {
           }
 
           try {
-            const refreshDecoded: any = jwtDecode(refreshToken);
+            const refreshDecoded = decodeJwt(refreshToken);
             // Check if refresh token is expired
-            if (refreshDecoded.exp < currentTime) {
+            if (typeof refreshDecoded.exp !== "number" || refreshDecoded.exp < currentTime) {
               dispatch(logout());
               window.location.href = "/login";
               return;
