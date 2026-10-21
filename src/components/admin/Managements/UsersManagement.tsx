@@ -26,7 +26,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSelector } from "react-redux";
-import { RootState } from "@/redux/admin/store";
 import { UsersManagementDetailed } from "./UsersManagementDetailed";
 import { mockAdmins, mockUsers, mockVendors } from "./mockUserData";
 
@@ -58,7 +57,7 @@ const UsersManagement = () => {
     type: "user" | "vendor" | "admin";
     id: string | null;
   } | null>(null);
-  const admin = useSelector((state: RootState) => state.admin);
+  const admin = useSelector((state: any) => state.admin);
   const isAdminSuperAdmin = admin?.role === "Super Admin";
   const users = mockUsers;
   const vendor = mockVendors;
