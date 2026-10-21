@@ -13,6 +13,7 @@ export interface Property {
   garage: number;
   area: number; // in sq ft
   image: string;
+  video?: string;
   facilities: {
     pool: boolean;
     parking: boolean;

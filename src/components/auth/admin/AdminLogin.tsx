@@ -129,7 +129,7 @@ export default function AdminLogin() {
             className="flex w-[50%] items-center justify-between gap-4 rounded-[5px]  px-4 py-3"
           >
             <Link
-              to="/vendor-forgot"
+              to="/admin-forgot"
               className="text-sm font-medium text-[#004e27] transition-colors hover:text-[#004e27]/80"
             >
               Forgot password?

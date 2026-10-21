@@ -13,10 +13,10 @@ const SectionCard: FC<SectionCardProps> = ({ title, description, children }) => 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="bg-white backdrop-blur-md bg-opacity-80 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow p-6 md:p-8"
+      className="rounded-xl border border-[#dce8e0] bg-white/95 p-4 shadow-sm backdrop-blur-md transition-shadow hover:shadow-md sm:p-6 md:p-8"
     >
       <div className="mb-6">
-        <h3 className="text-xl md:text-2xl font-bold text-gray-900">{title}</h3>
+        <h3 className="text-lg font-bold text-[#012E19] sm:text-xl md:text-2xl">{title}</h3>
         {description && (
           <p className="text-gray-600 text-sm mt-1">{description}</p>
         )}

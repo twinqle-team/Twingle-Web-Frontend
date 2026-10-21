@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Camera, Edit, X, Search } from "lucide-react";
-import { MdVerified } from "react-icons/md";
+import { Camera, Edit, X } from "lucide-react";
 import type React from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,7 +8,6 @@ import type { RootState } from "@/redux/store"
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useUploadAvatar, useUploadBusinessLogo } from "@/hooks/vendor/editvendorApi";
-import { useCreateRecipientCode } from "@/hooks/vendor/useRecipientCode";
 import { get_single_vendor } from "@/utils/vendor/vendorApi";
 
 interface VendorProfile {
@@ -26,158 +24,6 @@ interface VendorProfile {
 // Define popup types
 type PopupType = "password" | "location" | "account" | "email" | "store" | null;
 
-// Enhanced bank data with logos - this will be replaced by Paystack API
-const bankLogos: Record<string, string> = {
-  // ====== COMMERCIAL BANKS ======
-  "Access Bank": "/placeholder.svg?height=30&width=30&text=Access",
-  "Citibank Nigeria": "/placeholder.svg?height=30&width=30&text=Citi",
-  "Ecobank Nigeria": "/placeholder.svg?height=30&width=30&text=Ecobank",
-  "Fidelity Bank": "/placeholder.svg?height=30&width=30&text=Fidelity",
-  "First Bank of Nigeria": "/placeholder.svg?height=30&width=30&text=FirstBank",
-  "First City Monument Bank": "/placeholder.svg?height=30&width=30&text=FCMB",
-  "Globus Bank": "/placeholder.svg?height=30&width=30&text=Globus",
-  "Guaranty Trust Bank": "/placeholder.svg?height=30&width=30&text=GTBank",
-  "Heritage Bank": "/placeholder.svg?height=30&width=30&text=Heritage",
-  "Jaiz Bank": "/placeholder.svg?height=30&width=30&text=Jaiz",
-  "Keystone Bank": "/placeholder.svg?height=30&width=30&text=Keystone",
-  "Parallex Bank": "/placeholder.svg?height=30&width=30&text=Parallex",
-  "Polaris Bank": "/placeholder.svg?height=30&width=30&text=Polaris",
-  "PremiumTrust Bank": "/placeholder.svg?height=30&width=30&text=PremiumTrust",
-  "Providus Bank": "/placeholder.svg?height=30&width=30&text=Providus",
-  "Stanbic IBTC Bank": "/placeholder.svg?height=30&width=30&text=Stanbic",
-  "Sterling Bank": "/placeholder.svg?height=30&width=30&text=Sterling",
-  "SunTrust Bank": "/placeholder.svg?height=30&width=30&text=SunTrust",
-  TAJBank: "/placeholder.svg?height=30&width=30&text=TAJBank",
-  "Titan Trust Bank": "/placeholder.svg?height=30&width=30&text=Titan",
-  "Union Bank of Nigeria": "/placeholder.svg?height=30&width=30&text=Union",
-  "United Bank for Africa": "/placeholder.svg?height=30&width=30&text=UBA",
-  "Wema Bank": "/placeholder.svg?height=30&width=30&text=Wema",
-  "Zenith Bank": "/placeholder.svg?height=30&width=30&text=Zenith",
-
-  // ====== ONLINE/DIGITAL BANKS & MFBs ======
-  "ALAT by Wema": "/placeholder.svg?height=30&width=30&text=ALAT",
-  "Carbon (One Finance)": "/placeholder.svg?height=30&width=30&text=Carbon",
-  "Chipper Cash": "/placeholder.svg?height=30&width=30&text=Chipper",
-  Eyowo: "/placeholder.svg?height=30&width=30&text=Eyowo",
-  "FairMoney Microfinance Bank":
-    "/placeholder.svg?height=30&width=30&text=FairMoney",
-  "FinaTrust Microfinance Bank":
-    "/placeholder.svg?height=30&width=30&text=FinaTrust",
-  "Hackman Microfinance Bank":
-    "/placeholder.svg?height=30&width=30&text=Hackman",
-  "Kuda Bank": "/placeholder.svg?height=30&width=30&text=Kuda",
-  "Lotus Bank": "/placeholder.svg?height=30&width=30&text=Lotus",
-  "Moniepoint Microfinance Bank":
-    "/placeholder.svg?height=30&width=30&text=Moniepoint",
-  "Mint Finex MFB": "/placeholder.svg?height=30&width=30&text=Mint",
-  NowNow: "/placeholder.svg?height=30&width=30&text=NowNow",
-  "OPay Digital Bank": "/image/bank/Opay.png",
-  "PalmPay Digital Bank": "/placeholder.svg?height=30&width=30&text=PalmPay",
-  "Rubies Bank": "/placeholder.svg?height=30&width=30&text=Rubies",
-  "Sparkle Microfinance Bank":
-    "/placeholder.svg?height=30&width=30&text=Sparkle",
-  "VFD Microfinance Bank": "/placeholder.svg?height=30&width=30&text=VFD",
-
-  // ====== PAYMENT SERVICE BANKS (PSBs) ======
-  "9PSB": "/placeholder.svg?height=30&width=30&text=9PSB",
-  "Momo PSB": "/placeholder.svg?height=30&width=30&text=MomoPSB",
-  "Smartcash PSB": "/placeholder.svg?height=30&width=30&text=Smartcash",
-
-  // ====== BRICKS & MORTAR MICROFINANCE BANKS ======
-  "AB Microfinance Bank": "/placeholder.svg?height=30&width=30&text=AB",
-  "Accion Microfinance Bank": "/placeholder.svg?height=30&width=30&text=Accion",
-  "Baobab Microfinance Bank": "/placeholder.svg?height=30&width=30&text=Baobab",
-  "CEMCS Microfinance Bank": "/placeholder.svg?height=30&width=30&text=CEMCS",
-  "Finca Microfinance Bank": "/placeholder.svg?height=30&width=30&text=Finca",
-  "Fortis Microfinance Bank": "/placeholder.svg?height=30&width=30&text=Fortis",
-  "Hasal Microfinance Bank": "/placeholder.svg?height=30&width=30&text=Hasal",
-  "Infinity Microfinance Bank":
-    "/placeholder.svg?height=30&width=30&text=Infinity",
-  "LAPO Microfinance Bank": "/placeholder.svg?height=30&width=30&text=LAPO",
-  "Mutual Trust Microfinance Bank":
-    "/placeholder.svg?height=30&width=30&text=MutualTrust",
-  "NPF Microfinance Bank": "/placeholder.svg?height=30&width=30&text=NPF",
-  "Peace Microfinance Bank": "/placeholder.svg?height=30&width=30&text=Peace",
-  "QuickFund Microfinance Bank":
-    "/placeholder.svg?height=30&width=30&text=QuickFund",
-  "RenMoney Microfinance Bank":
-    "/placeholder.svg?height=30&width=30&text=RenMoney",
-  "Seedvest Microfinance Bank": "/image/bank/",
-};
-
-// Enhanced bank codes with all categories
-export const bankCodes = [
-  // ====== COMMERCIAL BANKS ======
-  { name: "Access Bank", code: "044", type: "Commercial" },
-  { name: "Citibank Nigeria", code: "023", type: "Commercial" },
-  { name: "Ecobank Nigeria", code: "050", type: "Commercial" },
-  { name: "Fidelity Bank", code: "070", type: "Commercial" },
-  { name: "First Bank of Nigeria", code: "011", type: "Commercial" },
-  { name: "First City Monument Bank", code: "214", type: "Commercial" },
-  { name: "Globus Bank", code: "00103", type: "Commercial" },
-  { name: "Guaranty Trust Bank", code: "058", type: "Commercial" },
-  { name: "Heritage Bank", code: "030", type: "Commercial" },
-  { name: "Jaiz Bank", code: "301", type: "Commercial" },
-  { name: "Keystone Bank", code: "082", type: "Commercial" },
-  { name: "Parallex Bank", code: "104", type: "Commercial" },
-  { name: "Polaris Bank", code: "076", type: "Commercial" },
-  { name: "PremiumTrust Bank", code: "105", type: "Commercial" },
-  { name: "Providus Bank", code: "101", type: "Commercial" },
-  { name: "Stanbic IBTC Bank", code: "221", type: "Commercial" },
-  { name: "Sterling Bank", code: "232", type: "Commercial" },
-  { name: "SunTrust Bank", code: "100", type: "Commercial" },
-  { name: "TAJBank", code: "302", type: "Commercial" },
-  { name: "Titan Trust Bank", code: "102", type: "Commercial" },
-  { name: "Union Bank of Nigeria", code: "032", type: "Commercial" },
-  { name: "United Bank for Africa", code: "033", type: "Commercial" },
-  { name: "Wema Bank", code: "035", type: "Commercial" },
-  { name: "Zenith Bank", code: "057", type: "Commercial" },
-
-  // ====== DIGITAL BANKS ======
-  { name: "ALAT by Wema", code: "035", type: "Digital" },
-  { name: "Carbon (One Finance)", code: "565", type: "Digital" },
-  { name: "Chipper Cash", code: "100022", type: "Digital" },
-  { name: "Eyowo", code: "50126", type: "Digital" },
-  { name: "Kuda Bank", code: "50211", type: "Digital" },
-  { name: "Lotus Bank", code: "303", type: "Digital" },
-  { name: "NowNow", code: "050", type: "Digital" },
-  { name: "OPay Digital Bank", code: "999992", type: "Digital" },
-  { name: "PalmPay Digital Bank", code: "999991", type: "Digital" },
-  { name: "Rubies Bank", code: "125", type: "Digital" },
-
-  // ====== MICROFINANCE BANKS ======
-  { name: "FairMoney Microfinance Bank", code: "090", type: "Microfinance" },
-  { name: "FinaTrust Microfinance Bank", code: "107", type: "Microfinance" },
-  { name: "Hackman Microfinance Bank", code: "51251", type: "Microfinance" },
-  { name: "Moniepoint Microfinance Bank", code: "50515", type: "Microfinance" },
-  { name: "Mint Finex MFB", code: "50304", type: "Microfinance" },
-  { name: "Sparkle Microfinance Bank", code: "51310", type: "Microfinance" },
-  { name: "VFD Microfinance Bank", code: "566", type: "Microfinance" },
-  { name: "AB Microfinance Bank", code: "090197", type: "Microfinance" },
-  { name: "Accion Microfinance Bank", code: "090134", type: "Microfinance" },
-  { name: "Baobab Microfinance Bank", code: "090118", type: "Microfinance" },
-  { name: "CEMCS Microfinance Bank", code: "50823", type: "Microfinance" },
-  { name: "Finca Microfinance Bank", code: "090107", type: "Microfinance" },
-  { name: "Fortis Microfinance Bank", code: "50162", type: "Microfinance" },
-  { name: "Hasal Microfinance Bank", code: "090121", type: "Microfinance" },
-  { name: "Infinity Microfinance Bank", code: "090157", type: "Microfinance" },
-  { name: "LAPO Microfinance Bank", code: "090259", type: "Microfinance" },
-  {
-    name: "Mutual Trust Microfinance Bank",
-    code: "090161",
-    type: "Microfinance",
-  },
-  { name: "NPF Microfinance Bank", code: "090194", type: "Microfinance" },
-  { name: "Peace Microfinance Bank", code: "090292", type: "Microfinance" },
-  { name: "QuickFund Microfinance Bank", code: "090261", type: "Microfinance" },
-  { name: "RenMoney Microfinance Bank", code: "090198", type: "Microfinance" },
-  { name: "Seedvest Microfinance Bank", code: "090112", type: "Microfinance" },
-
-  // ====== PAYMENT SERVICE BANKS (PSBs) ======
-  { name: "9PSB", code: "120001", type: "PSB" },
-  { name: "Momo PSB", code: "120003", type: "PSB" },
-  { name: "Smartcash PSB", code: "120002", type: "PSB" },
-];
 
 // Local storage keys
 const PROFILE_IMAGE_KEY = "vendor_profile_image";
@@ -193,31 +39,6 @@ const formatFileSize = (bytes: number) => {
   return (bytes / (1024 * 1024)).toFixed(2) + "MB";
 };
 
-// Helper function to get bank logo from bank name
-const getBankLogo = (bankName: string): string => {
-  if (!bankName) return "/images/banks/default-bank.png";
-
-  // First try exact match
-  if (bankLogos[bankName]) {
-    return bankLogos[bankName];
-  }
-
-  // Try partial matches for common variations
-  const normalizedBankName = bankName.toLowerCase().trim();
-
-  for (const [key, logo] of Object.entries(bankLogos)) {
-    const normalizedKey = key.toLowerCase();
-    if (
-      normalizedKey.includes(normalizedBankName) ||
-      normalizedBankName.includes(normalizedKey)
-    ) {
-      return logo;
-    }
-  }
-
-  // Return default if no match found
-  return "/images/banks/default-bank.png";
-};
 
 export default function AdminSetting() {
   const [showPassword, setShowPassword] = useState(false);
@@ -231,7 +52,6 @@ export default function AdminSetting() {
   const [activePopup, setActivePopup] = useState<PopupType>(null);
   const [actualPassword, setActualPassword] = useState("Password123");
   const [imagesLoaded, setImagesLoaded] = useState(false);
-  const [selectedBankCode, setSelectedBankCode] = useState("");
 
   // Form states for popups
   const [newPassword, setNewPassword] = useState("");
@@ -242,10 +62,6 @@ export default function AdminSetting() {
   const [newEmail, setNewEmail] = useState("");
   const [storeName, setStoreName] = useState("");
   const [storeNumber, setStoreNumber] = useState("");
-  const [accountNumber, setAccountNumber] = useState("");
-  const [isSearchingAccount, setIsSearchingAccount] = useState(false);
-  const [foundAccountName, setFoundAccountName] = useState("");
-  const [foundBankName, setFoundBankName] = useState("");
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const editButtonRef = useRef<HTMLButtonElement>(null);
@@ -265,7 +81,6 @@ const { data: vendors } = useQuery({
   // Mutations for image uploads and recipient code
   const uploadAvatarMutation = useUploadAvatar();
   const uploadBusinessLogoMutation = useUploadBusinessLogo();
-  const createRecipientCodeMutation = useCreateRecipientCode();
 
   const [profile, setProfile] = useState<VendorProfile>({
     companyName: "PreciousLtd Limited",
@@ -453,15 +268,6 @@ const { data: vendors } = useQuery({
         setState("");
         setAddress("");
         break;
-      case "account":
-        setActivePopup("account");
-        setAccountNumber(profile.accountNumber || "");
-        setSelectedBankCode(
-          bankCodes.find((bank) => bank.name === profile.bankName)?.code || ""
-        );
-        setFoundAccountName(profile.accountName || "");
-        setFoundBankName(profile.bankName || "");
-        break;
       case "email":
         setActivePopup("email");
         setNewEmail("");
@@ -537,104 +343,6 @@ const { data: vendors } = useQuery({
     }
   };
 
-  // Enhanced account search with Paystack API
-  const searchAccount = async () => {
-    if (!accountNumber.trim()) {
-      toast.error("Please enter an account number", {
-        position: "top-right",
-        autoClose: 4000,
-      });
-      return;
-    }
-
-    if (accountNumber.length !== 10) {
-      toast.error("Account number must be exactly 10 digits", {
-        position: "top-right",
-        autoClose: 4000,
-      });
-      return;
-    }
-
-    if (!selectedBankCode) {
-      toast.error("Please select a bank", {
-        position: "top-right",
-        autoClose: 4000,
-      });
-      return;
-    }
-
-    // Use Paystack key directly
-  const paystackKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
-
-    setIsSearchingAccount(true);
-    setFoundAccountName("");
-    setFoundBankName("");
-
-    try {
-      const verifyResponse = await fetch(
-        `https://api.paystack.co/bank/resolve?account_number=${accountNumber}&bank_code=${selectedBankCode}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${paystackKey}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (verifyResponse.ok) {
-        const verifyData = await verifyResponse.json();
-        if (
-          verifyData?.status &&
-          verifyData?.data &&
-          verifyData?.data?.account_name
-        ) {
-          const selectedBank = bankCodes.find(
-            (bank) => bank?.code === selectedBankCode
-          );
-          setFoundAccountName(verifyData?.data?.account_name);
-          setFoundBankName(selectedBank?.name || "");
-
-          // Update profile state with verified account details
-          setProfile((prev) => ({
-            ...prev,
-            accountName: verifyData?.data?.account_name,
-            accountNumber: accountNumber,
-            bankName: selectedBank?.name || "",
-          }));
-
-          toast.success("Account verified successfully!", {
-            position: "top-right",
-            autoClose: 3000,
-          });
-        } else {
-          toast.error(
-            "Account not found. Please verify the account number and bank selection.",
-            {
-              position: "top-right",
-              autoClose: 4000,
-            }
-          );
-        }
-      } else {
-        toast.error("Account verification failed. Please check your details.", {
-          position: "top-right",
-          autoClose: 4000,
-        });
-      }
-    } catch (error) {
-      console.error("Error verifying account:", error);
-      toast.error(
-        "Network error occurred. Please check your connection and try again.",
-        {
-          position: "top-right",
-          autoClose: 4000,
-        }
-      );
-    } finally {
-      setIsSearchingAccount(false);
-    }
-  };
 
   // Handle password change
   const handlePasswordChange = () => {
@@ -734,64 +442,7 @@ const { data: vendors } = useQuery({
   };
 
   // Enhanced account change handler with recipient code creation
-  const handleAccountChange = async () => {
-    if (!accountNumber || !foundAccountName || !selectedBankCode) {
-      toast.error("Please search for a valid account first", {
-        position: "top-right",
-        autoClose: 4000,
-      });
-      return;
-    }
-
-    try {
-      await createRecipientCodeMutation.mutateAsync({
-        token: user.token!,
-        accountData: {
-          account_number: accountNumber,
-          bank_code: selectedBankCode,
-          name: foundAccountName,
-          bankName: foundBankName,
-        },
-      });
-
-      // Ensure profile state is updated with verified account details
-      const selectedBank = bankCodes.find(
-        (bank) => bank.code === selectedBankCode
-      );
-      setProfile((prev) => ({
-        ...prev,
-        accountName: foundAccountName,
-        accountNumber: accountNumber,
-        bankName: selectedBank?.name || "",
-      }));
-
-      // Persist account details to localStorage (optional, for persistence)
-      if (typeof window !== "undefined") {
-        try {
-          localStorage.setItem(
-            "vendor_account_details",
-            JSON.stringify({
-              accountName: foundAccountName,
-              accountNumber: accountNumber,
-              bankName: selectedBank?.name || "",
-            })
-          );
-        } catch (error) {
-          console.error("Error saving account details to localStorage:", error);
-        }
-      }
-
-      toast.success("Account details updated successfully!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-
-      closePopup();
-    } catch (error) {
-      console.error("Error saving account details:", error);
-      // The error toast is already handled in the mutation
-    }
-  };
+  
 
   // Function to clear images from local storage and state
   const clearImages = () => {
@@ -820,13 +471,6 @@ const { data: vendors } = useQuery({
 
 
 
-  // Check if account details exist to determine button text
-  const hasAccountDetails =
-    profile.accountName && profile.accountNumber && profile.bankName;
-
-  // Get the current bank logo for display
-  const currentBankLogo = getBankLogo(profile.bankName);
-
   return (
     <motion.div
       className="min-h-screen p-6 bg-gray-50"
@@ -838,12 +482,6 @@ const { data: vendors } = useQuery({
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold"> Profile</h1>
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 px-3 py-1 text-sm text-blue-600 bg-blue-100 rounded-full">
-             Verified
-              <MdVerified size={20} className="text-blue-500" />
-            </div>
-          </div>
         </div>
 
         <div className="grid gap-6">
@@ -1016,14 +654,6 @@ const { data: vendors } = useQuery({
                         </button>
                         <button
                           className="w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
-                          onClick={() => handleEditOption("account")}
-                        >
-                          {hasAccountDetails
-                            ? "Update Account Details"
-                            : "Add Account Details"}
-                        </button>
-                        <button
-                          className="w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
                           onClick={() => handleEditOption("email")}
                         >
                           Change Email Address
@@ -1116,120 +746,6 @@ const { data: vendors } = useQuery({
                   Change password
                 </button>
               </div>
-            </div>
-          </motion.div>
-
-          {/* Business Category */}
-          <motion.div
-            variants={itemVariants}
-            className="p-6 bg-white rounded-lg shadow-sm"
-          >
-            <h2 className="mb-4 font-semibold">Business Category</h2>
-            <div className="relative" >
-              <div
-                className={`flex items-center justify-between p-3 border rounded-lg `}
-              >
-                <div className="flex items-center gap-2">
-                  {/* <span>{craftCategories[0] || "No category selected"}</span> */}
-                  <span>property Agent</span>
-                </div>
-                
-              </div>
-
-            
-            </div>
-          </motion.div>
-
-          {/* Enhanced Payment Details Section */}
-          <motion.div
-            variants={itemVariants}
-            className="p-6 bg-white rounded-lg shadow-sm"
-          >
-            <h2 className="mb-4 font-semibold">Payment Details</h2>
-            <div className="grid gap-4">
-              <div>
-                <label className="block mb-1 text-sm text-gray-500">
-                  Account Name
-                </label>
-                <motion.input
-                  type="text"
-                  value={profile.accountName}
-                  readOnly
-                  placeholder={
-                    !profile.accountName ? "No account name added" : ""
-                  }
-                  className={`w-full p-2 border rounded-lg bg-gray-50 cursor-not-allowed ${
-                    errors.accountName ? "border-red-500" : ""
-                  }`}
-                />
-                {errors.accountName && (
-                  <p className="mt-1 text-xs text-red-500">
-                    {errors.accountName}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label className="block mb-1 text-sm text-gray-500">
-                  Account Number
-                </label>
-                <motion.input
-                  type="text"
-                  value={profile.accountNumber}
-                  readOnly
-                  placeholder={
-                    !profile.accountNumber ? "No account number added" : ""
-                  }
-                  className={`w-full p-2 border rounded-lg bg-gray-50 cursor-not-allowed ${
-                    errors.accountNumber ? "border-red-500" : ""
-                  }`}
-                />
-                {errors.accountNumber && (
-                  <p className="mt-1 text-xs text-red-500">
-                    {errors.accountNumber}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label className="block mb-1 text-sm text-gray-500">
-                  Bank Name
-                </label>
-                <div className="relative">
-                  <div className="flex items-center w-full gap-2 p-2 border rounded-lg cursor-not-allowed bg-gray-50">
-                    {profile.bankName && (
-                      <img
-                        src={currentBankLogo || "/placeholder.svg"}
-                        alt={profile.bankName}
-                        className="w-6 h-6 object-contain"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src =
-                            "/images/banks/default-bank.png";
-                        }}
-                      />
-                    )}
-                    <motion.input
-                      type="text"
-                      value={profile.bankName}
-                      readOnly
-                      placeholder={!profile.bankName ? "No bank selected" : ""}
-                      className={`flex-1 outline-none bg-gray-50 cursor-not-allowed ${
-                        errors.bankName ? "text-red-500" : ""
-                      }`}
-                    />
-                  </div>
-                </div>
-                {errors.bankName && (
-                  <p className="mt-1 text-xs text-red-500">{errors.bankName}</p>
-                )}
-              </div>
-              <button
-                type="button"
-                className="text-sm text-purple-600 hover:text-purple-700"
-                onClick={() => handleEditOption("account")}
-              >
-                {hasAccountDetails
-                  ? "Update account details"
-                  : "Add account details"}
-              </button>
             </div>
           </motion.div>
 
@@ -1391,232 +907,7 @@ const { data: vendors } = useQuery({
                     </div>
                   </>
                 )}
-
-                {/* Enhanced Account Change Popup */}
-                {activePopup === "account" && (
-                  <>
-                    <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-xl font-semibold">
-                        {hasAccountDetails
-                          ? "Update Account Details"
-                          : "Add Account Details"}
-                      </h2>
-                      <motion.button
-                        onClick={closePopup}
-                        className="text-gray-500 hover:text-gray-700"
-                      >
-                        <X className="w-5 h-5" />
-                      </motion.button>
-                    </div>
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block mb-1 text-sm text-gray-500">
-                          Account Number
-                        </label>
-                        <motion.input
-                          type="text"
-                          value={accountNumber}
-                          onChange={(e) => {
-                            const value = e.target.value
-                              .replace(/\D/g, "")
-                              .slice(0, 10);
-                            setAccountNumber(value);
-                            // Clear previous results when account number changes
-                            if (value !== accountNumber) {
-                              setFoundAccountName("");
-                              setFoundBankName("");
-                            }
-                          }}
-                          placeholder="Enter 10-digit account number"
-                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#004E27] focus:border-[#004E27] outline-[#004E27]"
-                          maxLength={10}
-                        />
-                        <p className="mt-1 text-xs text-gray-500">
-                          {accountNumber.length > 0 &&
-                            accountNumber.length < 10 &&
-                            `${10 - accountNumber.length} more digits required`}
-                        </p>
-                      </div>
-
-                      <div>
-                        <label className="block mb-1 text-sm text-gray-500">
-                          Select Bank
-                        </label>
-                        <motion.select
-                          value={selectedBankCode}
-                          onChange={(e) => {
-                            setSelectedBankCode(e.target.value);
-                            // Clear previous results when bank changes
-                            setFoundAccountName("");
-                            setFoundBankName("");
-                          }}
-                          className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#004E27] focus:border-[#004E27] outline-[#004E27]"
-                        >
-                          <option value="">Choose your bank</option>
-                          {bankCodes.map((bank) => (
-                            <option key={bank.code} value={bank.code}>
-                              {bank.name} ({bank.type})
-                            </option>
-                          ))}
-                        </motion.select>
-                      </div>
-
-                      <div className="flex justify-center">
-                        <button
-                          className={`flex items-center gap-2 px-4 py-2 text-white rounded-lg transition-colors ${
-                            accountNumber.length === 10 &&
-                            selectedBankCode &&
-                            !isSearchingAccount
-                              ? "bg-blue-500 hover:bg-blue-600"
-                              : "bg-gray-400 cursor-not-allowed"
-                          }`}
-                          onClick={searchAccount}
-                          disabled={
-                            accountNumber.length !== 10 ||
-                            !selectedBankCode ||
-                            isSearchingAccount
-                          }
-                        >
-                          {isSearchingAccount ? (
-                            <>
-                              <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
-                              Verifying Account...
-                            </>
-                          ) : (
-                            <>
-                              <Search className="w-4 h-4" />
-                              Verify Account
-                            </>
-                          )}
-                        </button>
-                      </div>
-
-                      {/* Account verification results */}
-                      {foundAccountName && foundBankName && (
-                        <motion.div
-                          className="p-4 rounded-lg bg-[#004E27]border border-[#004E27]"
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <div className="flex items-start gap-3">
-                            <div className="w-8 h-8 bg-[#004E27] rounded-full flex items-center justify-center flex-shrink-0">
-                              <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                transition={{
-                                  delay: 0.2,
-                                  type: "spring",
-                                  stiffness: 200,
-                                }}
-                              >
-                                ✓
-                              </motion.div>
-                            </div>
-                            <div className="flex-1">
-                              <h4 className="text-sm font-semibold text-[#004E27] mb-2">
-                                Account Verified Successfully
-                              </h4>
-                              <div className="space-y-1">
-                                <div className="flex items-center gap-2">
-                                  <span className="text-xs text-[#004E27] font-medium">
-                                    Account Name:
-                                  </span>
-                                  <span className="text-sm text-[#004E27] font-semibold">
-                                    {foundAccountName}
-                                  </span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <span className="text-xs text-[#004E27] font-medium">
-                                    Bank:
-                                  </span>
-                                  <div className="flex items-center gap-2">
-                                    {bankLogos[foundBankName] && (
-                                      <img
-                                        src={
-                                          bankLogos[foundBankName] ||
-                                          "/placeholder.svg" ||
-                                          "/placeholder.svg"
-                                        }
-                                        alt={foundBankName}
-                                        className="w-4 h-4 object-contain"
-                                      />
-                                    )}
-                                    <span className="text-sm text-[#004E27] font-semibold">
-                                      {foundBankName}
-                                    </span>
-                                  </div>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <span className="text-xs text-[#004E27] font-medium">
-                                    Account Number:
-                                  </span>
-                                  <span className="text-sm text-[#004E27] font-mono">
-                                    {accountNumber}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-
-                      {/* Error state for failed verification */}
-                      {accountNumber.length === 10 &&
-                        !foundAccountName &&
-                        !isSearchingAccount && (
-                          <motion.div
-                            className="p-3 rounded-lg bg-red-50 border border-red-200"
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <div className="flex items-center gap-2">
-                              <div className="w-5 h-5 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                <span className="text-red-600 text-xs">✗</span>
-                              </div>
-                              <p className="text-sm text-red-700">
-                                Account verification failed. Please check the
-                                account number and try again.
-                              </p>
-                            </div>
-                          </motion.div>
-                        )}
-
-                      <div className="flex justify-end gap-2 mt-6">
-                        <button
-                          className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                          onClick={closePopup}
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                            foundAccountName && foundBankName
-                              ? "bg-[#004E27] text-white hover:bg-[#004E27]"
-                              : "bg-gray-200 text-gray-500 cursor-not-allowed"
-                          } ${
-                            createRecipientCodeMutation.isPending
-                              ? "opacity-50 cursor-not-allowed"
-                              : ""
-                          }`}
-                          onClick={handleAccountChange}
-                          disabled={
-                            !foundAccountName ||
-                            !foundBankName ||
-                            createRecipientCodeMutation.isPending
-                          }
-                        >
-                          {createRecipientCodeMutation.isPending
-                            ? "Creating..."
-                            : hasAccountDetails
-                            ? "Update Account"
-                            : "Add Account"}
-                        </button>
-                      </div>
-                    </div>
-                  </>
-                )}
+                
 
                 {/* Email Change Popup */}
                 {activePopup === "email" && (

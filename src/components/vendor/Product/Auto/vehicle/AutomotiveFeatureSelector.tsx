@@ -48,13 +48,14 @@ export default function AutomotiveFeatureSelector({
         {VEHICLE_FEATURES.map((feature) => (
           <motion.button
             key={feature}
+            type="button"
             onClick={() => toggleFeature(feature)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className={`px-4 py-2 rounded-full font-medium text-sm transition-all duration-200 ${
               selectedFeatures.includes(feature)
-                ? 'bg-blue-500 text-white shadow-lg'
-                : 'bg-gray-100 text-gray-900 hover:bg-gray-200 border border-gray-300'
+                ? 'bg-[#012E19] text-white shadow-lg'
+                : 'border border-[#dce8e0] bg-white text-[#012E19] hover:border-[#F2B60A] hover:bg-[#fff8df]'
             }`}
           >
             {feature}
@@ -75,9 +76,10 @@ export default function AutomotiveFeatureSelector({
                 exit={{ opacity: 0, scale: 0.9 }}
                 className="relative group"
               >
-                <div className="px-4 py-2 rounded-full font-medium text-sm bg-purple-500 text-white flex items-center justify-between gap-2">
+                <div className="flex items-center justify-between gap-2 rounded-full bg-[#F2B60A] px-4 py-2 text-sm font-medium text-[#012E19]">
                   <span className="truncate">{feature}</span>
                   <button
+                    type="button"
                     onClick={() => removeCustomFeature(feature)}
                     className="opacity-70 hover:opacity-100 transition-opacity"
                   >
@@ -93,7 +95,7 @@ export default function AutomotiveFeatureSelector({
       {/* Add Custom Feature Section */}
       <div className="mt-6 pt-6 border-t border-gray-200">
         {isAddingCustom ? (
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row">
             <input
               type="text"
               value={customFeatureInput}
@@ -105,12 +107,12 @@ export default function AutomotiveFeatureSelector({
                 }
               }}
               placeholder="Enter custom feature"
-              className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="min-w-0 flex-1 rounded-lg border border-[#dce8e0] px-4 py-2 outline-none focus:border-[#F2B60A] focus:ring-2 focus:ring-[#F2B60A]/20"
               autoFocus
             />
             <button
               onClick={addCustomFeature}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium text-sm"
+              className="rounded-lg bg-[#012E19] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#074b2d]"
             >
               Add
             </button>
@@ -119,7 +121,7 @@ export default function AutomotiveFeatureSelector({
                 setIsAddingCustom(false);
                 setCustomFeatureInput('');
               }}
-              className="px-4 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300 transition-colors font-medium text-sm"
+              className="rounded-lg bg-[#eef4f0] px-4 py-2 text-sm font-medium text-[#012E19] transition-colors hover:bg-[#e1ece5]"
             >
               Cancel
             </button>
@@ -129,7 +131,7 @@ export default function AutomotiveFeatureSelector({
             onClick={() => setIsAddingCustom(true)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-dashed border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors font-medium text-sm"
+            className="inline-flex items-center gap-2 rounded-lg border-2 border-dashed border-[#b8cfc1] px-4 py-2 text-sm font-medium text-[#012E19] transition-colors hover:border-[#F2B60A] hover:bg-[#fff8df]"
           >
             <Plus size={18} />
             Add Custom Feature

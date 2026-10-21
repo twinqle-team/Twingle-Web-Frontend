@@ -6,7 +6,7 @@ export const useStepper = (initialStep = 1) => {
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
   const nextStep = () => {
-    setCurrentStep(prev => Math.min(prev + 1, 7));
+    setCurrentStep(prev => Math.min(prev + 1, 3));
   };
 
   const prevStep = () => {
@@ -14,7 +14,7 @@ export const useStepper = (initialStep = 1) => {
   };
 
   const goToStep = (step: number) => {
-    setCurrentStep(step);
+    setCurrentStep(Math.min(Math.max(step, 1), 3));
   };
 
   const markStepCompleted = (step: number) => {

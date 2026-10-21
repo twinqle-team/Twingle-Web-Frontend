@@ -17,16 +17,16 @@ export const Button: React.FC<ButtonProps> = ({
   className = '',
   ...props
 }) => {
-  const base = "font-medium rounded-2xl transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/30 disabled:opacity-50";
+  const base = "font-medium rounded-xl transition-all focus:outline-none focus:ring-4 focus:ring-[#F2B60A]/30 disabled:opacity-50";
   
   const variants = {
-    primary: "bg-gradient-to-r from-[#0028F5] to-[#F84BFC] text-white shadow-xl hover:brightness-110",
-    secondary: "bg-white/10 border border-white/20 text-white hover:bg-white/20 backdrop-blur-xl",
+    primary: "bg-[#012E19] text-white shadow-md hover:bg-[#074b2d]",
+    secondary: "bg-white border border-[#dce8e0] text-[#012E19] hover:bg-[#f7faf8]",
   };
 
   const sizes = {
-    md: "px-8 py-3.5 text-base",
-    lg: "px-10 py-4 text-lg",
+    md: "px-6 py-3 text-sm sm:px-8 sm:py-3.5 sm:text-base",
+    lg: "px-8 py-3.5 text-base sm:px-10 sm:py-4 sm:text-lg",
   };
 
   return (

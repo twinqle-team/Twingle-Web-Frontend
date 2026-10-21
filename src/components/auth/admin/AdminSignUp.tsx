@@ -171,7 +171,7 @@ export default function AdminSignUp() {
             </div>
           </div>
 
-          <Link to="/vendor-verify">
+          <Link to="/admin-login">
           <motion.button
             variants={itemVariants}
             type="submit"
