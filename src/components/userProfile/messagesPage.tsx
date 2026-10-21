@@ -536,7 +536,7 @@ const MessagesPage: React.FC = () => {
 
           {/* Chat list body */}
           <div className="flex-1 overflow-y-auto">
-            {conversations.map((conversation) => {
+            {orderedConversations.map((conversation) => {
               const isActive = conversation.id === activeId;
               return (
                 <button
