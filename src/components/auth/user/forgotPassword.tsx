@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, ArrowLeft, AlertCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { z } from "zod";
 import SimpleSlider from "../../../lib/Sliding";
 import {
   forgotPasswordSchema,
   type ForgotPasswordFormData,
 } from "../../../lib/validationSchemas";
+import { useAppDispatch } from "../../../redux/hooks";
+import { forgotPassword } from "../../../redux/slices/userSlice";
+import Logo from "@/assets/Container.png";
 
 const LOGIN_EMAIL_STORAGE_KEY = "twingle_login_email";
 
@@ -16,6 +20,7 @@ export default function ForgotPasswordPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const savedEmail = window.localStorage.getItem(LOGIN_EMAIL_STORAGE_KEY);
@@ -37,10 +42,12 @@ export default function ForgotPasswordPage() {
       setIsLoading(true);
       window.localStorage.removeItem(LOGIN_EMAIL_STORAGE_KEY);
 
-      setTimeout(() => {
-        setIsLoading(false);
-        navigate("/verify-otp", { state: { email: email.trim() } });
-      }, 1200);
+      // Optimistic: redirect immediately
+      navigate("/reset-password", { state: { identifier: email.trim() } });
+      toast.success("Reset code sent successfully");
+
+      // Call API in background
+      dispatch(forgotPassword({ identifier: email.trim() }));
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Record<string, string> = {};
@@ -50,6 +57,7 @@ export default function ForgotPasswordPage() {
         });
         setErrors(newErrors);
       }
+      setIsLoading(false);
     }
   };
 
@@ -98,7 +106,7 @@ export default function ForgotPasswordPage() {
         className="flex min-h-screen w-full flex-col items-center justify-center bg-white px-4 py-8 sm:px-6 md:w-[55%] md:px-6 lg:w-1/2 lg:px-8 xl:px-10"
       >
         <img
-          src="src/assets/Container.png"
+          src={Logo}
           alt="Twingle logo"
           className="w-auto mb-4 h-14 sm:h-16"
         />

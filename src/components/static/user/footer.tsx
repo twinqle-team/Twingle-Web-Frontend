@@ -8,8 +8,21 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 
-// Using direct image URL for better performance
-const PLAY_STORE_IMG = "/src/assets/download (1).png";
+// Google Play Icon Component
+const GooglePlayIcon = () => (
+  <svg
+    className="w-7 h-7"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    role="img"
+  >
+    <path
+      d="M3,20.5V3.5C3,2.91,3.34,2.39,3.84,2.15L13.69,12L3.84,21.85C3.34,21.6,3,21.09,3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08,20.75,11.5,20.75,12C20.75,12.5,20.5,12.92,20.16,13.19L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"
+      fill="#FFFFFF"
+    />
+  </svg>
+);
 
 const Footer: React.FC = () => {
   const popularSearchLinks = [
@@ -96,12 +109,8 @@ const Footer: React.FC = () => {
                   href="#"
                   className="flex items-center gap-3 px-3 py-2 transition-all border rounded-lg bg-white/5 hover:bg-white/10 border-white/10"
                 >
-                  <div className="flex items-center justify-center overflow-hidden rounded-md w-9 h-9 bg-white/8">
-                    <img
-                      src={PLAY_STORE_IMG}
-                      alt="Google Play"
-                      className="object-contain h-7"
-                    />
+                  <div className="flex items-center justify-center rounded-md w-9 h-9 bg-white/8">
+                    <GooglePlayIcon />
                   </div>
                   <span className="flex flex-col leading-tight text-left">
                     <span className="text-xs text-emerald-100">Get it on</span>
