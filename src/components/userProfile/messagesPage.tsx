@@ -199,6 +199,9 @@ const MessagesPage: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const messageRefs = useRef<Record<number, HTMLDivElement | null>>({});
 
+  const orderedConversations = [...conversations].sort(
+    (a, b) => b.updatedAt - a.updatedAt,
+  );
   const activeConversation =
     conversations.find((c) => c.id === activeId) ?? null;
   const replyTarget =
@@ -530,7 +533,7 @@ const MessagesPage: React.FC = () => {
 
           {/* Chat list body */}
           <div className="flex-1 overflow-y-auto">
-            {conversations.map((conversation) => {
+            {orderedConversations.map((conversation) => {
               const isActive = conversation.id === activeId;
               return (
                 <button
