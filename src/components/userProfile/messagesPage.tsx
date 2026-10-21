@@ -199,6 +199,9 @@ const MessagesPage: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const messageRefs = useRef<Record<number, HTMLDivElement | null>>({});
 
+  const orderedConversations = [...conversations].sort(
+    (a, b) => b.updatedAt - a.updatedAt,
+  );
   const activeConversation =
     conversations.find((c) => c.id === activeId) ?? null;
   const replyTarget =
