@@ -1,16 +1,92 @@
+import { useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { jwtDecode } from "jwt-decode";
 import { router } from "@/router/mainRouter";
 import { queryClient } from "@/lib/queryClient";
 import ErrorBoundary from "@/components/error/errorBoundary";
 import NetworkError from "@/components/error/networkError";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
+import { logout, setAuthTokens } from "@/redux/slices/userSlice";
+import { refreshTokenAPI } from "@/utils/user/userAuth";
 
 function App() {
-  const { isAuthenticated, user } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    console.log("App mounted - starting token check");
+    const checkAndRefreshToken = async () => {
+      // Get tokens directly from localStorage to avoid re-renders
+      const persistRoot = localStorage.getItem("persist:root");
+      if (!persistRoot) {
+        console.log("No persist:root found in localStorage");
+        return;
+      }
+
+      let token = null;
+      let refreshToken = null;
+
+      try {
+        const parsed = JSON.parse(persistRoot);
+        const userSlice = parsed.user ? JSON.parse(parsed.user) : {};
+        token = userSlice?.token || null;
+        refreshToken = userSlice?.refreshToken || null;
+      } catch (e) {
+        console.error("Failed to parse persisted state:", e);
+        return;
+      }
+
+      if (!token) {
+        return;
+      }
+
+      try {
+        const decoded: any = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+
+        // Check if access token is expired
+        if (decoded.exp < currentTime) {
+          // Check if refresh token is also expired
+          if (!refreshToken) {
+            dispatch(logout());
+            window.location.href = "/login";
+            return;
+          }
+
+          try {
+            const refreshDecoded: any = jwtDecode(refreshToken);
+            // Check if refresh token is expired
+            if (refreshDecoded.exp < currentTime) {
+              dispatch(logout());
+              window.location.href = "/login";
+              return;
+            }
+            // Refresh token is valid, call refresh endpoint
+            const response = await refreshTokenAPI({ refreshToken });
+            const newAccessToken = response.data.tokens.accessToken;
+            const newRefreshToken = response.data.tokens.refreshToken;
+
+            // Update Redux state with new tokens
+            dispatch(setAuthTokens({ token: newAccessToken, refreshToken: newRefreshToken }));
+          } catch (error) {
+            // Refresh failed, logout user
+            dispatch(logout());
+            window.location.href = "/login";
+          }
+        }
+      } catch (error) {
+        console.error("Token decode failed:", error);
+        // Token is invalid, logout user
+        dispatch(logout());
+        window.location.href = "/login";
+      }
+    };
+
+    checkAndRefreshToken();
+  }, [dispatch]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -18,12 +94,7 @@ function App() {
         <ErrorBoundary>
           <RouterProvider router={router} />
         </ErrorBoundary>
-      </NetworkError>
-      {isAuthenticated && user && (
-        <div className="fixed bottom-4 right-4 z-[60] rounded-lg border border-green-200 bg-[#004e27] px-3 py-2 text-sm text-white shadow-sm">
-          Logged in as {user.email || user.name || "user"}
-        </div>
-      )}
+      </NetworkError> 
       <ToastContainer
         position="bottom-right"
         autoClose={5000}

@@ -19,7 +19,7 @@ export default function VerifyOtpPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { status } = useAppSelector((state) => state.user);
-  const email = (location.state as { email?: string } | null)?.email ?? "";
+  const email = location?.state ? (location.state as { email?: string }).email ?? "" : "";
   const [otp, setOtp] = useState<string[]>(Array(OTP_LENGTH).fill(""));
   const [isLoading, setIsLoading] = useState(false);
   const [resending, setResending] = useState(false);

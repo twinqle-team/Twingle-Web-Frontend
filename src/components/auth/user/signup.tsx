@@ -9,8 +9,8 @@ import {
   type SignupFormData,
 } from "../../../lib/validationSchemas";
 import Sliding from "../../../lib/Sliding";
-import { useAppDispatch } from "../../../redux/hooks";
-import { registerUser } from "../../../redux/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { registerUser, googleSignIn } from "../../../redux/slices/userSlice";
 
 // Google Icon Component
 const GoogleIcon = () => (
@@ -41,6 +41,7 @@ const GoogleIcon = () => (
 export default function SignupPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { status } = useAppSelector((state) => state.user);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -52,6 +53,7 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -133,6 +135,42 @@ export default function SignupPage() {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    setIsGoogleLoading(true);
+
+    try {
+      const idToken = import.meta.env.VITE_GOOGLE_ID_TOKEN || "";
+
+      if (!idToken) {
+        toast.error("Google ID token not configured");
+        setIsGoogleLoading(false);
+        return;
+      }
+
+      const resultAction = await dispatch(googleSignIn({ idToken }));
+
+      if (googleSignIn.fulfilled.match(resultAction)) {
+        toast.success(
+          resultAction.payload.message || "Google sign-in successful",
+        );
+        navigate("/profile");
+        return;
+      }
+
+      const message =
+        typeof resultAction.payload === "string"
+          ? resultAction.payload
+          : "Google sign-in failed";
+      toast.error(message);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Google sign-in failed",
+      );
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  };
+
   const leftVariants = {
     hidden: { opacity: 0, x: -30 },
     visible: {
@@ -161,7 +199,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex w-full min-h-screen p-0 overflow-x-hidden bg-white">
+    <div className="flex w-full h-screen p-0 overflow-x-hidden bg-white">
       {/* Left Side - Sliding Images */}
       <motion.div
         variants={leftVariants}
@@ -177,7 +215,7 @@ export default function SignupPage() {
         variants={rightVariants}
         initial="hidden"
         animate="visible"
-        className="flex flex-col items-center justify-start flex-1 min-h-screen px-4 py-8 overflow-y-auto bg-white sm:px-6 md:px-8 lg:px-10"
+        className="flex flex-col items-center w-full h-screen px-4 py-8 bg-white sm:px-6 md:w-1/2 md:px-8 lg:px-10 overflow-y-auto"
       >
         {/* <img
           src="src/assets/Container.png"
@@ -382,12 +420,27 @@ export default function SignupPage() {
           <motion.button
             variants={itemVariants}
             type="button"
+            onClick={handleGoogleSignIn}
+            disabled={isGoogleLoading || status === "loading"}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="flex items-center justify-center w-full gap-3 py-2.5 font-semibold text-gray-700 transition-colors bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 sm:py-3"
+            className="flex items-center justify-center w-full gap-3 py-2.5 font-semibold text-gray-700 transition-colors bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 sm:py-3"
           >
-            <GoogleIcon />
-            Sign up with Google
+            {isGoogleLoading ? (
+              <>
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                  className="w-5 h-5 border-2 border-gray-600 rounded-full border-t-transparent"
+                />
+                Signing up with Google...
+              </>
+            ) : (
+              <>
+                <GoogleIcon />
+                Sign up with Google
+              </>
+            )}
           </motion.button>
 
           <motion.button

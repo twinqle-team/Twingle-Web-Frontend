@@ -10,8 +10,10 @@ const layout: React.FC = () => {
   const isNavigating = navigation.state === "loading";
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [location.pathname]);
+    if (location?.pathname) {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    }
+  }, [location?.pathname]);
 
   return (
     <div className="relative min-h-screen bg-white">
