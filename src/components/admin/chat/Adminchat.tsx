@@ -439,9 +439,8 @@ const Adminchat: React.FC = () => {
         <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
           Messages
         </h1>
-        <p className="mt-2 text-gray-600">
-          Chat with buyers, sellers
-        </p>
+        <p className="mt-2 text-gray-600">Chat with buyers, sellers</p>
+        <p className="mt-2 text-gray-600">GOOD</p>
       </div>
 
       {/* Two-panel chat container */}
