@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import { useForm, SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -31,6 +31,14 @@ interface UploadedVideo {
   fileName: string;
 }
 
+const VEHICLE_DRAFT_KEY = 'twingle:vehicle-draft';
+
+type VehicleDraft = Partial<AutomotiveFormData> & {
+  savedAt: string;
+  imagePreviews: string[];
+  videoPreviews: string[];
+};
+
 export default function vehicleForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
@@ -61,9 +69,35 @@ export default function vehicleForm() {
     },
   });
 
-  const selectedFeatures = watch('features');
-  const customFeatures = watch('customFeatures');
+  const [draftSavedAt, setDraftSavedAt] = useState<string | null>(null);
+
+  console.log(draftSavedAt)
+  useEffect(() => {
+    const savedDraft = localStorage.getItem(VEHICLE_DRAFT_KEY);
+    if (!savedDraft) return;
+
+    try {
+      const draft = JSON.parse(savedDraft) as VehicleDraft;
+      reset(draft);
+      setDraftSavedAt(draft.savedAt);
+    } catch {
+      localStorage.removeItem(VEHICLE_DRAFT_KEY);
+    }
+  }, [reset]);
+
+  const selectedFeatures = watch('features') || [];
+  const customFeatures = watch('customFeatures') || [];
   const description = watch('description');
+
+  const handleImagesChange = (images: UploadedImage[]) => {
+    setUploadedImages(images);
+    setValue('images', images as AutomotiveFormData['images'], { shouldValidate: true, shouldDirty: true });
+  };
+
+  const handleVideosChange = (videos: UploadedVideo[]) => {
+    setUploadedVideos(videos);
+    setValue('videos', videos as AutomotiveFormData['videos'], { shouldValidate: true, shouldDirty: true });
+  };
 
   const onSubmit = async (data: AutomotiveFormData) => {
     try {
@@ -81,6 +115,7 @@ export default function vehicleForm() {
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       toast.success('Vehicle listing created successfully!');
+      localStorage.removeItem(VEHICLE_DRAFT_KEY);
       reset();
       setUploadedImages([]);
       setUploadedVideos([]);
@@ -101,7 +136,18 @@ export default function vehicleForm() {
   const handleSaveDraft = async () => {
     try {
       setIsSubmitting(true);
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const formValues = watch();
+      const draft: VehicleDraft = {
+        ...formValues,
+        images: [],
+        videos: [],
+        savedAt: new Date().toISOString(),
+        imagePreviews: uploadedImages.map((image) => image.preview),
+        videoPreviews: uploadedVideos.map((video) => video.preview),
+      };
+
+      localStorage.setItem(VEHICLE_DRAFT_KEY, JSON.stringify(draft));
+      setDraftSavedAt(draft.savedAt);
       toast.success('Vehicle draft saved successfully!');
     } catch (error) {
       toast.error('Failed to save draft');
@@ -115,22 +161,23 @@ export default function vehicleForm() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-purple-50 pb-32"
+      className="min-h-screen bg-[#f7faf8] pb-28 text-[#012E19] sm:pb-32"
     >
       {/* Header */}
-      <div className="top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="text-3xl font-bold text-gray-900">Add New Vehicle</h1>
-          <p className="text-gray-600 mt-1">Fill in the vehicle information below to publish your automotive listing.</p>
+      <div className=" top-0 z-30 border-b border-[#dce8e0] bg-white/90 backdrop-blur-xl">
+        <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 sm:py-6 lg:px-8">
+          <h1 className="text-2xl font-bold text-[#012E19] sm:text-3xl">Add New Vehicle</h1>
+          <p className="mt-1 max-w-2xl text-sm text-[#60756a] sm:text-base">Fill in the vehicle information below to publish your automotive listing.</p>
+          {/* {draftSavedAt && <p className="mt-2 text-xs font-medium text-[#a57900]">Draft saved {new Date(draftSavedAt).toLocaleString()}</p>} */}
         </div>
       </div>
 
       {/* Main Content */}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        <div className="mx-auto max-w-7xl space-y-5 px-4 py-6 sm:space-y-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
           {/* Vehicle Details */}
           <SectionCard title="Vehicle Details">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-2">
               <TextInput
                 label="Vehicle Title"
                 placeholder="Enter vehicle title"
@@ -144,7 +191,8 @@ export default function vehicleForm() {
                 placeholder="Select brand"
                 options={VEHICLE_BRANDS.map(brand => ({ label: brand, value: brand }))}
                 error={errors.brand}
-                onChange={(value:any) => setValue('brand', value)}
+                  value={watch('brand')}
+                  onChange={(event:any) => setValue('brand', event.target.value, { shouldValidate: true, shouldDirty: true })}
               />
 
               <TextInput
@@ -158,7 +206,8 @@ export default function vehicleForm() {
                 label="Year"
                 placeholder="Enter year"
                 error={errors.year}
-                onChange={(value: number) => setValue('year', value)}
+                value={watch('year')}
+                onChange={(value: number) => setValue('year', value, { shouldValidate: true, shouldDirty: true })}
               />
 
               <SelectInput
@@ -170,7 +219,8 @@ export default function vehicleForm() {
                   { label: 'Certified Pre-Owned', value: 'certified-pre-owned' },
                 ]}
                 error={errors.condition}
-                onChange={(value:any) => setValue('condition', value as any)}
+                value={watch('condition')}
+                onChange={(event:any) => setValue('condition', event.target.value as any, { shouldValidate: true, shouldDirty: true })}
               />
 
               <SelectInput
@@ -189,7 +239,8 @@ export default function vehicleForm() {
                   { label: 'Truck', value: 'truck' },
                 ]}
                 error={errors.bodyType}
-                onChange={(value:any) => setValue('bodyType', value as any)}
+                value={watch('bodyType')}
+                onChange={(event:any) => setValue('bodyType', event.target.value as any, { shouldValidate: true, shouldDirty: true })}
               />
 
               <SelectInput
@@ -202,7 +253,8 @@ export default function vehicleForm() {
                   { label: 'Semi-Automatic', value: 'semi-automatic' },
                 ]}
                 error={errors.transmission}
-                onChange={(value:any) => setValue('transmission', value as any)}
+                value={watch('transmission')}
+                onChange={(event:any) => setValue('transmission', event.target.value as any, { shouldValidate: true, shouldDirty: true })}
               />
 
               <SelectInput
@@ -217,7 +269,8 @@ export default function vehicleForm() {
                   { label: 'CNG', value: 'cng' },
                 ]}
                 error={errors.fuelType}
-                onChange={(value:any) => setValue('fuelType', value as any)}
+                value={watch('fuelType')}
+                onChange={(event:any) => setValue('fuelType', event.target.value as any, { shouldValidate: true, shouldDirty: true })}
               />
 
               <SelectInput
@@ -230,26 +283,29 @@ export default function vehicleForm() {
                   { label: '4WD', value: '4wd' },
                 ]}
                 error={errors.driveType}
-                onChange={(value:any) => setValue('driveType', value as any)}
+                value={watch('driveType')}
+                onChange={(event:any) => setValue('driveType', event.target.value as any, { shouldValidate: true, shouldDirty: true })}
               />
 
-              <div className="flex gap-3">
+              <div className="flex flex-col gap-3 min-[420px]:flex-row">
                 <div className="flex-1">
                   <NumberInput
                     label="Mileage"
                     placeholder="Enter mileage"
                     error={errors.mileage}
-                    onChange={(value: number) => setValue('mileage', value)}
+                    value={watch('mileage')}
+                    onChange={(value: number) => setValue('mileage', value, { shouldValidate: true, shouldDirty: true })}
                   />
                 </div>
-                <div className="w-32">
+                <div className="w-full min-[420px]:w-32">
                   <SelectInput
                     label="Unit"
                     options={[
                       { label: 'km', value: 'km' },
                       { label: 'miles', value: 'miles' },
                     ]}
-                    onChange={(value:any) => setValue('mileageUnit', value as any)}
+                    value={watch('mileageUnit')}
+                    onChange={(event:any) => setValue('mileageUnit', event.target.value as any, { shouldValidate: true, shouldDirty: true })}
                   />
                 </div>
               </div>
@@ -286,7 +342,8 @@ export default function vehicleForm() {
                 label="Price ($)"
                 placeholder="Enter price"
                 error={errors.price}
-                onChange={(value: number) => setValue('price', value)}
+                value={watch('price')}
+                onChange={(value: number) => setValue('price', value, { shouldValidate: true, shouldDirty: true })}
               />
 
               <SelectInput
@@ -298,7 +355,8 @@ export default function vehicleForm() {
                   { label: 'Sold', value: 'sold' },
                 ]}
                 error={errors.availabilityStatus}
-                onChange={(value:any) => setValue('availabilityStatus', value as any)}
+                value={watch('availabilityStatus')}
+                onChange={(event:any) => setValue('availabilityStatus', event.target.value as any, { shouldValidate: true, shouldDirty: true })}
               />
 
               <div className="lg:col-span-2">
@@ -309,7 +367,7 @@ export default function vehicleForm() {
                   maxLength={2000}
                   error={errors.description}
                   value={description}
-                  onChange={(value: string) => setValue('description', value)}
+                  onChange={(value: string) => setValue('description', value, { shouldValidate: true, shouldDirty: true })}
                 />
               </div>
             </div>
@@ -317,7 +375,7 @@ export default function vehicleForm() {
 
           {/* Location Details */}
           <SectionCard title="Dealer / Vehicle Location" description="Where is this vehicle located">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-2">
               <TextInput
                 label="City"
                 placeholder="Enter city"
@@ -344,7 +402,8 @@ export default function vehicleForm() {
                 placeholder="Select country"
                 options={COUNTRIES.map(country => ({ label: country, value: country }))}
                 error={errors.country}
-                onChange={(value:any) => setValue('country', value)}
+                value={watch('country')}
+                onChange={(event:any) => setValue('country', event.target.value, { shouldValidate: true, shouldDirty: true })}
                 searchable
               />
 
@@ -355,7 +414,7 @@ export default function vehicleForm() {
                   className="min-h-28"
                   error={errors.fullAddress}
                   value={watch('fullAddress')}
-                  onChange={(value: string) => setValue('fullAddress', value)}
+                  onChange={(value: string) => setValue('fullAddress', value, { shouldValidate: true, shouldDirty: true })}
                 />
               </div>
             </div>
@@ -363,21 +422,21 @@ export default function vehicleForm() {
 
           {/* Vehicle Media */}
           <SectionCard title="Vehicle Media" description="Upload images and videos of the vehicle">
-            <div className="space-y-8">
+            <div className="space-y-6 sm:space-y-8">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-4">Upload Images</h4>
+                <h4 className="mb-4 font-semibold text-[#012E19]">Upload Images</h4>
                 <ImageUploader
-                  onImagesChange={setUploadedImages}
+                  onImagesChange={handleImagesChange}
                   minImages={2}
                   maxImages={10}
                   error={uploadedImages.length === 0 ? 'Please upload at least 2 images' : undefined}
                 />
               </div>
 
-              <div className="pt-6 border-t border-gray-200">
-                <h4 className="font-semibold text-gray-900 mb-4">Upload Videos</h4>
+              <div className="border-t border-[#dce8e0] pt-6">
+                <h4 className="mb-4 font-semibold text-[#012E19]">Upload Videos</h4>
                 <VideoUploader
-                  onVideosChange={setUploadedVideos}
+                  onVideosChange={handleVideosChange}
                   minVideos={0}
                   maxVideos={4}
                   minDuration={60}
@@ -393,23 +452,23 @@ export default function vehicleForm() {
             <AutomotiveFeatureSelector
               selectedFeatures={selectedFeatures}
               customFeatures={customFeatures}
-              onFeaturesChange={(features:any) => setValue('features', features)}
-              onCustomFeaturesChange={(features:any) => setValue('customFeatures', features)}
+              onFeaturesChange={(features:any) => setValue('features', features, { shouldValidate: true, shouldDirty: true })}
+              onCustomFeaturesChange={(features:any) => setValue('customFeatures', features, { shouldValidate: true, shouldDirty: true })}
             />
           </SectionCard>
         </div>
       </form>
 
       {/* Sticky Action Bar */}
-      <div className=" bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between gap-4">
+      <div className="sticky bottom-0 z-30 border-t border-[#dce8e0] bg-white/95 shadow-2xl backdrop-blur-md">
+        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
+          <div className="flex flex-col-reverse gap-3 min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between sm:gap-4">
             
 
             <button
               onClick={handleSaveDraft}
               disabled={isSubmitting}
-              className="flex items-center gap-2 px-6 py-3 bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#eef4f0] px-6 py-3 font-medium text-[#012E19] transition-colors hover:bg-[#e1ece5] disabled:cursor-not-allowed disabled:opacity-50 min-[420px]:w-auto"
             >
               <Save size={20} />
               Save as Draft
@@ -420,7 +479,7 @@ export default function vehicleForm() {
               disabled={isSubmitting}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#012E19] px-8 py-3 font-semibold text-white transition-all hover:bg-[#074b2d] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50 min-[420px]:w-auto"
             >
               <Send size={20} />
               {isSubmitting ? 'Adding Vehicle...' : 'Add Vehicle'}

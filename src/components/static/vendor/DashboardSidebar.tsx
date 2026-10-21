@@ -49,16 +49,12 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen = false, onC
   //   navigate("/login-vendor");
   // };
   return (
-    <aside className={`fixed inset-y-0 left-0 z-40 flex h-screen w-72 shrink-0 flex-col justify-between overflow-y-auto bg-[#F5F8FA] p-5 text-gray-900 shadow-xl transition-transform duration-300 md:static md:z-auto md:w-64 md:translate-x-0 md:shadow-none ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
+    <aside className={`fixed inset-y-0 left-0 z-40 flex h-screen w-72 shrink-0 flex-col justify-between overflow-y-auto bg-white p-5 text-[#012E19] shadow-xl transition-transform duration-300 md:static md:z-auto md:w-64 md:translate-x-0 md:shadow-none ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
       <div>
 
         <div className="mb-5 flex items-center justify-between text-2xl font-bold text-[#012E19]">
-          {/* <Link to="/">
-
-            <img src={Logo} alt="Twingle" className=" w-20 h-20" />
-          </Link> */}
            <span>TWINQLE</span>
-           <button onClick={onClose} aria-label="Close menu" className="rounded p-2 text-[#012E19] hover:bg-[#e5eee8] md:hidden"><X className="h-5 w-5" /></button>
+           <button onClick={onClose} aria-label="Close menu" className="rounded p-2 text-[#012E19] hover:bg-[#fff8df] md:hidden"><X className="h-5 w-5" /></button>
         </div>
         <nav>
           <NavItem title="Dashboard" to="/app" Icon={Home} />
@@ -93,15 +89,15 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen = false, onC
       </div>
       <br />
 
-      <div className="flex items-center gap-3 p-3 bg-gray-200 rounded-lg">
-        <div className="bg-[#004e27] w-[40px] h-[40px] rounded-full text-white flex items-center justify-center">
+      <div className="flex items-center gap-3 rounded-lg border border-[#dce8e0] bg-[#f7faf8] p-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#012E19] text-white">
           <p>V</p>
         </div>
         <div>
-          <p className="text-sm font-semibold text-[#004e27]">Vendor</p>
+          <p className="text-sm font-semibold text-[#012E19]">Vendor</p>
           <div className="flex items-center justify-center mt-2">
-            <div className="w-[12px] h-[12px] bg-[#004e27] rounded-full"></div>
-            <span className="text-[#004e27] text-xs rounded ml-[3px]">
+            <div className="h-3 w-3 rounded-full bg-[#F2B60A]"></div>
+            <span className="ml-[3px] rounded text-xs text-[#60756a]">
               Online
             </span>
           </div>
@@ -145,8 +141,8 @@ const NavItem = ({
   return (
     <div>
       <div
-        className={`p-2 flex items-center justify-between gap-3 cursor-pointer hover:bg-[#004e27] rounded ${
-          open ? "bg-[#004e27] text-white" : ""
+        className={`flex cursor-pointer items-center justify-between gap-3 rounded-lg p-2 transition-colors hover:bg-[#012E19] hover:text-white ${
+          open ? "bg-[#012E19] text-white" : ""
         }`}
         onClick={handleClick}
       >
@@ -156,7 +152,7 @@ const NavItem = ({
             <NavLink
               to={to}
               className={({ isActive }) =>
-                isActive ? "font-semibold text-[#004e27]" : "text-gray-700"
+                isActive ? "font-semibold text-[#012E19]" : "text-[#60756a]"
               }
             >
               {title}
@@ -183,8 +179,8 @@ const NavItem = ({
               className={({ isActive }) =>
                 `block py-1 ${
                   isActive
-                    ? "text-orange-500 font-semibold"
-                    : "hover:text-gray-600"
+                    ? "font-semibold text-[#F2B60A]"
+                    : "text-[#60756a] hover:text-[#012E19]"
                 }`
               }
             >

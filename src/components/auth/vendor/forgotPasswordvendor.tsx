@@ -25,7 +25,7 @@ export default function ForgotPasswordvendor() {
 
     setTimeout(() => {
       setIsLoading(false);
-      navigate("/verify-otp", { state: { email: email.trim() } });
+      navigate("/verify", { state: { email: email.trim() } });
     }, 1200);
   };
 

@@ -1,44 +1,43 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
-// import { useDarkMode } from "../Context/DarkModeContext";
-import { QueryClient, QueryClientProvider} from "@tanstack/react-query"
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import SiderBar from "@/components/static/admin/SiderBar";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Header from "@/components/static/admin/Header";
- // Import dark mode context
+import SideBar from "@/components/static/admin/SiderBar";
 
 const AdminLayout: React.FC = () => {
-//   const { darkMode } = useDarkMode(); // Use context instead of local state
+  const queryClient = new QueryClient();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-
-  const queryClient = new QueryClient()
-
   return (
-   <QueryClientProvider client={queryClient}>
-     {/* <div className={darkMode ? "dark" : ""}> */}
-     <div>
-      <div className="flex h-screen">
+    <QueryClientProvider client={queryClient}>
+      <div className="flex h-screen min-w-0 overflow-hidden">
         {/* Sidebar */}
-        <SiderBar darkMode={false}
-         isOpen={isSidebarOpen} 
-         onClose={() => setIsSidebarOpen(false)}
+        <SideBar darkMode={false}
+        isOpen={isSidebarOpen} 
+        onClose={() => setIsSidebarOpen(false)}
          />
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex min-w-0 flex-1 flex-col">
           {/* Header */}
-          <Header /> {/* No need to pass darkMode here, since it can use the context */}
+          <Header onToggleSidebar={() => setIsSidebarOpen((v) => !v)} />
 
           {/* Scrollable Outlet */}
-          <main className="flex-1 overflow-y-auto p-4">
+          <main className="min-w-0 flex-1 overflow-y-auto p-2 sm:p-4">
             <Outlet />
           </main>
         </div>
+        {isSidebarOpen && (
+          <div
+            className="fixed inset-0 z-30 bg-black/40 md:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+
       </div>
-    </div>
-    <ReactQueryDevtools initialIsOpen={true} />
-   </QueryClientProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 };
 

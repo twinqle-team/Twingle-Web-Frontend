@@ -3,7 +3,8 @@ import { Bell, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 
-const Header: React.FC <{ onToggleSidebar?: () => void }> = ({
+
+const Header: React.FC  <{ onToggleSidebar?: () => void }> = ({
   onToggleSidebar,
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -45,39 +46,20 @@ const Header: React.FC <{ onToggleSidebar?: () => void }> = ({
       time: "2:20pm",
     },
     {
-      id: 3,
-      message: "OKonkwo Hilary added your product on wishlist",
-      date: "Sep 20, 2024",
-      time: "2:20pm",
-    },
-    {
-      id: 3,
-      message: "OKonkwo Hilary added your product on wishlist",
-      date: "Sep 20, 2024",
-      time: "2:20pm",
-    },
-    {
-      id: 3,
-      message: "OKonkwo Hilary added your product on wishlist",
-      date: "Sep 20, 2024",
-      time: "2:20pm",
-    },
-    {
-      id: 1,
-      message: "Giovanni Kamper commented on your post",
-      detail: "This Looks great!! Let's get started on it.",
-      date: "Sep 20, 2024",
-      time: "2:20pm",
-      avatar: "/path-to-avatar1.png",
+      id: 4,
+      message: "New customer review posted",
+      detail: "Great service! Highly recommended.",
+      date: "Sep 21, 2024",
+      time: "10:15am",
     },
   ];
 
   return (
-    <header className="flex items-center justify-between p-4 text-gray-900 bg-white shadow-md">
+    <header className="flex items-center justify-between border-b border-[#dce8e0] bg-white p-4 text-[#012E19] shadow-sm">
       <h1 className="text-xl font-semibold">
-        Good Morning,{" "}
-        <span className="text-[#1E8863]">
-          vendor
+        Good morning,{" "}
+        <span className="text-[#012E19]">
+          Admin
           {/* {user?.vendor?.name.charAt(0).toUpperCase() +
             user?.vendor?.name.slice(1)} */}
         </span>
@@ -86,7 +68,7 @@ const Header: React.FC <{ onToggleSidebar?: () => void }> = ({
         <button
           onClick={onToggleSidebar}
           aria-label="Open Menu"
-          className="p-2 rounded md:hidden hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="rounded p-2 hover:bg-[#fff8df] md:hidden"
         >
           <Menu className="w-6 h-6" />
         </button>
@@ -127,7 +109,7 @@ const Header: React.FC <{ onToggleSidebar?: () => void }> = ({
                 <div className="overflow-y-auto max-h-64">
                   {notifications.map((notification) => (
                     <div
-                      key={notification.id}
+                      key={`${notification.id}-${notification.message}`}
                       className="flex items-start gap-3 p-4 border-b hover:bg-gray-100"
                     >
                       {notification.avatar ? (
@@ -137,7 +119,7 @@ const Header: React.FC <{ onToggleSidebar?: () => void }> = ({
                           className="w-10 h-10 rounded-full"
                         />
                       ) : (
-                        <div className="flex items-center justify-center w-10 h-10 font-bold text-white bg-[#1E8863] rounded-full">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#012E19] font-bold text-white">
                           {notification.message[0]}
                         </div>
                       )}
@@ -157,7 +139,7 @@ const Header: React.FC <{ onToggleSidebar?: () => void }> = ({
                 </div>
                 <div className="flex items-center justify-between p-4">
                   {/* <button className="text-orange-500">Mark as read</button> */}
-                  <button className="px-4 py-2 text-white bg-[#1E8863] rounded w-full">
+                  <button className="w-full rounded bg-[#012E19] px-4 py-2 text-white hover:bg-[#074b2d]">
                     Mark as read
                   </button>
                 </div>
@@ -169,10 +151,10 @@ const Header: React.FC <{ onToggleSidebar?: () => void }> = ({
      
             <div className="flex items-center gap-3 pl-6 border-l border-gray-200">
               <div className="text-right">
-                <p className="font-medium text-sm">Admin Oluwaseun</p>
-                <p className="text-xs text-green-600">Online</p>
+                <p className="text-sm font-medium">Admin Oluwaseun</p>
+                <p className="text-xs text-[#a57900]">Online</p>
               </div>
-              <div className="w-9 h-9 bg-gradient-to-br from-green-400 to-emerald-600 rounded-2xl flex items-center justify-center text-white font-semibold ring-2 ring-white">AO</div>
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#F2B60A] font-semibold text-[#012E19] ring-2 ring-white">AO</div>
             </div>
 
          

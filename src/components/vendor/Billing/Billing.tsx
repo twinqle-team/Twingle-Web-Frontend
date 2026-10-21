@@ -24,6 +24,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 type InvoiceStatus = "Paid" | "Pending" | "Overdue";
+type BillingCycle = "weekly" | "monthly" | "yearly";
 
 type Invoice = {
 	id: string;
@@ -50,11 +51,32 @@ const statusStyles: Record<InvoiceStatus, string> = {
 const Billing = () => {
 	const [filter, setFilter] = useState<"All" | InvoiceStatus>("All");
 	const [search, setSearch] = useState("");
-	const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+	const [activeModal, setActiveModal] = useState<"payment" | "usage" | "plan" | null>(null);
+	const [isPaymentUpdate, setIsPaymentUpdate] = useState(false);
 	const [cardNumber, setCardNumber] = useState("");
 	const [cardName, setCardName] = useState("");
 	const [expiry, setExpiry] = useState("");
 	const [cvc, setCvc] = useState("");
+	const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
+
+	const switchBilling = (cycle: BillingCycle) => {
+		setBillingCycle(cycle);
+	};
+
+	const getPricing = (monthlyPrice: number) => {
+		if (billingCycle === "weekly") {
+			return (monthlyPrice / 4.33).toFixed(2); // Weekly rate
+		} else if (billingCycle === "yearly") {
+			return (monthlyPrice * 12 * 0.8).toFixed(2); // 20% discount for yearly
+		}
+		return monthlyPrice.toFixed(2); // Monthly rate
+	};
+
+	const getPricingLabel = () => {
+		if (billingCycle === "weekly") return "/week";
+		if (billingCycle === "yearly") return "/year";
+		return "/mo";
+	};
 
 	const visibleInvoices = useMemo(() => {
 		const normalizedSearch = search.trim().toLowerCase();
@@ -67,7 +89,12 @@ const Billing = () => {
 
 	const addPaymentMethod = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		setIsPaymentModalOpen(false);
+		setActiveModal(null);
+	};
+
+	const openPaymentModal = (isUpdate = false) => {
+		setIsPaymentUpdate(isUpdate);
+		setActiveModal("payment");
 	};
 
 	return (
@@ -79,7 +106,7 @@ const Billing = () => {
 						<h1 className="text-3xl font-bold tracking-tight">Billing & payments</h1>
 						<p className="mt-1 text-sm text-[#60756a]">Manage your plan, payment method, and invoice history.</p>
 					</div>
-					<button onClick={() => setIsPaymentModalOpen(true)} className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#012E19] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#074b2d] sm:w-auto">
+					<button onClick={() => openPaymentModal()} className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#012E19] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#074b2d] sm:w-auto">
 						<Plus size={17} /> Add payment method
 					</button>
 				</header>
@@ -98,7 +125,7 @@ const Billing = () => {
 								<p className="text-sm text-[#c6d8ce]">Next payment on Dec 20, 2024</p>
 								<div className="mt-2 flex flex-wrap items-end justify-between gap-3">
 									<p className="text-3xl font-bold">$249 <span className="text-sm font-normal text-[#c6d8ce]">/ month</span></p>
-									<button className="inline-flex items-center gap-1 text-sm font-semibold text-[#F2B60A] hover:underline">Manage plan <ArrowUpRight size={15} /></button>
+									<button onClick={() => setActiveModal("plan")} className="inline-flex items-center gap-1 text-sm font-semibold text-[#F2B60A] hover:underline">Manage plan <ArrowUpRight size={15} /></button>
 								</div>
 							</div>
 						</div>
@@ -113,13 +140,13 @@ const Billing = () => {
 						<p className="mt-4 text-3xl font-bold">68%</p>
 						<div className="mt-3 h-2 overflow-hidden rounded-full bg-[#edf2ee]"><div className="h-full w-[68%] rounded-full bg-[#F2B60A]" /></div>
 						<p className="mt-3 text-xs text-[#60756a]">6,820 of 10,000 monthly listings used</p>
-						<button className="mt-5 inline-flex items-center gap-1 text-sm font-bold text-[#012E19] hover:text-[#a57900]">View usage details <ArrowUpRight size={15} /></button>
+						<button onClick={() => setActiveModal("usage")} className="mt-5 inline-flex items-center gap-1 text-sm font-bold text-[#012E19] hover:text-[#a57900]">View usage details <ArrowUpRight size={15} /></button>
 					</div>
 
 					<div className="rounded-xl border border-[#dce8e0] bg-white p-5 shadow-sm sm:p-6">
 						<div className="flex items-center justify-between"><p className="text-sm font-semibold text-[#60756a]">Payment method</p><CreditCard size={20} className="text-[#a57900]" /></div>
 						<div className="mt-5 flex items-center gap-3"><div className="flex h-10 w-14 items-center justify-center rounded-md bg-[#012E19] text-xs font-bold text-white">VISA</div><div><p className="font-semibold">•••• 4242</p><p className="text-xs text-[#60756a]">Expires 08/26</p></div></div>
-						<button onClick={() => setIsPaymentModalOpen(true)} className="mt-6 text-left text-sm font-bold text-[#012E19] hover:text-[#a57900]">Update payment method</button>
+						<button onClick={() => openPaymentModal(true)} className="mt-6 text-left text-sm font-bold text-[#012E19] hover:text-[#a57900]">Update payment method</button>
 					</div>
 				</section>
 
@@ -138,15 +165,152 @@ const Billing = () => {
 					<div className="flex flex-col gap-1 border-t border-[#e8efea] px-4 py-4 text-xs text-[#60756a] sm:flex-row sm:items-center sm:justify-between sm:px-5"><span>Showing {visibleInvoices.length} of {invoices.length} invoices</span><span>All amounts are in USD</span></div>
 				</section>
 			</div>
-			<Dialog open={isPaymentModalOpen} onOpenChange={setIsPaymentModalOpen}>
+			<Dialog open={activeModal !== null} onOpenChange={(open) => !open && setActiveModal(null)}>
 				<DialogContent className="max-h-[calc(100vh-2rem)] max-w-lg overflow-y-auto border-[#dce8e0] bg-white p-5 sm:p-6">
-					<DialogHeader><DialogTitle className="text-xl font-bold text-[#012E19]">Add payment method</DialogTitle><DialogDescription className="text-[#60756a]">Your card will be securely saved for future billing.</DialogDescription></DialogHeader>
+					{/* payment details modal content */}
+					{activeModal === "payment" && <>
+					<DialogHeader><DialogTitle className="text-xl font-bold text-[#012E19]">{isPaymentUpdate ? "Update payment method" : "Add payment method"}</DialogTitle><DialogDescription className="text-[#60756a]">Your card will be securely saved for future billing.</DialogDescription></DialogHeader>
 					<form onSubmit={addPaymentMethod} className="space-y-4">
 						<label className="block text-sm font-semibold text-[#012E19]">Cardholder name<input required value={cardName} onChange={(event) => setCardName(event.target.value)} placeholder="e.g. Alex Morgan" className="mt-1.5 w-full rounded-lg border border-[#dce8e0] px-3 py-2.5 font-normal outline-none focus:border-[#F2B60A] focus:ring-2 focus:ring-[#F2B60A]/20" /></label>
 						<label className="block text-sm font-semibold text-[#012E19]">Card number<input required inputMode="numeric" value={cardNumber} onChange={(event) => setCardNumber(event.target.value)} placeholder="1234 5678 9012 3456" className="mt-1.5 w-full rounded-lg border border-[#dce8e0] px-3 py-2.5 font-normal outline-none focus:border-[#F2B60A] focus:ring-2 focus:ring-[#F2B60A]/20" /></label>
 						<div className="grid grid-cols-2 gap-3"><label className="block text-sm font-semibold text-[#012E19]">Expiry date<input required value={expiry} onChange={(event) => setExpiry(event.target.value)} placeholder="MM / YY" className="mt-1.5 w-full rounded-lg border border-[#dce8e0] px-3 py-2.5 font-normal outline-none focus:border-[#F2B60A] focus:ring-2 focus:ring-[#F2B60A]/20" /></label><label className="block text-sm font-semibold text-[#012E19]">CVC<input required inputMode="numeric" value={cvc} onChange={(event) => setCvc(event.target.value)} placeholder="123" className="mt-1.5 w-full rounded-lg border border-[#dce8e0] px-3 py-2.5 font-normal outline-none focus:border-[#F2B60A] focus:ring-2 focus:ring-[#F2B60A]/20" /></label></div>
 						<DialogFooter className="-mx-5 -mb-5 mt-6 px-5 sm:-mx-6 sm:-mb-6 sm:px-6"><DialogClose asChild><Button type="button" variant="outline">Cancel</Button></DialogClose><Button type="submit" className="bg-[#012E19] text-white hover:bg-[#074b2d]">Save payment method</Button></DialogFooter>
-					</form>
+					</form></>}
+					{/* Usage details modal content */}
+					{activeModal === "usage" && <>
+						<DialogHeader><DialogTitle className="text-xl font-bold text-[#012E19]">Usage details</DialogTitle><DialogDescription className="text-[#60756a]">Your Professional plan usage for this billing cycle.</DialogDescription></DialogHeader>
+						<div className="space-y-5 py-2"><div><div className="mb-2 flex justify-between text-sm font-semibold"><span>Listings</span><span>6,820 / 10,000</span></div><div className="h-3 overflow-hidden rounded-full bg-[#edf2ee]"><div className="h-full w-[68%] rounded-full bg-[#F2B60A]" /></div></div><div className="grid grid-cols-2 gap-3"><div className="rounded-lg bg-[#f7faf8] p-4"><p className="text-xs text-[#60756a]">Listings remaining</p><p className="mt-1 text-xl font-bold">3,180</p></div><div className="rounded-lg bg-[#f7faf8] p-4"><p className="text-xs text-[#60756a]">Cycle resets</p><p className="mt-1 text-xl font-bold">Dec 20</p></div></div></div>
+						<DialogFooter><DialogClose asChild><Button type="button" variant="outline">Close</Button></DialogClose></DialogFooter>
+					</>}
+					{/* Plan management modal content */}
+					{activeModal === "plan" && <>
+						<DialogHeader><DialogTitle className="text-xl font-bold text-[#012E19]">Manage your plan</DialogTitle>
+						<DialogDescription className="text-[#60756a]">Choose the plan that fits your marketplace activity.</DialogDescription>
+						</DialogHeader>
+						
+						{/* Billing Cycle Toggle */}
+						<div className="mb-4 flex justify-center">
+							<div className="inline-flex rounded-lg border border-[#dce8e0] bg-[#fbfdfb] p-1">
+								{/* Weekly */}
+								<button
+									type="button"
+									onClick={() => switchBilling("weekly")}
+									className={`rounded px-4 py-2 text-sm font-semibold transition-colors ${
+										billingCycle === "weekly"
+											? "border border-[#dce8e0] bg-white text-[#012E19] shadow-sm"
+											: "text-[#60756a] hover:text-[#012E19]"
+									}`}
+								>
+									Weekly
+								</button>
+
+								{/* Monthly */}
+								<button
+									type="button"
+									onClick={() => switchBilling("monthly")}
+									className={`rounded px-4 py-2 text-sm font-semibold transition-colors ${
+										billingCycle === "monthly"
+											? "border border-[#dce8e0] bg-white text-[#012E19] shadow-sm"
+											: "text-[#60756a] hover:text-[#012E19]"
+									}`}
+								>
+									Monthly
+								</button>
+
+								{/* Yearly */}
+								<button
+									type="button"
+									onClick={() => switchBilling("yearly")}
+									className={`flex items-center gap-2 rounded px-4 py-2 text-sm font-semibold transition-colors ${
+										billingCycle === "yearly"
+											? "border border-[#dce8e0] bg-white text-[#012E19] shadow-sm"
+											: "text-[#60756a] hover:text-[#012E19]"
+									}`}
+								>
+									Yearly
+									<span className="rounded bg-[#F2B60A] px-2 py-0.5 text-[10px] font-bold text-[#012E19]">
+										SAVE 20%
+									</span>
+								</button>
+							</div>
+						</div>
+						
+						<div className="space-y-3 py-2">
+							{/* Starter */}
+							<div className="rounded-xl border-2 border-[#F2B60A] bg-[#fff8df] p-4">
+								<div className="mb-4 flex items-start justify-between">
+									<div>
+										<p className="font-bold text-[#012E19]">Starter</p>
+										<p className="mt-1 text-xl font-bold text-[#012E19]">${getPricing(49)}<span className="text-sm font-normal text-[#60756a]">{getPricingLabel()}</span></p>
+										<p className="mt-1 text-sm text-[#60756a]">Essential tools for independent portfolio management.</p>
+									</div>
+									<span className="mt-2 inline-block rounded-full bg-[#F2B60A] px-2.5 py-1 text-xs font-bold text-[#012E19]">Current plan</span>
+								</div>
+								<ul className="mb-4 space-y-2">
+									<li className="flex items-center gap-2 text-sm text-[#012E19]"><Check size={16} className="text-[#12a84b]" /> Base inventory management</li>
+									<li className="flex items-center gap-2 text-sm text-[#012E19]"><Check size={16} className="text-[#12a84b]" /> Standard reporting</li>
+									<li className="flex items-center gap-2 text-sm text-[#012E19]"><Check size={16} className="text-[#12a84b]" /> Email support (48hr SLA)</li>
+								</ul>
+							</div>
+							
+							{/* Business */}
+							<div className="rounded-xl border border-[#dce8e0] p-4">
+								<div className="mb-4 flex items-start justify-between">
+									<div>
+										<p className="font-bold text-[#012E19]">Business</p>
+										<p className="mt-1 text-xl font-bold text-[#012E19]">${getPricing(129)}<span className="text-sm font-normal text-[#60756a]">{getPricingLabel()}</span></p>
+										<p className="mt-1 text-sm text-[#60756a]">Advanced automation for growing estates.</p>
+									</div>
+								</div>
+								<ul className="mb-4 space-y-2">
+									<li className="flex items-center gap-2 text-sm text-[#012E19]"><Check size={16} className="text-[#12a84b]" /> All Starter features</li>
+									<li className="flex items-center gap-2 text-sm text-[#012E19]"><Check size={16} className="text-[#12a84b]" /> Advanced analytics</li>
+									<li className="flex items-center gap-2 text-sm text-[#012E19]"><Check size={16} className="text-[#12a84b]" /> Automated listings</li>
+									<li className="flex items-center gap-2 text-sm text-[#012E19]"><Check size={16} className="text-[#12a84b]" /> Priority support (24hr SLA)</li>
+								</ul>
+								<Button className="w-full bg-[#012E19] text-white hover:bg-[#074b2d]">Upgrade to Business</Button>
+							</div>
+							
+							{/* Gold */}
+							<div className="rounded-xl border border-[#dce8e0] p-4">
+								<div className="mb-4 flex items-start justify-between">
+									<div>
+										<p className="font-bold text-[#012E19]">Gold</p>
+										<p className="mt-1 text-xl font-bold text-[#012E19]">${getPricing(249)}<span className="text-sm font-normal text-[#60756a]">{getPricingLabel()}</span></p>
+										<p className="mt-1 text-sm text-[#60756a]">Full white-label solution with API connectivity.</p>
+									</div>
+								</div>
+								<ul className="mb-4 space-y-2">
+									<li className="flex items-center gap-2 text-sm text-[#012E19]"><Check size={16} className="text-[#12a84b]" /> All Business features</li>
+									<li className="flex items-center gap-2 text-sm text-[#012E19]"><Check size={16} className="text-[#12a84b]" /> Custom branding</li>
+									<li className="flex items-center gap-2 text-sm text-[#012E19]"><Check size={16} className="text-[#12a84b]" /> REST API access</li>
+									<li className="flex items-center gap-2 text-sm text-[#012E19]"><Check size={16} className="text-[#12a84b]" /> Dedicated Account Manager</li>
+								</ul>
+								<Button className="w-full bg-[#012E19] text-white hover:bg-[#074b2d]">Upgrade to Gold</Button>
+							</div>
+							
+							{/* Professional */}
+							<div className="rounded-xl border border-[#dce8e0] p-4">
+								<div className="mb-4 flex items-start justify-between">
+									<div>
+										<p className="font-bold text-[#012E19]">Professional</p>
+										<p className="mt-1 text-xl font-bold text-[#012E19]">${getPricing(499)}<span className="text-sm font-normal text-[#60756a]">{getPricingLabel()}</span></p>
+										<p className="mt-1 text-sm text-[#60756a]">Enterprise grade infrastructure for global mobility.</p>
+									</div>
+								</div>
+								<ul className="mb-4 space-y-2">
+									<li className="flex items-center gap-2 text-sm text-[#012E19]"><Check size={16} className="text-[#12a84b]" /> All Gold features</li>
+									<li className="flex items-center gap-2 text-sm text-[#012E19]"><Check size={16} className="text-[#12a84b]" /> Institutional escrow features</li>
+									<li className="flex items-center gap-2 text-sm text-[#012E19]"><Check size={16} className="text-[#12a84b]" /> Global distribution network</li>
+									<li className="flex items-center gap-2 text-sm text-[#012E19]"><Check size={16} className="text-[#12a84b]" /> 24/7 Concierge Support</li>
+								</ul>
+								<Button className="w-full bg-[#012E19] text-white hover:bg-[#074b2d]">Upgrade to Professional</Button>
+							</div>
+						</div>
+						<DialogFooter>
+							<DialogClose asChild><Button type="button" variant="outline">Cancel</Button></DialogClose>
+						</DialogFooter>
+					</>}
 				</DialogContent>
 			</Dialog>
 		</main>

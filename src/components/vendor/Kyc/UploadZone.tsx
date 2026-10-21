@@ -43,16 +43,16 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onFileAccepted, onFileRe
 
   if (currentFile) {
     return (
-      <div className="border border-white/20 rounded-3xl p-8 bg-white/5 backdrop-blur-xl">
-        <div className="flex items-center gap-6">
-          <div className="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center">
-            {currentFile.type.includes('pdf') ? <FileText className="w-10 h-10 text-pink-400" /> : <ImageIcon className="w-10 h-10 text-blue-400" />}
+      <div className="rounded-xl border border-[#dce8e0] bg-[#f7faf8] p-4 sm:p-6">
+        <div className="flex items-start gap-4 sm:items-center sm:gap-6">
+          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-white sm:h-20 sm:w-20 sm:rounded-2xl">
+            {currentFile.type.includes('pdf') ? <FileText className="h-8 w-8 text-[#012E19] sm:h-10 sm:w-10" /> : <ImageIcon className="h-8 w-8 text-[#F2B60A] sm:h-10 sm:w-10" />}
           </div>
           <div className="flex-1">
-            <p className="font-medium truncate">{currentFile.name}</p>
-            <p className="text-sm text-white/60">{(currentFile.size / 1024 / 1024).toFixed(2)} MB</p>
+            <p className="font-medium text-[#012E19]">ID document uploaded</p>
+            <p className="text-sm text-[#60756a]">{(currentFile.size / 1024 / 1024).toFixed(2)} MB</p>
           </div>
-          <button onClick={onFileRemoved} className="text-red-400 hover:text-red-500">
+          <button onClick={onFileRemoved} aria-label="Remove document" className="text-red-500 hover:text-red-700">
             <X size={28} />
           </button>
         </div>
@@ -62,13 +62,13 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onFileAccepted, onFileRe
   }
 
   return (
-    <div {...getRootProps()} className={`border-3 border-dashed rounded-3xl p-16 text-center cursor-pointer transition-all ${isDragActive ? 'border-[#F84BFC] bg-pink-500/10' : 'border-white/20 hover:border-white/40'}`}>
+    <div {...getRootProps()} className={`cursor-pointer rounded-xl border-2 border-dashed p-8 text-center transition-all sm:p-14 ${isDragActive ? 'border-[#F2B60A] bg-[#fff8df]' : 'border-[#b8cfc1] hover:border-[#F2B60A]'}`}>
       <input {...getInputProps()} />
-      <Upload className="w-16 h-16 mx-auto mb-6 text-white/70" />
-      <h3 className="text-2xl font-semibold mb-2">Drop your ID here</h3>
-      <p className="text-white/60">JPG, PNG or PDF • Max 10MB</p>
-      <p className="mt-6 inline-block px-8 py-3 bg-white/10 rounded-2xl">Browse Files</p>
-      {error && <p className="text-red-400 mt-6">{error}</p>}
+      <Upload className="mx-auto mb-5 h-12 w-12 text-[#012E19] sm:h-16 sm:w-16" />
+      <h3 className="mb-2 text-xl font-semibold text-[#012E19] sm:text-2xl">Drop your ID here</h3>
+      <p className="text-sm text-[#60756a] sm:text-base">JPG, PNG or PDF • Max 10MB</p>
+      <p className="mt-5 inline-block rounded-lg bg-[#012E19] px-6 py-2.5 text-sm font-semibold text-white">Browse Files</p>
+      {error && <p className="mt-5 text-red-500">{error}</p>}
     </div>
   );
 };

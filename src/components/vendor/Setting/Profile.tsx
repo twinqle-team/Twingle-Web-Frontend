@@ -224,6 +224,10 @@ export default function Profile() {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [bannerImage, setBannerImage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [locationEnabled, setLocationEnabled] = useState(false);
+  const [isLocationLocked, setIsLocationLocked] = useState(false);
+  const [isGettingLocation, setIsGettingLocation] = useState(false);
+  const [locationData, setLocationData] = useState<{ latitude: number; longitude: number; address?: string } | null>(null);
   const [errors, setErrors] = useState<
     Partial<Record<keyof VendorProfile, string>>
   >({});
@@ -665,6 +669,77 @@ const { data: vendors } = useQuery({
     closePopup();
   };
 
+  // Handle location toggle - get user's current location
+  const handleLocationToggle = async () => {
+    // If already enabled and locked, prevent turning off
+    if (isLocationLocked) {
+      toast.error("Location has been enabled and cannot be disabled", {
+        position: "top-right",
+        autoClose: 4000,
+      });
+      return;
+    }
+
+    // If enabling, get current location
+    if (!locationEnabled) {
+      setIsGettingLocation(true);
+      try {
+        if (!navigator.geolocation) {
+          toast.error("Geolocation is not supported by your browser", {
+            position: "top-right",
+            autoClose: 4000,
+          });
+          setIsGettingLocation(false);
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setLocationData({ latitude, longitude });
+            setLocationEnabled(true);
+            setIsLocationLocked(true);
+            setIsGettingLocation(false);
+
+            toast.success("Location enabled successfully", {
+              position: "top-right",
+              autoClose: 3000,
+            });
+          },
+          (error) => {
+            setIsGettingLocation(false);
+            console.error("Geolocation error:", error);
+
+            let errorMessage = "Unable to get your location";
+            if (error.code === error.PERMISSION_DENIED) {
+              errorMessage = "Location permission denied. Please enable location access in your browser settings";
+            } else if (error.code === error.POSITION_UNAVAILABLE) {
+              errorMessage = "Location information is unavailable";
+            } else if (error.code === error.TIMEOUT) {
+              errorMessage = "Location request timed out";
+            }
+
+            toast.error(errorMessage, {
+              position: "top-right",
+              autoClose: 4000,
+            });
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+      } catch (error) {
+        setIsGettingLocation(false);
+        console.error("Error getting location:", error);
+        toast.error("An error occurred while getting your location", {
+          position: "top-right",
+          autoClose: 4000,
+        });
+      }
+    }
+  };
+
+  // console.log(handleLocationToggle)
+  // console.log(locationEnabled, isLocationLocked, isGettingLocation, locationData)
+
   // Handle location change
   const handleLocationChange = () => {
     if (!country || !state || !address) {
@@ -839,9 +914,9 @@ const { data: vendors } = useQuery({
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold"> Profile</h1>
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 px-3 py-1 text-sm text-blue-600 bg-blue-100 rounded-full">
+            <div className="flex items-center gap-1 px-3 py-1 text-sm text-white bg-[#0E9E6E] rounded-full">
              Verified
-              <MdVerified size={20} className="text-blue-500" />
+              <MdVerified size={20} className="text-white" />
             </div>
           </div>
         </div>
@@ -1140,6 +1215,82 @@ const { data: vendors } = useQuery({
             </div>
           </motion.div>
 
+          {/* Location */}
+  <motion.div
+      variants={itemVariants}
+      className="p-6 bg-white rounded-lg shadow-sm"
+>
+  <h2 className="mb-4 font-semibold">Location</h2>
+
+  <div className="flex items-center justify-between p-3 border rounded-lg">
+    <div>
+      <p className="font-medium text-gray-800">
+        Get access to live location
+      </p>
+      <p className="text-sm text-gray-500">
+        Allow us to access your current location
+      </p>
+      {locationEnabled && locationData && (
+        <div className="mt-2 text-xs text-green-600">
+          <p>📍 Location active</p>
+          <p>Lat: {locationData.latitude.toFixed(4)}, Long: {locationData.longitude.toFixed(4)}</p>
+        </div>
+      )}
+    </div>
+
+    {/* Toggle Switch */}
+    <button
+      type="button"
+      role="switch"
+      aria-checked={locationEnabled}
+      onClick={handleLocationToggle}
+      disabled={isGettingLocation || isLocationLocked}
+      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+        locationEnabled ? "bg-[#012E19]" : "bg-gray-300"
+      } ${
+        (isGettingLocation || isLocationLocked) ? "opacity-75 cursor-not-allowed" : "cursor-pointer hover:shadow-md"
+      }`}
+    >
+      <span
+        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+          locationEnabled ? "translate-x-6" : "translate-x-1"
+        }`}
+      />
+    </button>
+  </div>
+  {isGettingLocation && (
+    <div className="mt-2 text-sm text-blue-600 flex items-center gap-2">
+      <span className="inline-block animate-spin">⏳</span>
+      Getting your location...
+    </div>
+  )}
+  {isLocationLocked && locationEnabled && (
+    <div className="mt-2 text-sm text-orange-600">
+      ℹ️ Location is now locked and cannot be disabled
+    </div>
+  )}
+</motion.div>
+
+          {/*Become Both  */}
+          <motion.div
+            variants={itemVariants}
+            className="p-6 bg-white rounded-lg shadow-sm"
+          >
+            <h2 className="mb-4 font-semibold">Become a Business Owner</h2>
+            <div className="relative" >
+              <div
+                className={`flex items-center justify-center  p-3 border rounded-lg `}
+              >
+                <button className="flex items-center bg-[#012E19] text-white p-3 border rounded-lg">
+                  <span>Become Both Agents</span>
+                </button>
+                
+              </div>
+
+            
+            </div>
+          </motion.div>
+
           {/* Enhanced Payment Details Section */}
           <motion.div
             variants={itemVariants}
@@ -1241,7 +1392,7 @@ const { data: vendors } = useQuery({
             className="flex justify-end gap-4"
           >
             <button
-              className="px-6 py-2 border border-[#004E27] rounded-lg hover:bg-[#004E27]"
+              className="px-6 py-2 border border-[#004E27] rounded-lg hover:bg-[#004E27] hover:text-white"
               onClick={clearImages}
             >
               Discard Changes

@@ -476,14 +476,6 @@ export default function Property() {
         className="bottom-0 z-30 border-t border-[#dce8e0] bg-white/95 shadow-lg backdrop-blur-md"
       >
         <div className="mx-auto flex max-w-6xl flex-col-reverse gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-end sm:gap-4 sm:px-6 sm:py-4 md:py-5 lg:px-8">
-          {/* <Link
-            to="/properties"
-            className="px-6 py-3 border-2 border-gray-200 text-gray-900 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
-          >
-            Cancel
-          </Link> */}
-          
-
           <button
             type="button"
             className="w-full rounded-lg bg-[#eef4f0] px-6 py-3 font-semibold text-[#012E19] transition-colors hover:bg-[#e1ece5] sm:w-auto"

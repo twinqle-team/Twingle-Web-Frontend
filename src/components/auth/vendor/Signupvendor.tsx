@@ -80,11 +80,6 @@ export default function Signupvendor() {
         animate="visible"
         className="flex flex-col items-center justify-center w-full min-h-screen px-4 py-8 bg-white sm:px-6 md:w-1/2 md:px-8 lg:px-10"
       >
-        {/* <img
-          src="src/assets/Container.png"
-          alt="Twingle logo"
-          className="w-auto mb-4 h-14 sm:h-16"
-        /> */}
 
         <h1 className="mb-2 text-2xl font-bold">
           Welcome to <span className="text-[#004e27]">Twingle!</span>

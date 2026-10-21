@@ -10,29 +10,29 @@ export const ProgressStepper: React.FC<ProgressStepperProps> = ({ currentStep })
   const steps = ["Upload ID", "Live Verification", "Review & Submit"];
 
   return (
-    <div className="flex items-center gap-4 md:gap-8  top-6 z-50 bg-[#000002]/90 backdrop-blur-2xl px-8 py-5 rounded-3xl border border-white/10">
+    <div className="grid grid-cols-3 gap-2 rounded-xl border border-[#dce8e0] bg-white px-3 py-3 shadow-sm sm:gap-4 sm:px-5 sm:py-4">
       {steps.map((title, index) => {
         const stepNum = index + 1;
         const isCompleted = stepNum < currentStep;
         const isCurrent = stepNum === currentStep;
 
         return (
-          <div key={index} className="flex items-center gap-4 flex-1">
+          <div key={index} className="flex min-w-0 items-center gap-2 sm:gap-3">
             <motion.div
-              className={`w-9 h-9 rounded-2xl flex items-center justify-center border-2 transition-all ${
+              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border-2 text-sm transition-all sm:h-9 sm:w-9 ${
                 isCompleted
-                  ? 'bg-emerald-500 border-emerald-500'
+                  ? 'border-[#012E19] bg-[#012E19] text-white'
                   : isCurrent
-                  ? 'bg-gradient-to-br from-[#0028F5] to-[#F84BFC] border-[#F84BFC] shadow-lg shadow-pink-500/40'
-                  : 'border-white/30'
+                  ? 'border-[#F2B60A] bg-[#F2B60A] text-[#012E19] shadow-md'
+                  : 'border-[#b8cfc1] text-[#60756a]'
               }`}
             >
               {isCompleted ? <Check className="w-5 h-5" /> : stepNum}
             </motion.div>
-            <span className={`font-medium text-sm md:text-base ${isCurrent ? 'text-white' : 'text-white/60'}`}>
+            <span className={`truncate text-[11px] font-semibold sm:text-sm ${isCurrent ? 'text-[#012E19]' : 'text-[#80958a]'}`}>
               {title}
             </span>
-            {index < steps.length - 1 && <div className="flex-1 h-px bg-white/10" />}
+            {index < steps.length - 1 && <div className="hidden h-px flex-1 bg-[#dce8e0] sm:block" />}
           </div>
         );
       })}

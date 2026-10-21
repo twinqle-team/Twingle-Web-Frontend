@@ -17,7 +17,7 @@ import VendorLayout from "@/components/vendor/Layout/Layout";
 import Dashboard from "@/components/vendor/Main/Dashboard";
 
 import PropertyList from "@/components/vendor/Product/Property/Property-list/PropertyList";
-// import AutomotiveList from "@/components/vendor/Product/Auto/vehiclelist/AutomotiveList";
+import AutomotiveList from "@/components/vendor/Product/Auto/vehiclelist/AutomotiveList";
 import Review from "@/components/vendor/Review/Review";
 import Profile from "@/components/vendor/Setting/Profile";
 import Payment from "@/components/vendor/Payment/Payment";
@@ -29,7 +29,6 @@ import VehicleForm from "@/components/vendor/Product/Auto/vehicle/VehicleForm";
 
 
 import ProfileLayout from "@/components/layout/profileLayout";
-// import ProfileDashboard from "@/components/userProfile/profileDashboard";
 import Verifyvendor from "@/components/auth/vendor/Verifyvendor";
 import Verify from "@/components/auth/vendor/Verify";
 import AdminSignUp from "@/components/auth/admin/AdminSignUp";
@@ -48,6 +47,16 @@ import SavedPage from "@/components/userProfile/savedPage";
 import VendorNewPass from "@/components/auth/vendor/VendorNewPass";
 import OrdersPage from "@/components/userProfile/ordersPage";
 import ProfilePage from "@/components/userProfile/profilePage";
+import AdminCustomer from "@/components/admin/customer/AdminCustomer";
+import AdminPayment from "@/components/admin/payment/AdminPayment";
+import AdminProperty from "@/components/admin/product/property/property-form/AdminProperty";
+import AdminPropertiesList from "@/components/admin/product/property/property-list/AdminPropertiesList";
+import AdminvehicleForm from "@/components/admin/product/auto/auto-form/AdminvehicleForm";
+import AdminAutomotiveList from "@/components/admin/product/auto/auto-list/AdminAutomotiveList";
+import UsersManagement from "@/components/admin/Managements/UsersManagement";
+import AdminForgot from "@/components/auth/admin/AdminForgot";
+import AdminVerify from "@/components/auth/admin/AdminVerify";
+import AdminNewPass from "@/components/auth/admin/AdminNewPass";
 
 const Home = lazy(() => import("@/pages/homePage"));
 const RealEstate = lazy(() => import("@/pages/realEstatePage"));
@@ -99,10 +108,6 @@ const routes: RouteObject[] = [
         <VerifyOtpPage />
       </Suspense>
     ),
-  },
-  {
-    path: "/verify",
-    element: <Verify />,
   },
   {
     path: "/checkout",
@@ -245,20 +250,28 @@ const routes: RouteObject[] = [
   },
   {
     path: "/vendor-verify",
-    element: <Verifyvendor />,
+    element: (
+      <Suspense fallback={<Spinner />}>
+        <Verifyvendor />
+      </Suspense>
+    ),
   },
-  // {
-  //   path: "/new",
-  //   element: <VendorNewPass />,
-  //   element: (
-  //     <Suspense fallback={<Spinner />}>
-  //       <VerifyOtpPage />
-  //     </Suspense>
-  //   ),
-  // },
+
+    {
+    path: "/verify",
+    element: (
+      <Suspense fallback={<Spinner />}>
+        <Verify />
+      </Suspense>
+    ),
+  },
   {
     path: "/new",
-    element: <VendorNewPass />,
+    element:(
+      <Suspense fallback={<Spinner />}>
+        <VendorNewPass />
+      </Suspense>
+    ),
   },
   {
     path: "/app",
@@ -267,7 +280,7 @@ const routes: RouteObject[] = [
       { index: true, element: <Suspense fallback={<Spinner />}><Dashboard /></Suspense> },
       { path: "new-property", element: <Suspense fallback={<Spinner />}><Property /></Suspense> },
       { path: "My-Properties", element: <Suspense fallback={<Spinner />}><PropertyList /></Suspense> },
-      // { path: "My-Automotives", element: <Suspense fallback={<Spinner />}><AutomotiveList /></Suspense> },
+      { path: "My-Automotives", element: <Suspense fallback={<Spinner />}><AutomotiveList /></Suspense> },
       { path: "new-automotive", element: <Suspense fallback={<Spinner />}><VehicleForm /></Suspense> },
       { path: "reviews", element: <Suspense fallback={<Spinner />}><Review /></Suspense> },
       { path: "settings", element: <Suspense fallback={<Spinner />}><Profile /></Suspense> },
@@ -297,12 +310,44 @@ const routes: RouteObject[] = [
     ),
   },
   {
+    path: "/admin-forgot",
+    element: (
+      <Suspense fallback={<Spinner />}>
+        <AdminForgot />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/admin-new",
+    element: (
+      <Suspense fallback={<Spinner />}>
+        <AdminNewPass />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/admin-verify",
+    element: (
+      <Suspense fallback={<Spinner />}>
+        <AdminVerify />
+      </Suspense>
+    ),
+  },
+  {
     path: "/admin",
     element: <AdminLayout />,
     children: [
       { index: true, element: <Suspense fallback={<Spinner />}><AdminDash /></Suspense> },
+      { path: "new-property", element: <Suspense fallback={<Spinner />}><AdminProperty /></Suspense> },
+      { path: "My-Properties", element: <Suspense fallback={<Spinner />}><AdminPropertiesList /></Suspense> },
       { path: "inbox", element: <Suspense fallback={<Spinner />}><Adminchat /></Suspense> },
+      { path: "My-Automotives", element: <Suspense fallback={<Spinner />}><AdminAutomotiveList /></Suspense> },
+      { path: "User-Management", element: <Suspense fallback={<Spinner />}><UsersManagement /></Suspense> },
+      // { path: "Kyc-Management", element: <Suspense fallback={<Spinner />}><KYCVerification /></Suspense> },
+      { path: "new-automotive", element: <Suspense fallback={<Spinner />}><AdminvehicleForm /></Suspense> },
+      { path: "Customers", element: <Suspense fallback={<Spinner />}><AdminCustomer /></Suspense> },
       { path: "settings", element: <Suspense fallback={<Spinner />}><AdminSetting /></Suspense> },
+      { path: "Payment", element: <Suspense fallback={<Spinner />}><AdminPayment /></Suspense> },
       { path: "reviews", element: <Suspense fallback={<Spinner />}><AdminReview /></Suspense> },
     ],
   },  

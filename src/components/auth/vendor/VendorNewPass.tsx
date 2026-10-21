@@ -1,18 +1,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-// import { IoStorefrontOutline } from "react-icons/io5";
 import { Eye, EyeOff, Lock, } from "lucide-react";
 import { Link } from "react-router-dom";
 import SimpleSlider from "../../../lib/Sliding";
 
 export default function VendorNewPass() {
   const [formData, setFormData] = useState({
-    CompanyName: "",
-    email: "",
     password: "",
     confirmPassword: "",
-    agentType: "",
-    country: "", // Added for country selection
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -79,21 +74,15 @@ export default function VendorNewPass() {
         animate="visible"
         className="flex flex-col items-center justify-center w-full min-h-screen px-4 py-8 bg-white sm:px-6 md:w-1/2 md:px-8 lg:px-10"
       >
-        {/* <img
-          src="src/assets/Container.png"
-          alt="Twingle logo"
-          className="w-auto mb-4 h-14 sm:h-16"
-        /> */}
-
         <h1 className="mb-2 text-2xl font-bold">
-          Welcome to <span className="text-[#004e27]">Twingle!</span>
-        </h1>
-        <p className="mb-4 text-gray-600">
-          We’re excited to have you onboard—start selling and growing your
-          business with us today!
-        </p>
+  Create a <span className="text-[#004e27]">New Password</span>
+</h1>
+
+<p className="mb-4 text-gray-600">
+  Enter a new password below to secure your Twingle account.
+</p>
         <br />
-        {/* <br /> */}
+        <br />
 
         <form
           onSubmit={handleNewpassword}
@@ -107,7 +96,7 @@ export default function VendorNewPass() {
               <input
                 type={showPassword ? "text" : "password"}
                 name="New password"
-                placeholder="Password"
+                placeholder=" New Password"
                 value={formData.password}
                 onChange={handleChange}
                 className="w-full h-full text-gray-700 bg-transparent placeholder:text-gray-400 focus:outline-none"
@@ -169,10 +158,10 @@ export default function VendorNewPass() {
                   transition={{ duration: 1, repeat: Infinity }}
                   className="w-5 h-5 border-2 border-white rounded-full border-t-transparent"
                 />
-                Creating account...
+                Resetting Password...
               </>
             ) : (
-              "Reset my account"
+              "Reset Password"
             )}
           </motion.button>
         </form>

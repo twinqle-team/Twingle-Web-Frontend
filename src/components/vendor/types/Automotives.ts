@@ -23,7 +23,6 @@ export interface Automotives {
   zipcode: string;
   country: string;
   fulladdress: string;
-  area: number; // in sq ft
   image: string;
   video: string;
   facilities: {

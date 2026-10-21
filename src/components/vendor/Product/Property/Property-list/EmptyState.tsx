@@ -35,7 +35,7 @@ const EmptyState: FC<EmptyStateProps> = ({ onAddProperty }) => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={onAddProperty}
-        className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
+        className="inline-flex items-center gap-2 px-6 py-3 bg-[#012E19] text-white rounded-lg hover:bg-[#014a2d] transition-colors font-medium"
       >
         <Plus size={20} />
         Add Property

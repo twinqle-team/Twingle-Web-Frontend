@@ -38,16 +38,16 @@ export const DocumentChecklist: React.FC<DocumentChecklistProps> = ({ onComplete
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: index * 0.05 }}
           onClick={() => toggleCheck(index)}
-          className="flex items-start gap-4 bg-white/5 hover:bg-white/10 rounded-2xl p-5 cursor-pointer border border-transparent hover:border-white/10 transition-all group"
+          className="group flex cursor-pointer items-start gap-3 rounded-xl border border-[#dce8e0] bg-white p-4 transition-all hover:border-[#F2B60A] hover:bg-[#fffdf5] sm:gap-4 sm:p-5"
         >
           <div className="pt-0.5">
             {checked.includes(index) ? (
-              <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+              <CheckCircle2 className="h-6 w-6 text-[#012E19]" />
             ) : (
-              <Circle className="w-6 h-6 text-white/40 group-hover:text-white/60" />
+              <Circle className="h-6 w-6 text-[#b8cfc1] group-hover:text-[#a57900]" />
             )}
           </div>
-          <p className="text-lg leading-tight text-white/90">{item}</p>
+          <p className="text-sm leading-tight text-[#012E19] sm:text-base">{item}</p>
         </motion.div>
       ))}
     </div>

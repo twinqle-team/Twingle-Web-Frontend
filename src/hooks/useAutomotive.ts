@@ -24,7 +24,7 @@ export function useDeleteAuto() {
   return useMutation({
     mutationFn: (id: string) => AutoService.deleteAuto(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['automotive'] });
+      queryClient.invalidateQueries({ queryKey: ['automotives'] });
     },
   });
 }
@@ -36,7 +36,7 @@ export function useUpdateAuto() {
     mutationFn: ({ id, updates }: { id: string; updates: Partial<Automotives> }) =>
       AutoService.updateAuto(id, updates),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['automotive'] });
+      queryClient.invalidateQueries({ queryKey: ['automotives'] });
     },
   });
 }
